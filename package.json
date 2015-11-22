@@ -1,0 +1,37 @@
+{
+  "name": "content-chef-delivery-js-client",
+  "version": "1.0.0",
+  "description": "ContentChef.io javascript client",
+  "main": "require('content-chef-delivery-js-client');",
+  "scripts": {
+    "commit": "git-cz",
+    "test": "mocha src/index.test.js -w",
+    "test:single": "mocha src/index.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/bytecode-lm/content-chef-delivery-js-client.git"
+  },
+  "author": "Alessandro Palumbo (http://contentchef.io/)",
+  "license": "LGPL",
+  "homepage": "https://bitbucket.org/bytecode-lm/content-chef-delivery-js-client#readme",
+  "devDependencies": {
+    "chai": "3.4.1",
+    "commitizen": "2.4.6",
+    "cz-conventional-changelog": "1.1.4",
+    "ghooks": "1.0.1",
+    "mocha": "2.3.4"
+  },
+  "dependencies": {
+    "axios": "0.7.0",
+    "es6-promise": "3.0.2"
+  },
+  "czConfig": {
+    "path": "node_modules/cz-conventional-changelog"
+  },
+  "config": {
+    "ghooks" : {
+      "pre-commit": "npm run test:single"
+    }
+  }
+}
