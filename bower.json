@@ -1,0 +1,25 @@
+{
+  "name": "contentchef-js-client",
+  "description": "ContentChef.io javascript client",
+  "main": "require('contentchef-js-client')",
+  "authors": [
+    "Alessandro Palumbo (http://contentchef.io/)"
+  ],
+  "license": "Apache-2.0",
+  "keywords": [
+    "content"
+  ],
+  "moduleType": [
+    "amd",
+    "node"
+  ],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
