@@ -1,5 +1,5 @@
 {
-  "name": "content-chef-delivery-js-client",
+  "name": "@apalumbo/contentchef-js-client",
   "version": "1.0.0",
   "description": "ContentChef.io javascript client",
   "main": "require('content-chef-delivery-js-client');",
@@ -8,12 +8,13 @@
     "test": "mocha test/index.test.js -w",
     "test:single": "istanbul cover -x *.test.js _mocha -- -R spec test/index.test.js"
   },
+  "files" : "dist",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/bytecode-lm/content-chef-delivery-js-client.git"
+    "url": "git+ssh://git@bitbucket.org/bytecode-lm/contentchef-js-client.git"
   },
   "author": "Alessandro Palumbo (http://contentchef.io/)",
-  "license": "LGPL",
+  "license": "Apache-2.0",
   "homepage": "https://bitbucket.org/bytecode-lm/content-chef-delivery-js-client#readme",
   "devDependencies": {
     "browserify": "latest",
@@ -46,5 +47,11 @@
     "ghooks": {
       "pre-commit": "npm run test:single"
     }
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "keywords": [
+    "content"
+  ]
 }
