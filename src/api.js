@@ -1,9 +1,6 @@
 (function (Global, undefined) {
     "use strict";
 
-    var promise = require('es6-promise');
-    var axios = require('axios');
-
     /**
      * The kit's main entry point; initialize your API like this: ContentChef.Api(baseUrl, apiToken, apiCache, cacheTimeToLive)
      *
