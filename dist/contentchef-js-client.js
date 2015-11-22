@@ -1,9 +1,6 @@
 (function (Global, undefined) {
     "use strict";
 
-    var promise = require('es6-promise');
-    var axios = require('axios');
-
     /**
      * The kit's main entry point; initialize your API like this: ContentChef.Api(baseUrl, apiToken, apiCache, cacheTimeToLive)
      *
@@ -180,9 +177,4 @@
     Global.ContentChef = {
         Api: contentChef
     };
-} (typeof exports === 'object' && exports ? exports : (typeof module === "object" && module && typeof module.exports === "object" ? module.exports : window)));;/**
- * Created by apalumbo on 20/11/15.
- */
-
-require('./api.js');
-
+} (typeof exports === 'object' && exports ? exports : (typeof module === "object" && module && typeof module.exports === "object" ? module.exports : window)));;
