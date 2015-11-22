@@ -1,9 +1,8 @@
-require('es6-promise').polyfill();
-var axios = require('axios');
-
 (function (Global, undefined) {
-
     "use strict";
+
+    var promise = require('es6-promise');
+    var axios = require('axios');
 
     /**
      * The kit's main entry point; initialize your API like this: ContentChef.Api(baseUrl, apiToken, apiCache, cacheTimeToLive)
@@ -21,10 +20,8 @@ var axios = require('axios');
     var contentChef = function (baseUrl, apiToken,apiCache,cacheTimeToLive) {
         var theApi = contentChef.fn.initialize(baseUrl, apiToken, apiCache, cacheTimeToLive);
 
-        return theApi
+        return theApi;
     };
-
-
 
     contentChef.fn = contentChef.prototype = {
 
@@ -45,27 +42,27 @@ var axios = require('axios');
         lookupPageByUrl : function(pageUrl) {
             var theFullUrl = this.url + 'getWebPageByUrl/' + this.origin  + '/' + encodeURIComponent(pageUrl);
 
-            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebPage,mapErrorResponse)
+            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebPage,mapErrorResponse);
         },
 
         lookupPageById : function(pageId) {
             var theFullUrl = this.url + 'getWebPageById/' + this.origin  + '/' + encodeURIComponent(pageId);
 
-            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebPage,mapErrorResponse)
+            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebPage,mapErrorResponse);
         },
 
         lookupContentLatestRevision: function(contentId, definitionId) {
             var theFullUrl = this.url + 'getLatestContent/' +
                 this.origin  + '/' + encodeURIComponent(contentId) + '/' + encodeURIComponent(definitionId);
 
-            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContent,mapContentErrorResponse)
+            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContent,mapContentErrorResponse);
         },
 
         lookupContentRevision: function(contentId, contentRevision) {
             var theFullUrl = this.url + 'getContent/' +
                 this.origin  + '/' + encodeURIComponent(contentId) + '/' + encodeURIComponent(contentRevision);
 
-            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContent,mapContentErrorResponse)
+            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContent,mapContentErrorResponse);
         }
 
     };
@@ -77,7 +74,7 @@ var axios = require('axios');
                     resolve(successMappingFunction.call(this,result.data));
                 })
                 .catch(function (result) {
-                    reject(failureMappingFunction.call(this,result))
+                    reject(failureMappingFunction.call(this,result));
                 });
 
         });
@@ -119,8 +116,8 @@ var axios = require('axios');
             data.templateRevision,
             data.group,
             data['#originId'],
-            transformAreas(data.contentAreas)
-            ,data.variablesArea);
+            transformAreas(data.contentAreas),
+            data.variablesArea);
     };
 
     var mapSuccessfulResponseToWebContent = function(data) {
@@ -128,13 +125,13 @@ var axios = require('axios');
     };
 
     function NotFound() {
-        this.message = 'Not found'
+        this.message = 'Not found';
     }
 
     NotFound.prototype = {};
 
     function GenericError() {
-        this.message = 'Generic error'
+        this.message = 'Generic error';
     }
 
     GenericError.prototype = {};
