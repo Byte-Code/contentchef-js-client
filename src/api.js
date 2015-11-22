@@ -101,7 +101,8 @@
         for (var i = 0; i<contentAreas.length;i++) {
             var contentArea = contentAreas[i];
             var areaName = contentArea.areaName;
-            areas[areaName] = contentArea.contents;
+            var contents = contentArea.contents;
+            areas[areaName] = contents.length == 1? contents[0] : contentArea.contents;
         }
 
         return areas;
