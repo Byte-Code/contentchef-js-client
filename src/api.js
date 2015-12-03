@@ -60,6 +60,14 @@
                 this.origin  + '/' + encodeURIComponent(contentId) + '/' + encodeURIComponent(contentRevision);
 
             return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContent,mapContentErrorResponse);
+        },
+
+        listAllContentByDefinition: function(definitionId) {
+            var theFullUrl = this.url + 'listContentsByDefinitionId' +
+                //'/' + this.origin  +
+                '/' + encodeURIComponent(definitionId) ;
+
+            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContentList,mapContentErrorResponse);
         }
 
     };
@@ -121,6 +129,10 @@
     var mapSuccessfulResponseToWebContent = function(data) {
         return data;
     };
+
+    var mapSuccessfulResponseToWebContentList = function(data) {
+        return data;
+    }
 
     function NotFound() {
         this.message = 'Not found';
