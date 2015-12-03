@@ -52,14 +52,22 @@
             var theFullUrl = this.url + 'getLatestContent/' +
                 this.origin  + '/' + encodeURIComponent(contentId) + '/' + encodeURIComponent(definitionId);
 
-            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContent,mapContentErrorResponse);
+            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContent,mapErrorResponse);
         },
 
         lookupContentRevision: function(contentId, contentRevision) {
             var theFullUrl = this.url + 'getContent/' +
                 this.origin  + '/' + encodeURIComponent(contentId) + '/' + encodeURIComponent(contentRevision);
 
-            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContent,mapContentErrorResponse);
+            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContent,mapErrorResponse);
+        },
+
+        listAllContentByDefinition: function(definitionId) {
+            var theFullUrl = this.url + 'listContentsByDefinitionId' +
+                //'/' + this.origin  +
+                '/' + encodeURIComponent(definitionId) ;
+
+            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContentList,mapErrorResponse);
         }
 
     };
@@ -122,6 +130,10 @@
         return data;
     };
 
+    var mapSuccessfulResponseToWebContentList = function(data) {
+        return data;
+    };
+
     function NotFound() {
         this.message = 'Not found';
     }
@@ -139,7 +151,7 @@
             return contentChef.fn.GENERIC_ERROR;
         }
 
-        var failureBody = result.data['failure body'];
+        var failureBody = result.data.failureBody;
         if (failureBody && failureBody.failure && failureBody.failure == 'not.found') {
             return contentChef.fn.NOT_FOUND;
         }
