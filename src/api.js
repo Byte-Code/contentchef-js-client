@@ -37,48 +37,48 @@
         },
 
         lookupPageByUrl : function(pageUrl) {
-            var theFullUrl = this.url + 'getWebPageByUrl/' + this.origin  + '/' + encodeURIComponent(pageUrl);
+            var theFullUrl = this.url + 'getWebPageByUrl/' + encodeURIComponent(this.origin)  + '/' + encodeURIComponent(pageUrl);
 
             return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebPage,mapErrorResponse);
         },
 
         lookupPageById : function(pageId) {
-            var theFullUrl = this.url + 'getWebPageById/' + this.origin  + '/' + encodeURIComponent(pageId);
+            var theFullUrl = this.url + 'getWebPageById/' + encodeURIComponent(this.origin)  + '/' + encodeURIComponent(pageId);
 
             return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebPage,mapErrorResponse);
         },
 
         lookupContentLatestRevision: function(contentId, definitionId) {
             var theFullUrl = this.url + 'getLatestContent/' +
-                this.origin  + '/' + encodeURIComponent(contentId) + '/' + encodeURIComponent(definitionId);
+                encodeURIComponent(this.origin)  + '/' + encodeURIComponent(contentId) + '/' + encodeURIComponent(definitionId);
 
             return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContent,mapErrorResponse);
         },
 
         lookupContentLatestRevisionBySlug: function(contentSlug, definitionId) {
             var theFullUrl = this.url + 'getLatestContentBySlug/' +
-                this.origin  + '/' + encodeURIComponent(contentSlug) + '/' + encodeURIComponent(definitionId);
+                encodeURIComponent(this.origin)  + '/' + encodeURIComponent(contentSlug) + '/' + encodeURIComponent(definitionId);
 
             return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContent,mapErrorResponse);
         },
 
         lookupContentRevision: function(contentId, contentRevision) {
             var theFullUrl = this.url + 'getContent/' +
-                this.origin  + '/' + encodeURIComponent(contentId) + '/' + encodeURIComponent(contentRevision);
+                encodeURIComponent(this.origin)  + '/' + encodeURIComponent(contentId) + '/' + encodeURIComponent(contentRevision);
 
             return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContent,mapErrorResponse);
         },
 
         lookupContentRevisionBySlug: function(contentSlug, contentRevision) {
             var theFullUrl = this.url + 'getContentBySlug/' +
-                this.origin  + '/' + encodeURIComponent(contentSlug) + '/' + encodeURIComponent(contentRevision);
+                encodeURIComponent(this.origin)  + '/' + encodeURIComponent(contentSlug) + '/' + encodeURIComponent(contentRevision);
 
             return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContent,mapErrorResponse);
         },
 
         listAllContentByDefinition: function(definitionId) {
             var theFullUrl = this.url + 'listContentsByDefinitionId' +
-                '/' + this.origin  +
+                '/' + encodeURIComponent(this.origin)  +
                 '/' + encodeURIComponent(definitionId) ;
 
             return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContentList,mapErrorResponse);
@@ -94,6 +94,14 @@
             }
 
             return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContentList,mapErrorResponse);
+        },
+
+        getAvailablePages: function() {
+
+            var theFullUrl = this.url + 'getAvailablePages' +
+                '/' + encodeURIComponent(this.origin) ;
+
+            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebPageReferenceList,mapErrorResponse);
         }
 
     };
@@ -125,6 +133,19 @@
 
     WebPage.prototype = {};
 
+    function WebPageReference(webPageId,name,url,templateId,templateRevision,group,originId,revisionId) {
+        this.webPageId = webPageId;
+        this.name = name;
+        this.url = url;
+        this.templateId = templateId;
+        this.templateRevision = templateRevision;
+        this.group = group;
+        this.originId = originId;
+        this.revisionId = revisionId;
+    }
+
+    WebPageReference.prototype = {};
+
     var transformAreas = function (contentAreas) {
 
         var areas = {};
@@ -150,6 +171,24 @@
             data['#originId'],
             transformAreas(data.contentAreas),
             data.variablesArea);
+    };
+
+    var mapSuccessfulResponseToWebPageReferenceList = function(data) {
+        var webPageReferences=[];
+        for (var i=0;i<data.length;i++) {
+            var item = data[i];
+            webPageReferences.push(new WebPageReference(
+                item.webPageId,
+                item.name,
+                item.url,
+                item.templateId,
+                item.templateRevision,
+                item.group,
+                item['#originId'],
+                item.revisionId
+            ));
+        }
+        return data;
     };
 
     var mapSuccessfulResponseToWebContent = function(data) {
