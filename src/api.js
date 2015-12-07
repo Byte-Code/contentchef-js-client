@@ -82,6 +82,18 @@
                 '/' + encodeURIComponent(definitionId) ;
 
             return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContentList,mapErrorResponse);
+        },
+
+        searchContent: function(queryName,queryParam) {
+
+            var theFullUrl = this.url + 'searchContent' +
+                '/' + encodeURIComponent(queryName) ;
+
+            if (queryParam) {
+                theFullUrl = theFullUrl + '?queryParam' + encodeURIComponent(queryParam);
+            }
+
+            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContentList,mapErrorResponse);
         }
 
     };
