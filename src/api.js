@@ -90,7 +90,7 @@
                 '/' + encodeURIComponent(queryName) ;
 
             if (queryParam) {
-                theFullUrl = theFullUrl + '?queryParam' + encodeURIComponent(queryParam);
+                theFullUrl = theFullUrl + '?queryParam=' + encodeURIComponent(queryParam);
             }
 
             return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContentList,mapErrorResponse);
