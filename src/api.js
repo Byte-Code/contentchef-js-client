@@ -1,4 +1,5 @@
-(function (Global, undefined) {
+
+(function(Global, undefined) {
     "use strict";
 
     /**
@@ -14,21 +15,22 @@
      * @param {int} cacheTimeToLive - The time to leave , in seconds, for the items in the cache (if not provided a default will be used)
      * @returns {Api} - The created api object
      */
-    var contentChef = function (baseUrl, apiToken,apiCache,cacheTimeToLive) {
-        var theApi = contentChef.fn.initialize(baseUrl, apiToken, apiCache, cacheTimeToLive);
+    var contentChef = function(deliveryUrl, origin, apiToken, apiCache, cacheTimeToLive) {
+        var theApi = contentChef.fn.initialize(deliveryUrl, origin, apiToken, apiCache, cacheTimeToLive);
 
         return theApi;
     };
 
+    var delivery = require('./delivery-module');
+
     contentChef.fn = contentChef.prototype = {
 
-        API_URL : '/contentchef-delivery/v1/',
+        API_URL_DELIVERY: '/contentchef-delivery/v1/',
 
-        NOT_FOUND : new NotFound(),
-        GENERIC_ERROR : new GenericError(),
+        initialize: function(deliveryUrl, origin, apiToken, apiCache, cacheTimeToLive) {
 
-        initialize: function(baseUrl, origin, apiToken, apiCache, cacheTimeToLive) {
-            this.url = baseUrl +  contentChef.prototype.API_URL;
+            delivery.setUrl(deliveryUrl )//+ contentChef.prototype.API_URL_DELIVERY)
+
             this.origin = origin;
             this.apiToken = apiToken;
             this.apiCache = apiCache || defaultGlobalCache();
@@ -36,199 +38,83 @@
             return this;
         },
 
-        lookupPageByUrl : function(pageUrl) {
-            var theFullUrl = this.url + 'getWebPageByUrl/' + encodeURIComponent(this.origin)  + '/' + encodeURIComponent(pageUrl);
+        /******  AUTHORING  ******/
 
-            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebPage,mapErrorResponse);
+
+        lookupContentByRevision: function(deliveryId, contentId, contentRevision) {
+            return delivery.lookupContentByRevision(deliveryId, contentId, contentRevision);
         },
 
-        lookupPageById : function(pageId) {
-            var theFullUrl = this.url + 'getWebPageById/' + encodeURIComponent(this.origin)  + '/' + encodeURIComponent(pageId);
-
-            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebPage,mapErrorResponse);
+        lookupContentLatestRevision: function(deliveryId, contentId, definitionId) {
+            return delivery.lookupContentLatestRevision(deliveryId, contentId, definitionId);
         },
 
-        lookupContentLatestRevision: function(contentId, definitionId) {
-            var theFullUrl = this.url + 'getLatestContent/' +
-                encodeURIComponent(this.origin)  + '/' + encodeURIComponent(contentId) + '/' + encodeURIComponent(definitionId);
-
-            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContent,mapErrorResponse);
+        lookupContentBySlug: function(deliveryId, contentSlug, contentRevision) {
+            return delivery.lookupContentBySlug(deliveryId, contentSlug, contentRevision);
         },
 
-        lookupContentLatestRevisionBySlug: function(contentSlug, definitionId) {
-            var theFullUrl = this.url + 'getLatestContentBySlug/' +
-                encodeURIComponent(this.origin)  + '/' + encodeURIComponent(contentSlug) + '/' + encodeURIComponent(definitionId);
-
-            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContent,mapErrorResponse);
+        lookupContentLatestRevisionBySlug: function(deliveryId, contentSlug, definitionId) {
+            return delivery.lookupContentLatestRevisionBySlug(deliveryId, contentSlug, definitionId);
         },
 
-        lookupContentRevision: function(contentId, contentRevision) {
-            var theFullUrl = this.url + 'getContent/' +
-                encodeURIComponent(this.origin)  + '/' + encodeURIComponent(contentId) + '/' + encodeURIComponent(contentRevision);
-
-            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContent,mapErrorResponse);
+        listAllContentByDefinition: function(deliveryId, definitionId) {
+            return delivery.listAllContentByDefinition(deliveryId, definitionId);
         },
 
-        lookupContentRevisionBySlug: function(contentSlug, contentRevision) {
-            var theFullUrl = this.url + 'getContentBySlug/' +
-                encodeURIComponent(this.origin)  + '/' + encodeURIComponent(contentSlug) + '/' + encodeURIComponent(contentRevision);
-
-            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContent,mapErrorResponse);
+        listUnpublishedContentsByDefinition: function(deliveryId, definitionId, apiKey) {
+            return delivery.listUnpublishedContentsByDefinition(deliveryId, definitionId, apiKey);
         },
 
-        listAllContentByDefinition: function(definitionId) {
-            var theFullUrl = this.url + 'listContentsByDefinitionId' +
-                '/' + encodeURIComponent(this.origin)  +
-                '/' + encodeURIComponent(definitionId) ;
-
-            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContentList,mapErrorResponse);
+        lookupWebPagesSitemapByUrl: function(deliveryId, baseURL) {
+            return delivery.lookupWebPagesSitemapByUrl(deliveryId, baseURL);
         },
 
-        searchContent: function(queryName,queryParam) {
-
-            var theFullUrl = this.url + 'searchContent' +
-                '/' + encodeURIComponent(queryName) ;
-
-            if (queryParam) {
-                theFullUrl = theFullUrl + '?queryParam' + encodeURIComponent(queryParam);
-            }
-
-            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContentList,mapErrorResponse);
+        lookupWebPagesSitemapByUrlAndOrigin: function(deliveryId, baseURL, originId) {
+            return delivery.lookupWebPagesSitemapByUrlAndOrigin(deliveryId, baseURL, originId);
         },
 
-        getAvailablePages: function() {
+        lookupPageById: function(deliveryId, pageId) {
+            return delivery.lookupPageById(deliveryId, pageId);
+        },
 
-            var theFullUrl = this.url + 'getAvailablePages' +
-                '/' + encodeURIComponent(this.origin) ;
+        lookupPageByUrl: function(deliveryId, pageUrl) {
+            return delivery.lookupPageByUrl(deliveryId, pageUrl);
+        },
 
-            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebPageReferenceList,mapErrorResponse);
+        storeQuery: function(deliveryId, params) {
+            return delivery.storeQuery(deliveryId, params);
+        },
+        
+        createRelease: function(deliveryId, params) {
+            return delivery.createRelease(deliveryId, params);
+        },
+
+        addToRelease: function(deliveryId, params) {
+            return delivery.addToRelease(deliveryId, params);
+        },
+
+        stageRelease: function(deliveryId, params) {
+            return delivery.stageRelease(deliveryId, params);
+        },
+
+        publishStagedRelease: function(deliveryId, params) {
+            return delivery.publishStagedRelease(deliveryId, params);
+        },
+
+        searchContent: function(deliveryId, queryName, queryParam) {
+            return delivery.searchContent(deliveryId, queryName, queryParam);
+        },
+
+        getAvailablePages: function(deliveryId) {
+            return delivery.getAvailablePages(deliveryId);
         }
 
     };
-
-    var lookupItem = function(fullUrl, apiToken, successMappingFunction, failureMappingFunction) {
-        return new Promise(function(resolve, reject) {
-            axios.get(fullUrl, {headers: {'x-square-api-key':apiToken}})
-                .then(function (result) {
-                    resolve(successMappingFunction.call(this,result.data));
-                })
-                .catch(function (result) {
-                    reject(failureMappingFunction.call(this,result));
-                });
-
-        });
-    };
-
-    function WebPage(webPageId,name,url,templateId,templateRevision,group,originId,contentAreas,variablesArea) {
-        this.webPageId = webPageId;
-        this.name = name;
-        this.url = url;
-        this.templateId = templateId;
-        this.templateRevision = templateRevision;
-        this.group = group;
-        this.originId = originId;
-        this.contentAreas = contentAreas;
-        this.variablesArea = variablesArea;
-    }
-
-    WebPage.prototype = {};
-
-    function WebPageReference(webPageId,name,url,templateId,templateRevision,group,originId,revisionId) {
-        this.webPageId = webPageId;
-        this.name = name;
-        this.url = url;
-        this.templateId = templateId;
-        this.templateRevision = templateRevision;
-        this.group = group;
-        this.originId = originId;
-        this.revisionId = revisionId;
-    }
-
-    WebPageReference.prototype = {};
-
-    var transformAreas = function (contentAreas) {
-
-        var areas = {};
-
-        for (var i = 0; i<contentAreas.length;i++) {
-            var contentArea = contentAreas[i];
-            var areaName = contentArea.areaName;
-            var contents = contentArea.contents;
-            areas[areaName] = contents.length == 1? contents[0] : contentArea.contents;
-        }
-
-        return areas;
-    };
-
-    var mapSuccessfulResponseToWebPage = function(data) {
-
-        return new WebPage(data.webPageId,
-            data.name,
-            data.url,
-            data.templateId,
-            data.templateRevision,
-            data.group,
-            data['#originId'],
-            transformAreas(data.contentAreas),
-            data.variablesArea);
-    };
-
-    var mapSuccessfulResponseToWebPageReferenceList = function(data) {
-        var webPageReferences=[];
-        for (var i=0;i<data.length;i++) {
-            var item = data[i];
-            webPageReferences.push(new WebPageReference(
-                item.webPageId,
-                item.name,
-                item.url,
-                item.templateId,
-                item.templateRevision,
-                item.group,
-                item['#originId'],
-                item.revisionId
-            ));
-        }
-        return data;
-    };
-
-    var mapSuccessfulResponseToWebContent = function(data) {
-        return data;
-    };
-
-    var mapSuccessfulResponseToWebContentList = function(data) {
-        return data;
-    };
-
-    function NotFound() {
-        this.message = 'Not found';
-    }
-
-    NotFound.prototype = {};
-
-    function GenericError() {
-        this.message = 'Generic error';
-    }
-
-    GenericError.prototype = {};
-
-    function mapErrorResponse(result) {
-        if (result.status != 400) {
-            return contentChef.fn.GENERIC_ERROR;
-        }
-
-        var failureBody = result.data.failureBody;
-        if (failureBody && failureBody.failure && failureBody.failure == 'not.found') {
-            return contentChef.fn.NOT_FOUND;
-        }
-
-        return contentChef.fn.GENERIC_ERROR;
-
-    }
 
     function defaultGlobalCache() {
         var isBrowser = typeof global != 'object';
 
-        var g = isBrowser?window:global;
+        var g = isBrowser ? window : global;
 
         if (!g.contentChefCache) {
             // todo create global cache object
@@ -240,4 +126,5 @@
     Global.ContentChef = {
         Api: contentChef
     };
-} (typeof exports === 'object' && exports ? exports : (typeof module === "object" && module && typeof module.exports === "object" ? module.exports : window)));
+
+}(typeof exports === 'object' && exports ? exports : (typeof module === "object" && module && typeof module.exports === "object" ? module.exports : window)));

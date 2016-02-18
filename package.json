@@ -39,7 +39,8 @@
   },
   "dependencies": {
     "axios": "0.7.0",
-    "es6-promise": "3.0.2"
+    "es6-promise": "3.0.2",
+    "mongodb": "^2.1.4"
   },
   "czConfig": {
     "path": "node_modules/cz-conventional-changelog"
