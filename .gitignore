@@ -1,3 +1,4 @@
 node_modules
 coverage
 test/index.test.js
+.DS_STORE
