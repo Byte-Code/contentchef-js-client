@@ -45,16 +45,16 @@
             return delivery.lookupContentByRevision(deliveryId, contentId, contentRevision);
         },
 
-        lookupContentLatestRevision: function(deliveryId, contentId, definitionId) {
-            return delivery.lookupContentLatestRevision(deliveryId, contentId, definitionId);
+        lookupContentLatestRevision: function(deliveryId, contentId) {
+            return delivery.lookupContentLatestRevision(deliveryId, contentId);
         },
 
         lookupContentBySlug: function(deliveryId, contentSlug, contentRevision) {
             return delivery.lookupContentBySlug(deliveryId, contentSlug, contentRevision);
         },
 
-        lookupContentLatestRevisionBySlug: function(deliveryId, contentSlug, definitionId) {
-            return delivery.lookupContentLatestRevisionBySlug(deliveryId, contentSlug, definitionId);
+        lookupContentLatestRevisionBySlug: function(deliveryId, contentSlug) {
+            return delivery.lookupContentLatestRevisionBySlug(deliveryId, contentSlug);
         },
 
         listAllContentByDefinition: function(deliveryId, definitionId) {
@@ -69,10 +69,6 @@
             return delivery.lookupWebPagesSitemapByUrl(deliveryId, baseURL);
         },
 
-        lookupWebPagesSitemapByUrlAndOrigin: function(deliveryId, baseURL, originId) {
-            return delivery.lookupWebPagesSitemapByUrlAndOrigin(deliveryId, baseURL, originId);
-        },
-
         lookupPageById: function(deliveryId, pageId) {
             return delivery.lookupPageById(deliveryId, pageId);
         },
@@ -85,8 +81,8 @@
             return delivery.storeQuery(deliveryId, params);
         },
         
-        createRelease: function(deliveryId, params) {
-            return delivery.createRelease(deliveryId, params);
+        createRelease: function(deliveryId, spaceId, params) {
+            return delivery.createRelease(deliveryId, spaceId, params);
         },
 
         addToRelease: function(deliveryId, params) {

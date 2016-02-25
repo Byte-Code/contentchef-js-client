@@ -14,7 +14,7 @@ var unpublishedContent = {
   "content" : {
     "foo" : "bar"
   }, 
-  "originId" : "leroymerlin", 
+  "repository" : "leroymerlin", 
   "itemId" : "content1", 
   "itemType" : "content", 
   "releaseId" : "unpublishedReleaseOnDelivery", 
@@ -34,7 +34,7 @@ var publishedContent = {
     "foo" : "bar",
     "slug" : "slug2"
   }, 
-  "originId" : "leroymerlin", 
+  "repository" : "leroymerlin", 
   "itemId" : "content2", 
   "itemType" : "content", 
   "releaseId" : "publishedReleaseOnDelivery", 
@@ -43,13 +43,13 @@ var publishedContent = {
 
 var unpublishedWebPage = { 
     "_id" : new ObjectID.createFromHexString("56b891d78a456d13026afc2c"),
-  "originId" : "leroymerlin", 
   "itemId" : "webPage1", 
   "itemType" : "webPage", 
   "releaseId" : "unpublishedReleaseOnDelivery", 
   "published" : false,
   "webPageName" : "webPage", 
   "webPageUrl" : "webPage1Url", 
+  "webPageSite" : "site1", 
   "webPageTemplateId" : "templateId", 
   "webPageTemplateRevision" : "latest", 
   "webPageGroup" : "group1", 
@@ -62,11 +62,11 @@ var unpublishedWebPage = {
     "contents" : [
     {
       "contentId" : "contentFromRelease", 
-      "#originId" : "leroymerlin", 
+      "#repository" : "leroymerlin", 
       "contentDefinitionId" : "definition1", 
       "#definitionId" : "reflinked", 
       "#definitionRevision" : "56a760163a1fde89024a7d99", 
-      "#definitionOrigin" : "leroymerlin"
+      "#definitionRepository" : "leroymerlin"
     }
     ]
   }
@@ -75,13 +75,13 @@ var unpublishedWebPage = {
 
 var publishedWebPage = { 
     "_id" : new ObjectID.createFromHexString("56b891d78a456d13026afc2d"),
-  "originId" : "leroymerlin", 
   "itemId" : "webPage2", 
   "itemType" : "webPage", 
   "releaseId" : "publishedReleaseOnDelivery", 
   "published" : true,
   "webPageName" : "webPage", 
   "webPageUrl" : "webPage2Url", 
+  "webPageSite" : "site1", 
   "webPageTemplateId" : "templateId", 
   "webPageTemplateRevision" : "latest", 
   "webPageGroup" : "group1", 
@@ -94,11 +94,11 @@ var publishedWebPage = {
     "contents" : [
     {
       "contentId" : "contentFromRelease", 
-      "#originId" : "leroymerlin", 
+      "#repository" : "leroymerlin", 
       "contentDefinitionId" : "definition1", 
       "#definitionId" : "reflinked", 
       "#definitionRevision" : "56a760163a1fde89024a7d99", 
-      "#definitionOrigin" : "leroymerlin"
+      "#definitionRepository" : "leroymerlin"
     }
     ]
   }
@@ -106,11 +106,11 @@ var publishedWebPage = {
 }
 
 var query = {
-  "find" : "{\"originId\" : \"leroymerlin\"}",
+  "find" : "{\"repository\" : \"leroymerlin\"}",
   "queryName" : "query1"
 }
 
-MongoClient.connect("mongodb://localhost:27017/clientApiTest-delivery", function(err, db) {
+MongoClient.connect("mongodb://localhost:27017/dev_contentchef_delivery_v2", function(err, db) {
   if(err) { return console.dir(err); }
 
   db.dropDatabase();

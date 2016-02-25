@@ -17,8 +17,8 @@ module.exports = {
         return http.getItem(theFullUrl, this.apiToken, mapSuccessfulResponseToContent);
     },
 
-    lookupContentLatestRevision: function(deliveryId, contentId, definitionId) {
-        var theFullUrl = url + '/' + deliveryId + '/getLatestContent/' + encodeURIComponent(contentId) + '/' + encodeURIComponent(definitionId);
+    lookupContentLatestRevision: function(deliveryId, contentId) {
+        var theFullUrl = url + '/' + deliveryId + '/getLatestContent/' + encodeURIComponent(contentId);
 
         return http.getItem(theFullUrl, this.apiToken, mapSuccessfulResponseToContent);
     },
@@ -29,8 +29,8 @@ module.exports = {
         return http.getItem(theFullUrl, this.apiToken, mapSuccessfulResponseToContent);
     },
 
-    lookupContentLatestRevisionBySlug: function(deliveryId, contentSlug, definitionId) {
-        var theFullUrl = url + '/' + deliveryId + '/getLatestContentBySlug/' + encodeURIComponent(contentSlug) + '/' + encodeURIComponent(definitionId);
+    lookupContentLatestRevisionBySlug: function(deliveryId, contentSlug) {
+        var theFullUrl = url + '/' + deliveryId + '/getLatestContentBySlug/' + encodeURIComponent(contentSlug);
 
         return http.getItem(theFullUrl, this.apiToken, mapSuccessfulResponseToContent);
     },
@@ -53,12 +53,6 @@ module.exports = {
         return http.getItem(theFullUrl, this.apiToken, mapSuccessfulResponseToSiteMap);
     },
 
-    lookupWebPagesSitemapByUrlAndOrigin: function(deliveryId, baseURL, originId) {
-        var theFullUrl = url + '/' + deliveryId + '/getWebpagesSitemap/' + encodeURIComponent(baseURL) +'/' + encodeURIComponent(originId);;
-
-        return http.getItem(theFullUrl, this.apiToken, mapSuccessfulResponseToSiteMap);
-    },
-
     lookupPageById : function(deliveryId, pageId) {
         var theFullUrl = url + '/' + deliveryId + '/getWebPageById/' + encodeURIComponent(pageId);
 
@@ -77,8 +71,8 @@ module.exports = {
         return http.postItem(theFullUrl, this.apiToken, params);
     },
 
-    createRelease: function(deliveryId, params) {
-        var theFullUrl = url + '/' + deliveryId  + '/createRelease';
+    createRelease: function(deliveryId, spaceId, params) {
+        var theFullUrl = url + '/' + deliveryId  + '/' + spaceId  + '/createRelease';
 
         return http.postItem(theFullUrl, this.apiToken, params);
     },

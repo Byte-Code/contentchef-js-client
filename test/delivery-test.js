@@ -5,7 +5,8 @@ var api = cc.ContentChef.Api("http://localhost:9002", "")
 console.log("\nStarting script...\n###################")
 
 var createSomeNewRelease = { 
-    "releaseId" : "someNewRelease", 
+    "releaseId" : "someNewRelease",
+    "spaceId" : "leroymerlin",
     "expectedNumOfContents" : 1,
     "expectedNumOfWebPages" : 1
 }
@@ -19,7 +20,6 @@ var addToSomeNewRelease = {
         "definitionId" : "definition1",
         "definitionRevisionId" : "56a760163a1fde89024a7d98"
       },
-      "#originId" : "leroymerlin",
       "content" : { "a" : "b" }
     }],
     "webPages" : [{
@@ -28,7 +28,7 @@ var addToSomeNewRelease = {
       "url" : "someNewWebPageURL",
       "name" : "someNewWebPageName",
       "revisionId" : "23b760163a1fde89024a7d98",
-      "#originId" : "leroymerlin",
+      "site" : "site1",
       "templateId": "",
       "templateRevision" : "",
       "group" : "",
@@ -49,21 +49,20 @@ var publishSomeNewRelease = {
 
 
 readPromise("lookupContentByRevision", api.lookupContentByRevision("leroymerlin", "content2", "56b891d78a456d13026afc1d"))
-readPromise("lookupContentLatestRevision", api.lookupContentLatestRevision("leroymerlin", "content2", "definition1"))
+readPromise("lookupContentLatestRevision", api.lookupContentLatestRevision("leroymerlin", "content2"))
 readPromise("lookupContentBySlug", api.lookupContentBySlug("leroymerlin", "slug2", "56b891d78a456d13026afc1d"))
-readPromise("lookupContentLatestRevisionBySlug", api.lookupContentLatestRevisionBySlug("leroymerlin", "slug2", "definition1"))
+readPromise("lookupContentLatestRevisionBySlug", api.lookupContentLatestRevisionBySlug("leroymerlin", "slug2"))
 readPromise("listAllContentByDefinition", api.listAllContentByDefinition("leroymerlin", "definition1"))
 readPromise("listUnpublishedContentsByDefinition", api.listUnpublishedContentsByDefinition("leroymerlin", "definition1", "someKey"))
 readPromise("lookupWebPagesSitemapByUrl", api.lookupWebPagesSitemapByUrl("leroymerlin", "someBaseUrl"))
-readPromise("lookupWebPagesSitemapByUrlAndOrigin", api.lookupWebPagesSitemapByUrlAndOrigin("leroymerlin", "someBaseUrl", "leroymerlin"))
 readPromise("lookupPageById", api.lookupPageById("leroymerlin", "webPage2"))
 readPromise("lookupPageByUrl", api.lookupPageByUrl("leroymerlin", "webPage2Url"))
 readPromise("storeQuery", api.storeQuery("leroymerlin", {
 	"deliveryId" : "leroymerlin",
-	"find" : {"originId" : "leroymerlin"},
-	"name" : "originName"
+	"find" : {"repository" : "leroymerlin"},
+	"name" : "someNewQuery"
 }))
-readCreateReleasePromise("createRelease", api.createRelease("leroymerlin", createSomeNewRelease))
+readCreateReleasePromise("createRelease", api.createRelease("leroymerlin", "leroymerlin", createSomeNewRelease))
 readPromise("searchContent", api.searchContent("leroymerlin", "query1"))
 readPromise("getAvailablePages", api.getAvailablePages("leroymerlin"))
 
