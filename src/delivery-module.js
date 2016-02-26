@@ -47,8 +47,8 @@ module.exports = {
         return http.getProtectedItem(theFullUrl, this.apiToken, apiKey, mapSuccessfulResponseToContentList, apiKey);
     },
 
-    lookupWebPagesSitemapByUrl: function(deliveryId, baseURL) {
-        var theFullUrl = url + '/' + deliveryId + '/getWebpagesSitemap/' + encodeURIComponent(baseURL);
+    lookupWebPagesSitemapByUrl: function(deliveryId, baseURL, site) {
+        var theFullUrl = url + '/' + deliveryId + '/getWebpagesSitemap/' + encodeURIComponent(baseURL) + '/' + encodeURIComponent(site);
 
         return http.getItem(theFullUrl, this.apiToken, mapSuccessfulResponseToSiteMap);
     },

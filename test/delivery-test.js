@@ -54,7 +54,7 @@ readPromise("lookupContentBySlug", api.lookupContentBySlug("leroymerlin", "slug2
 readPromise("lookupContentLatestRevisionBySlug", api.lookupContentLatestRevisionBySlug("leroymerlin", "slug2"))
 readPromise("listAllContentByDefinition", api.listAllContentByDefinition("leroymerlin", "definition1"))
 readPromise("listUnpublishedContentsByDefinition", api.listUnpublishedContentsByDefinition("leroymerlin", "definition1", "someKey"))
-readPromise("lookupWebPagesSitemapByUrl", api.lookupWebPagesSitemapByUrl("leroymerlin", "someBaseUrl"))
+readPromise("lookupWebPagesSitemapByUrl", api.lookupWebPagesSitemapByUrl("leroymerlin", "webPage2Url", "site1"))
 readPromise("lookupPageById", api.lookupPageById("leroymerlin", "webPage2"))
 readPromise("lookupPageByUrl", api.lookupPageByUrl("leroymerlin", "webPage2Url"))
 readPromise("storeQuery", api.storeQuery("leroymerlin", {
