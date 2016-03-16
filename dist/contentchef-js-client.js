@@ -1,6 +1,9 @@
 (function (Global, undefined) {
     "use strict";
 
+    //var axios = require('axios');
+    //var prom = require('es6-promise');
+
     /**
      * The kit's main entry point; initialize your API like this: ContentChef.Api(baseUrl, apiToken, apiCache, cacheTimeToLive)
      *
@@ -28,7 +31,7 @@
         GENERIC_ERROR : new GenericError(),
 
         initialize: function(baseUrl, origin, apiToken, apiCache, cacheTimeToLive) {
-            this.url = baseUrl +  contentChef.prototype.API_URL;
+            this.url = baseUrl;
             this.origin = origin;
             this.apiToken = apiToken;
             this.apiCache = apiCache || defaultGlobalCache();

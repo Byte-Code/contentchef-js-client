@@ -1,4 +1,7 @@
-(function (Global, undefined) {
+var axios = require('axios');
+var prom = require('es6-promise');
+
+(function (axios, prom, Global, undefined) {
     "use strict";
 
     /**
@@ -22,7 +25,7 @@
 
     contentChef.fn = contentChef.prototype = {
 
-        API_URL : '/contentchef-delivery/v1/',
+        API_URL : '',
 
         NOT_FOUND : new NotFound(),
         GENERIC_ERROR : new GenericError(),
@@ -240,4 +243,4 @@
     Global.ContentChef = {
         Api: contentChef
     };
-} (typeof exports === 'object' && exports ? exports : (typeof module === "object" && module && typeof module.exports === "object" ? module.exports : window)));
+} (axios, prom, typeof exports === 'object' && exports ? exports : (typeof module === "object" && module && typeof module.exports === "object" ? module.exports : window)));
