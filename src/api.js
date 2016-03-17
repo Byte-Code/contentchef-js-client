@@ -41,68 +41,68 @@
         /******  AUTHORING  ******/
 
 
-        lookupContentByRevision: function(deliveryId, contentId, contentRevision) {
-            return delivery.lookupContentByRevision(deliveryId, contentId, contentRevision);
+        lookupContentByRevision: function(spaceId, deliveryId, contentId, contentRevision) {
+            return delivery.lookupContentByRevision(spaceId, deliveryId, contentId, contentRevision);
         },
 
-        lookupContentLatestRevision: function(deliveryId, contentId) {
-            return delivery.lookupContentLatestRevision(deliveryId, contentId);
+        lookupContentLatestRevision: function(spaceId, deliveryId, contentId) {
+            return delivery.lookupContentLatestRevision(spaceId, deliveryId, contentId);
         },
 
-        lookupContentBySlug: function(deliveryId, contentSlug, contentRevision) {
-            return delivery.lookupContentBySlug(deliveryId, contentSlug, contentRevision);
+        lookupContentBySlug: function(spaceId, deliveryId, contentSlug, contentRevision) {
+            return delivery.lookupContentBySlug(spaceId, deliveryId, contentSlug, contentRevision);
         },
 
-        lookupContentLatestRevisionBySlug: function(deliveryId, contentSlug) {
-            return delivery.lookupContentLatestRevisionBySlug(deliveryId, contentSlug);
+        lookupContentLatestRevisionBySlug: function(spaceId, deliveryId, contentSlug) {
+            return delivery.lookupContentLatestRevisionBySlug(spaceId, deliveryId, contentSlug);
         },
 
-        listAllContentByDefinition: function(deliveryId, definitionId) {
-            return delivery.listAllContentByDefinition(deliveryId, definitionId);
+        listAllContentByDefinition: function(spaceId, deliveryId, definitionId) {
+            return delivery.listAllContentByDefinition(spaceId, deliveryId, definitionId);
         },
 
-        listUnpublishedContentsByDefinition: function(deliveryId, definitionId, apiKey) {
-            return delivery.listUnpublishedContentsByDefinition(deliveryId, definitionId, apiKey);
+        listUnpublishedContentsByDefinition: function(spaceId, deliveryId, definitionId, apiKey) {
+            return delivery.listUnpublishedContentsByDefinition(spaceId, deliveryId, definitionId, apiKey);
         },
 
-        lookupWebPagesSitemapByUrl: function(deliveryId, baseURL) {
-            return delivery.lookupWebPagesSitemapByUrl(deliveryId, baseURL);
+        lookupWebPagesSitemapByUrl: function(spaceId, deliveryId, baseURL, site) {
+            return delivery.lookupWebPagesSitemapByUrl(spaceId, deliveryId, baseURL, site);
         },
 
-        lookupPageById: function(deliveryId, pageId) {
-            return delivery.lookupPageById(deliveryId, pageId);
+        lookupPageById: function(spaceId, deliveryId, site, pageId) {
+            return delivery.lookupPageById(spaceId, deliveryId, pageId, site);
         },
 
-        lookupPageByUrl: function(deliveryId, pageUrl) {
-            return delivery.lookupPageByUrl(deliveryId, pageUrl);
+        lookupPageByUrl: function(spaceId, deliveryId, site, pageUrl) {
+            return delivery.lookupPageByUrl(spaceId, deliveryId, pageUrl, site);
         },
 
-        storeQuery: function(deliveryId, params) {
-            return delivery.storeQuery(deliveryId, params);
+        storeQuery: function(spaceId, deliveryId, params) {
+            return delivery.storeQuery(spaceId, deliveryId, params);
         },
         
-        createRelease: function(deliveryId, spaceId, params) {
-            return delivery.createRelease(deliveryId, spaceId, params);
+        createRelease: function(spaceId, deliveryId, params) {
+            return delivery.createRelease(spaceId, deliveryId, params);
         },
 
-        addToRelease: function(deliveryId, params) {
-            return delivery.addToRelease(deliveryId, params);
+        addToRelease: function(spaceId, deliveryId, params) {
+            return delivery.addToRelease(spaceId, deliveryId, params);
         },
 
-        stageRelease: function(deliveryId, params) {
-            return delivery.stageRelease(deliveryId, params);
+        stageRelease: function(spaceId, deliveryId, params) {
+            return delivery.stageRelease(spaceId, deliveryId, params);
         },
 
-        publishStagedRelease: function(deliveryId, params) {
-            return delivery.publishStagedRelease(deliveryId, params);
+        publishStagedRelease: function(spaceId, deliveryId, params) {
+            return delivery.publishStagedRelease(spaceId, deliveryId, params);
         },
 
-        searchContent: function(deliveryId, queryName, queryParam) {
-            return delivery.searchContent(deliveryId, queryName, queryParam);
+        searchContent: function(spaceId, deliveryId, queryName, queryParam) {
+            return delivery.searchContent(spaceId, deliveryId, queryName, queryParam);
         },
 
-        getAvailablePages: function(deliveryId) {
-            return delivery.getAvailablePages(deliveryId);
+        getAvailablePages: function(spaceId, deliveryId) {
+            return delivery.getAvailablePages(spaceId, deliveryId);
         }
 
     };

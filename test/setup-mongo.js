@@ -15,7 +15,7 @@ var unpublishedContent = {
     "foo" : "bar"
   }, 
   "repository" : "leroymerlin", 
-  "itemId" : "content1", 
+  "contentId" : "content1", 
   "itemType" : "content", 
   "releaseId" : "unpublishedReleaseOnDelivery", 
   "published" : false
@@ -35,7 +35,7 @@ var publishedContent = {
     "slug" : "slug2"
   }, 
   "repository" : "leroymerlin", 
-  "itemId" : "content2", 
+  "contentId" : "content2", 
   "itemType" : "content", 
   "releaseId" : "publishedReleaseOnDelivery", 
   "published" : true
@@ -43,16 +43,16 @@ var publishedContent = {
 
 var unpublishedWebPage = { 
     "_id" : new ObjectID.createFromHexString("56b891d78a456d13026afc2c"),
-  "itemId" : "webPage1", 
+  "webPageId" : "webPage1", 
   "itemType" : "webPage", 
   "releaseId" : "unpublishedReleaseOnDelivery", 
   "published" : false,
-  "webPageName" : "webPage", 
-  "webPageUrl" : "webPage1Url", 
-  "webPageSite" : "site1", 
-  "webPageTemplateId" : "templateId", 
-  "webPageTemplateRevision" : "latest", 
-  "webPageGroup" : "group1", 
+  "name" : "webPage", 
+  "url" : "webPage1Url", 
+  "site" : "site1", 
+  "templateId" : "templateId", 
+  "templateRevision" : "latest", 
+  "group" : "group1", 
   "variablesArea" : {}, 
   "contentAreas" : [
   {
@@ -75,16 +75,16 @@ var unpublishedWebPage = {
 
 var publishedWebPage = { 
     "_id" : new ObjectID.createFromHexString("56b891d78a456d13026afc2d"),
-  "itemId" : "webPage2", 
+  "webPageId" : "webPage2", 
   "itemType" : "webPage", 
   "releaseId" : "publishedReleaseOnDelivery", 
   "published" : true,
-  "webPageName" : "webPage", 
-  "webPageUrl" : "webPage2Url", 
-  "webPageSite" : "site1", 
-  "webPageTemplateId" : "templateId", 
-  "webPageTemplateRevision" : "latest", 
-  "webPageGroup" : "group1", 
+  "name" : "webPage", 
+  "url" : "webPage2Url", 
+  "site" : "site1", 
+  "templateId" : "templateId", 
+  "templateRevision" : "latest", 
+  "group" : "group1", 
   "variablesArea" : {}, 
   "contentAreas" : [
   {

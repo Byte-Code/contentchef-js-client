@@ -20,6 +20,7 @@ var addToSomeNewRelease = {
         "definitionId" : "definition1",
         "definitionRevisionId" : "56a760163a1fde89024a7d98"
       },
+      "tags" : ["tag1"],
       "content" : { "a" : "b" }
     }],
     "webPages" : [{
@@ -31,10 +32,21 @@ var addToSomeNewRelease = {
       "site" : "site1",
       "templateId": "",
       "templateRevision" : "",
+      "variablesArea" : {},
       "group" : "",
       "contentAreas" : [{ 
-      	"contents": [{}]
-      }]
+	  	"areaName": "area1",
+	  	"areaType": "areaType",
+	  	"areaDescription": "areaDescription",
+	  	"contents": [{
+	    	"contentId": "content1",
+	    	"contentDefinitionId": "contentDefinition1",
+	    	"#repository": "repo1",
+	    	"#definitionRepository": "repo1",
+	    	"#definitionId" : "definitionId",
+	    	"#definitionRevision" : "revision"
+	  	}]
+	  }]
     }]
 }
 
@@ -48,23 +60,23 @@ var publishSomeNewRelease = {
 
 
 
-readPromise("lookupContentByRevision", api.lookupContentByRevision("leroymerlin", "content2", "56b891d78a456d13026afc1d"))
-readPromise("lookupContentLatestRevision", api.lookupContentLatestRevision("leroymerlin", "content2"))
-readPromise("lookupContentBySlug", api.lookupContentBySlug("leroymerlin", "slug2", "56b891d78a456d13026afc1d"))
-readPromise("lookupContentLatestRevisionBySlug", api.lookupContentLatestRevisionBySlug("leroymerlin", "slug2"))
-readPromise("listAllContentByDefinition", api.listAllContentByDefinition("leroymerlin", "definition1"))
-readPromise("listUnpublishedContentsByDefinition", api.listUnpublishedContentsByDefinition("leroymerlin", "definition1", "someKey"))
-readPromise("lookupWebPagesSitemapByUrl", api.lookupWebPagesSitemapByUrl("leroymerlin", "webPage2Url", "site1"))
-readPromise("lookupPageById", api.lookupPageById("leroymerlin", "webPage2"))
-readPromise("lookupPageByUrl", api.lookupPageByUrl("leroymerlin", "webPage2Url"))
-readPromise("storeQuery", api.storeQuery("leroymerlin", {
+readPromise("lookupContentByRevision", api.lookupContentByRevision("leroymerlin", "prod", "content2", "56b891d78a456d13026afc1d"))
+readPromise("lookupContentLatestRevision", api.lookupContentLatestRevision("leroymerlin", "prod", "content2"))
+readPromise("lookupContentBySlug", api.lookupContentBySlug("leroymerlin", "prod", "slug2", "56b891d78a456d13026afc1d"))
+readPromise("lookupContentLatestRevisionBySlug", api.lookupContentLatestRevisionBySlug("leroymerlin", "prod", "slug2"))
+readPromise("listAllContentByDefinition", api.listAllContentByDefinition("leroymerlin", "prod", "definition1"))
+readPromise("listUnpublishedContentsByDefinition", api.listUnpublishedContentsByDefinition("leroymerlin", "prod", "definition1", "someKey"))
+readPromise("lookupWebPagesSitemapByUrl", api.lookupWebPagesSitemapByUrl("leroymerlin", "prod", "webPage2Url", "site1"))
+readPromise("lookupPageById", api.lookupPageById("leroymerlin", "prod", "webPage2", "site1"))
+readPromise("lookupPageByUrl", api.lookupPageByUrl("leroymerlin", "prod", "webPage2Url", "site1"))
+readPromise("storeQuery", api.storeQuery("leroymerlin", "prod", {
 	"deliveryId" : "leroymerlin",
 	"find" : {"repository" : "leroymerlin"},
 	"name" : "someNewQuery"
 }))
-readCreateReleasePromise("createRelease", api.createRelease("leroymerlin", "leroymerlin", createSomeNewRelease))
-readPromise("searchContent", api.searchContent("leroymerlin", "query1"))
-readPromise("getAvailablePages", api.getAvailablePages("leroymerlin"))
+readCreateReleasePromise("createRelease", api.createRelease("leroymerlin", "prod", createSomeNewRelease))
+readPromise("searchContent", api.searchContent("leroymerlin", "prod", "query1"))
+readPromise("getAvailablePages", api.getAvailablePages("leroymerlin", "prod"))
 
 
 console.log("\nFinished.\n")
@@ -83,7 +95,7 @@ function readCreateReleasePromise(caller, promise) {
 	promise.then(function(result) {
 		console.log(caller + ": SUCCESS\n----------------------")
 		console.log(JSON.stringify(result) +"\n"); 
-		readAddToSomeNewReleasePromise("addToRelease", api.addToRelease("leroymerlin", addToSomeNewRelease))
+		readAddToSomeNewReleasePromise("addToRelease", api.addToRelease("leroymerlin", "prod", addToSomeNewRelease))
 	}, function(err) {
 		console.log(caller + ": ERROR\n----------------------")
 		console.log(JSON.stringify(err) +"\n");
@@ -94,7 +106,7 @@ function readAddToSomeNewReleasePromise(caller, promise) {
 	promise.then(function(result) {
 		console.log(caller + ": SUCCESS\n----------------------")
 		console.log(JSON.stringify(result) +"\n"); 
-		readStageSomeNewReleasePromise("stageRelease", api.stageRelease("leroymerlin", stageSomeNewRelease))
+		readStageSomeNewReleasePromise("stageRelease", api.stageRelease("leroymerlin", "prod", stageSomeNewRelease))
 	}, function(err) {
 		console.log(caller + ": ERROR\n----------------------")
 		console.log(JSON.stringify(err) +"\n");
@@ -105,7 +117,7 @@ function readStageSomeNewReleasePromise(caller, promise) {
 	promise.then(function(result) {
 		console.log(caller + ": SUCCESS\n----------------------")
 		console.log(JSON.stringify(result) +"\n"); 
-		readPublishSomeNewReleasePromise("publishStagedRelease", api.publishStagedRelease("leroymerlin", publishSomeNewRelease))
+		readPublishSomeNewReleasePromise("publishStagedRelease", api.publishStagedRelease("leroymerlin", "prod", publishSomeNewRelease))
 	}, function(err) {
 		console.log(caller + ": ERROR\n----------------------")
 		console.log(JSON.stringify(err) +"\n");
