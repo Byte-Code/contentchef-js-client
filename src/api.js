@@ -38,8 +38,6 @@
             return this;
         },
 
-        /******  AUTHORING  ******/
-
 
         lookupContentByRevision: function(spaceId, deliveryId, contentId, contentRevision) {
             return delivery.lookupContentByRevision(spaceId, deliveryId, contentId, contentRevision);
@@ -57,8 +55,20 @@
             return delivery.lookupContentLatestRevisionBySlug(spaceId, deliveryId, contentSlug);
         },
 
-        listAllContentByDefinition: function(spaceId, deliveryId, definitionId) {
-            return delivery.listAllContentByDefinition(spaceId, deliveryId, definitionId);
+        listContentsByTag: function(spaceId, deliveryId, tag) {
+            return delivery.listContentsByTag(spaceId, deliveryId, tag);
+        },
+
+        listContentsByTagAndDefinition: function(spaceId, deliveryId, tag, definitionId) {
+            return delivery.listContentsByTagAndDefinition(spaceId, deliveryId, tag, definitionId);
+        },
+
+        listContentsByDefinition: function(spaceId, deliveryId, definitionId) {
+            return delivery.listContentsByDefinition(spaceId, deliveryId, definitionId);
+        },
+
+        listContentsByDefinitionFromTo: function(spaceId, deliveryId, definitionId, from, to) {
+            return delivery.listContentsByDefinitionFromTo(spaceId, deliveryId, definitionId, from, to);
         },
 
         listUnpublishedContentsByDefinition: function(spaceId, deliveryId, definitionId, apiKey) {

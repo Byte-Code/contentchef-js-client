@@ -35,8 +35,26 @@ module.exports = {
         return http.getItem(theFullUrl, this.apiToken, mapSuccessfulResponseToContent);
     },
 
-    listAllContentByDefinition: function(spaceId, deliveryId, definitionId) {
+    listContentsByTag: function(spaceId, deliveryId, tag) {
+        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listContentsByTag/' + encodeURIComponent(tag) ;
+
+        return http.getItem(theFullUrl, this.apiToken, mapSuccessfulResponseToContentList);
+    },
+
+    listContentsByTagAndDefinition: function(spaceId, deliveryId, tag, definitionId) {
+        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listContentsByTagAndDefinition/' + encodeURIComponent(tag) + '/' + encodeURIComponent(definitionId) ;
+
+        return http.getItem(theFullUrl, this.apiToken, mapSuccessfulResponseToContentList);
+    },
+
+    listContentsByDefinition: function(spaceId, deliveryId, definitionId) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listContentsByDefinitionId/' + encodeURIComponent(definitionId) ;
+
+        return http.getItem(theFullUrl, this.apiToken, mapSuccessfulResponseToContentList);
+    },
+
+    listContentsByDefinitionFromTo: function(spaceId, deliveryId, definitionId, from, to) {
+        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listContentsByDefinitionId/' + encodeURIComponent(definitionId) + '/' + encodeURIComponent(from) + '/' + encodeURIComponent(to) ;
 
         return http.getItem(theFullUrl, this.apiToken, mapSuccessfulResponseToContentList);
     },

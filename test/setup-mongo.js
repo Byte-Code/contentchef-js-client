@@ -9,7 +9,7 @@ var unpublishedContent = {
     "definitionRevisionId" : "56a760163a1fde89024a7d98"
   }, 
   "tags" : [
-  ""
+    "tag1"
   ], 
   "content" : {
     "foo" : "bar"
@@ -28,7 +28,7 @@ var publishedContent = {
     "definitionRevisionId" : "56a760163a1fde89024a7d99"
   }, 
   "tags" : [
-  ""
+    "tag1"
   ], 
   "content" : {
     "foo" : "bar",
