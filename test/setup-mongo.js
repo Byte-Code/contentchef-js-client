@@ -19,7 +19,7 @@ var unpublishedContent = {
   "itemType" : "content", 
   "releaseId" : "unpublishedReleaseOnDelivery", 
   "published" : false
-}
+};
 
 var publishedContent = { 
     "_id" : new ObjectID.createFromHexString("56b891d78a456d13026afc1d"),
@@ -39,7 +39,7 @@ var publishedContent = {
   "itemType" : "content", 
   "releaseId" : "publishedReleaseOnDelivery", 
   "published" : true
-}
+};
 
 var unpublishedWebPage = { 
     "_id" : new ObjectID.createFromHexString("56b891d78a456d13026afc2c"),
@@ -71,7 +71,7 @@ var unpublishedWebPage = {
     ]
   }
   ]
-}
+};
 
 var publishedWebPage = { 
     "_id" : new ObjectID.createFromHexString("56b891d78a456d13026afc2d"),
@@ -103,12 +103,12 @@ var publishedWebPage = {
     ]
   }
   ]
-}
+};
 
 var query = {
   "find" : "{\"repository\" : \"leroymerlin\"}",
   "queryName" : "query1"
-}
+};
 
 MongoClient.connect("mongodb://localhost:27017/dev_contentchef_delivery_v2", function(err, db) {
   if(err) { return console.dir(err); }

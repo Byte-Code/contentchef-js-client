@@ -1,32 +1,31 @@
 
-"use strict";
 
 var promise = require('es6-promise');
 var axios = require('axios');
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
-const BAD_REQUEST = 400
-const NOT_FOUND = 404
-const INTERNAL_SERVER_ERROR = 500
+var BAD_REQUEST = 400;
+var NOT_FOUND = 404;
+var INTERNAL_SERVER_ERROR = 500;
 
 var mapSuccessfulResponse = function(data) {
     return data;
-}
+};
 
 var mapErrorResponse = function(response) {
 
     var data = response.data;
 
     if (data && data.failure && data.failure == 'not.found') {
-        return new NotFound(response)
+        return new NotFound(response);
     }
 
     if (response.status == BAD_REQUEST) {
-        return new BadRequest(response)
+        return new BadRequest(response);
     }
 
     if (response.status == INTERNAL_SERVER_ERROR) {
-        return new InternalServerError(response)
+        return new InternalServerError(response);
     }
 
     return new GenericError(response);

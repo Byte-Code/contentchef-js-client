@@ -1,14 +1,11 @@
 
-"use strict";
-
-var http = require('./http-module')
-var url = ""
+var http = require('./http-module');
+var url = "";
 
 module.exports = {
 
-
     setUrl: function(newUrl) {
-        url = newUrl
+        url = newUrl;
     },
 
     lookupContentByRevision: function(spaceId, deliveryId, contentId, contentRevision) {
@@ -197,5 +194,5 @@ var mapSuccessfulResponseToWebPageList = function(data) {
 };
 
 var mapSuccessfulResponseToSiteMap = function(data) {
-    return data
+    return data;
 };

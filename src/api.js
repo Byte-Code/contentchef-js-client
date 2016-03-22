@@ -29,7 +29,7 @@
 
         initialize: function(deliveryUrl, origin, apiToken, apiCache, cacheTimeToLive) {
 
-            delivery.setUrl(deliveryUrl )//+ contentChef.prototype.API_URL_DELIVERY)
+            delivery.setUrl(deliveryUrl ); //+ contentChef.prototype.API_URL_DELIVERY)
 
             this.origin = origin;
             this.apiToken = apiToken;
