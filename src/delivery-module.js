@@ -1,6 +1,7 @@
 
 var http = require('./http-module');
 var url = "";
+var token = {};
 
 module.exports = {
 
@@ -8,106 +9,110 @@ module.exports = {
         url = newUrl;
     },
 
+    setApiToken: function(apiToken) {
+        token = apiToken;
+    },
+
     lookupContentByRevision: function(spaceId, deliveryId, contentId, contentRevision) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getContent/' + encodeURIComponent(contentId) + '/' + encodeURIComponent(contentRevision);
 
-        return http.getItem(theFullUrl, this.apiToken, mapSuccessfulResponseToContent);
+        return http.getItem(theFullUrl, mapSuccessfulResponseToContent, token);
     },
 
     lookupContentLatestRevision: function(spaceId, deliveryId, contentId) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getLatestContent/' + encodeURIComponent(contentId);
 
-        return http.getItem(theFullUrl, this.apiToken, mapSuccessfulResponseToContent);
+        return http.getItem(theFullUrl, mapSuccessfulResponseToContent, token);
     },
 
     lookupContentBySlug: function(spaceId, deliveryId, contentSlug, contentRevision) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getContentBySlug/' + encodeURIComponent(contentSlug) + '/' + encodeURIComponent(contentRevision);
 
-        return http.getItem(theFullUrl, this.apiToken, mapSuccessfulResponseToContent);
+        return http.getItem(theFullUrl, mapSuccessfulResponseToContent, token);
     },
 
     lookupContentLatestRevisionBySlug: function(spaceId, deliveryId, contentSlug) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getLatestContentBySlug/' + encodeURIComponent(contentSlug);
 
-        return http.getItem(theFullUrl, this.apiToken, mapSuccessfulResponseToContent);
+        return http.getItem(theFullUrl, mapSuccessfulResponseToContent, token);
     },
 
     listContentsByTag: function(spaceId, deliveryId, tag) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listContentsByTag/' + encodeURIComponent(tag) ;
 
-        return http.getItem(theFullUrl, this.apiToken, mapSuccessfulResponseToContentList);
+        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, token);
     },
 
     listContentsByTagAndDefinition: function(spaceId, deliveryId, tag, definitionId) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listContentsByTagAndDefinition/' + encodeURIComponent(tag) + '/' + encodeURIComponent(definitionId) ;
 
-        return http.getItem(theFullUrl, this.apiToken, mapSuccessfulResponseToContentList);
+        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, token);
     },
 
     listContentsByDefinition: function(spaceId, deliveryId, definitionId) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listContentsByDefinitionId/' + encodeURIComponent(definitionId) ;
 
-        return http.getItem(theFullUrl, this.apiToken, mapSuccessfulResponseToContentList);
+        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, token);
     },
 
     listContentsByDefinitionFromTo: function(spaceId, deliveryId, definitionId, from, to) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listContentsByDefinitionId/' + encodeURIComponent(definitionId) + '/' + encodeURIComponent(from) + '/' + encodeURIComponent(to) ;
 
-        return http.getItem(theFullUrl, this.apiToken, mapSuccessfulResponseToContentList);
+        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, token);
     },
 
-    listUnpublishedContentsByDefinition: function(spaceId, deliveryId, definitionId, apiKey) {
+    listUnpublishedContentsByDefinition: function(spaceId, deliveryId, definitionId) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listUnpublishedContentsByDefinitionId/' + encodeURIComponent(definitionId) ;
 
-        return http.getProtectedItem(theFullUrl, this.apiToken, apiKey, mapSuccessfulResponseToContentList, apiKey);
+        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, token);
     },
 
     lookupWebPagesSitemapByUrl: function(spaceId, deliveryId, baseURL, site) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getWebpagesSitemap/' + encodeURIComponent(baseURL) + '/' + encodeURIComponent(site);
 
-        return http.getItem(theFullUrl, this.apiToken, mapSuccessfulResponseToSiteMap);
+        return http.getItem(theFullUrl, mapSuccessfulResponseToSiteMap, token);
     },
 
     lookupPageById : function(spaceId, deliveryId, pageId, site) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getWebPageById/' + encodeURIComponent(site)  + '/' + encodeURIComponent(pageId);
 
-        return http.getItem(theFullUrl, this.apiToken, mapSuccessfulResponseToWebPage);
+        return http.getItem(theFullUrl, mapSuccessfulResponseToWebPage, token);
     },
 
     lookupPageByUrl : function(spaceId, deliveryId, pageUrl, site) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getWebPageByUrl/' + encodeURIComponent(site)  + '/' + encodeURIComponent(pageUrl);
 
-        return http.getItem(theFullUrl, this.apiToken, mapSuccessfulResponseToWebPage);
+        return http.getItem(theFullUrl, mapSuccessfulResponseToWebPage, token);
     },
 
     storeQuery: function(spaceId, deliveryId, params) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId)  + '/storeQuery';
 
-        return http.postItem(theFullUrl, this.apiToken, params);
+        return http.postItem(theFullUrl, params, token);
     },
 
     createRelease: function(spaceId, deliveryId, params) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId)  + '/createRelease';
 
-        return http.postItem(theFullUrl, this.apiToken, params);
+        return http.postItem(theFullUrl, params, token);
     },
 
     addToRelease: function(spaceId, deliveryId, params) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId)  + '/addToRelease';
 
-        return http.postItem(theFullUrl, this.apiToken, params);
+        return http.postItem(theFullUrl, params, token);
     },
 
     stageRelease: function(spaceId, deliveryId, params) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId)  + '/stageRelease';
 
-        return http.postItem(theFullUrl, this.apiToken, params);
+        return http.postItem(theFullUrl, params, token);
     },
 
     publishStagedRelease: function(spaceId, deliveryId, params) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId)  + '/publishStagedRelease';
 
-        return http.postItem(theFullUrl, this.apiToken, params);
+        return http.postItem(theFullUrl, params, token);
     },
 
     searchContent: function(spaceId, deliveryId, queryName, queryParam) {
@@ -118,14 +123,14 @@ module.exports = {
             theFullUrl = theFullUrl + '?queryParam' + encodeURIComponent(queryParam);
         }
 
-        return http.getItem(theFullUrl, this.apiToken, mapSuccessfulResponseToContentList);
+        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, token);
     },
 
     getAvailablePages: function(spaceId, deliveryId) {
 
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getAvailablePages';
 
-        return http.getItem(theFullUrl, this.apiToken, mapSuccessfulResponseToWebPageList);
+        return http.getItem(theFullUrl, mapSuccessfulResponseToWebPageList, token);
     }
 };
 

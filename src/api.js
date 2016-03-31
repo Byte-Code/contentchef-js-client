@@ -29,10 +29,10 @@
 
         initialize: function(deliveryUrl, origin, apiToken, apiCache, cacheTimeToLive) {
 
-            delivery.setUrl(deliveryUrl ); //+ contentChef.prototype.API_URL_DELIVERY)
+            delivery.setUrl(deliveryUrl); //+ contentChef.prototype.API_URL_DELIVERY)
+            delivery.setApiToken(apiToken); //+ contentChef.prototype.API_URL_DELIVERY)
 
             this.origin = origin;
-            this.apiToken = apiToken;
             this.apiCache = apiCache || defaultGlobalCache();
             this.dataCacheTTL = cacheTimeToLive || 10;
             return this;
@@ -71,8 +71,8 @@
             return delivery.listContentsByDefinitionFromTo(spaceId, deliveryId, definitionId, from, to);
         },
 
-        listUnpublishedContentsByDefinition: function(spaceId, deliveryId, definitionId, apiKey) {
-            return delivery.listUnpublishedContentsByDefinition(spaceId, deliveryId, definitionId, apiKey);
+        listUnpublishedContentsByDefinition: function(spaceId, deliveryId, definitionId, apiKeyForUnpublishedContent) {
+            return delivery.listUnpublishedContentsByDefinition(spaceId, deliveryId, definitionId, apiKeyForUnpublishedContent);
         },
 
         lookupWebPagesSitemapByUrl: function(spaceId, deliveryId, baseURL, site) {

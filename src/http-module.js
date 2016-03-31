@@ -8,10 +8,6 @@ var BAD_REQUEST = 400;
 var NOT_FOUND = 404;
 var INTERNAL_SERVER_ERROR = 500;
 
-var mapSuccessfulResponse = function(data) {
-    return data;
-};
-
 var mapErrorResponse = function(response) {
 
     var data = response.data;
@@ -64,28 +60,11 @@ function GenericError(response) {
 
 module.exports = {
 
-    getItem: function(fullUrl, apiToken, successMappingFunction) {
-
-        var successFunction = (successMappingFunction) ? successMappingFunction : mapSuccessfulResponse;
-
-        return new Promise(function(resolve, reject) {
-            axios.get(fullUrl)
-            .then(function(result) {
-                resolve(successFunction.call(this, result.data));
-            })
-            .catch(function(result) {
-                reject(mapErrorResponse.call(this, result));
-            });
-        });
-    },
-
-    getProtectedItem: function(fullUrl, apiToken, apiKey, successMappingFunction) {
+    getItem: function(fullUrl, successFunction, apiKeyJson) {
 
         var config = {
-            headers: {'api-key': apiKey}
+            headers: apiKeyJson
         };
-
-        var successFunction = (successMappingFunction) ? successMappingFunction : mapSuccessfulResponse;
 
         return new Promise(function(resolve, reject) {
             axios.get(fullUrl, config)
@@ -98,12 +77,12 @@ module.exports = {
         });
     },
 
-    postItem: function(fullUrl, apiToken, params) {
+    postItem: function(fullUrl, params) {
 
         return new Promise(function(resolve, reject) {
             axios.post(fullUrl, params)
             .then(function(result) {
-                resolve(mapSuccessfulResponse.call(this, result.data));
+                resolve(result.data);
             })
             .catch(function(result) {
                 reject(mapErrorResponse.call(this, result));

@@ -1,6 +1,6 @@
 
 var cc = require('./../src/api');
-var api = cc.ContentChef.Api("http://localhost:9002", "");
+var api = cc.ContentChef.Api("http://localhost:9002", "origin", {"api-key" : "someKey"});
 
 console.log("\nStarting script...\n###################");
 
@@ -68,7 +68,7 @@ readPromise("listContentsByTag", api.listContentsByTag("leroymerlin", "prod", "t
 readPromise("listContentsByTagAndDefinition", api.listContentsByTagAndDefinition("leroymerlin", "prod", "tag1", "definition1"));
 readPromise("listContentsByDefinition", api.listContentsByDefinition("leroymerlin", "prod", "definition1"));
 readPromise("listContentsByDefinitionFromTo", api.listContentsByDefinitionFromTo("leroymerlin", "prod", "definition1", 0, 1));
-readPromise("listUnpublishedContentsByDefinition", api.listUnpublishedContentsByDefinition("leroymerlin", "prod", "definition1", "someKey"));
+readPromise("listUnpublishedContentsByDefinition", api.listUnpublishedContentsByDefinition("leroymerlin", "prod", "definition1"));
 readPromise("lookupWebPagesSitemapByUrl", api.lookupWebPagesSitemapByUrl("leroymerlin", "prod", "webPage2Url", "site1"));
 readPromise("lookupPageById", api.lookupPageById("leroymerlin", "prod", "webPage2", "site1"));
 readPromise("lookupPageByUrl", api.lookupPageByUrl("leroymerlin", "prod", "webPage2Url", "site1"));
