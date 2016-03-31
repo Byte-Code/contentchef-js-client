@@ -9,14 +9,13 @@
      * @alias Api
      * @constructor
      * @param {string} baseUrl - The base URL of the contentchef.io API endpoint
-     * @param {string} origin - The base URL of the contentchef.io API endpoint
      * @param {string} apiToken - The apiToken
      * @param {function} apiCache - A cache object that will be used for caching API responses (if not provided a default one will be used)
      * @param {int} cacheTimeToLive - The time to leave , in seconds, for the items in the cache (if not provided a default will be used)
      * @returns {Api} - The created api object
      */
-    var contentChef = function(deliveryUrl, origin, apiToken, apiCache, cacheTimeToLive) {
-        var theApi = contentChef.fn.initialize(deliveryUrl, origin, apiToken, apiCache, cacheTimeToLive);
+    var contentChef = function(deliveryUrl, apiToken, apiCache, cacheTimeToLive) {
+        var theApi = contentChef.fn.initialize(deliveryUrl, apiToken, apiCache, cacheTimeToLive);
 
         return theApi;
     };
@@ -27,12 +26,11 @@
 
         API_URL_DELIVERY: '/contentchef-delivery/v1/',
 
-        initialize: function(deliveryUrl, origin, apiToken, apiCache, cacheTimeToLive) {
+        initialize: function(deliveryUrl, apiToken, apiCache, cacheTimeToLive) {
 
             delivery.setUrl(deliveryUrl); //+ contentChef.prototype.API_URL_DELIVERY)
             delivery.setApiToken(apiToken); //+ contentChef.prototype.API_URL_DELIVERY)
 
-            this.origin = origin;
             this.apiCache = apiCache || defaultGlobalCache();
             this.dataCacheTTL = cacheTimeToLive || 10;
             return this;

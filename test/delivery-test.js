@@ -1,6 +1,6 @@
 
 var cc = require('./../src/api');
-var api = cc.ContentChef.Api("http://localhost:9002", "origin", {"api-key" : "someKey"});
+var api = cc.ContentChef.Api("http://localhost:9002", {"api-key" : "someKey"});
 
 console.log("\nStarting script...\n###################");
 
