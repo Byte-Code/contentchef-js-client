@@ -63,7 +63,7 @@ module.exports = {
 
     listUnpublishedContentsByDefinition: function(spaceId, deliveryId, definitionId, authToken) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listUnpublishedContentsByDefinitionId/' + encodeURIComponent(definitionId);
-        var authHeader = {}
+        var authHeader = {};
         for (var key in header) authHeader[key] = header[key];
         authHeader["api-key"] = authToken;
         return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, authHeader);

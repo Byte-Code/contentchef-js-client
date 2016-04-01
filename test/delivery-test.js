@@ -2,8 +2,6 @@
 var cc = require('./../src/api');
 var api = cc.ContentChef.Api("http://localhost:9002", "");
 
-console.log("\nStarting script...\n###################");
-
 var createSomeNewRelease = { 
     "releaseId" : "someNewRelease",
     "spaceId" : "leroymerlin",
@@ -58,7 +56,7 @@ var publishSomeNewRelease = {
     "releaseId" : "someNewRelease"
 };
 
-
+console.log("Testing in progress...\n")
 
 readPromise("lookupContentByRevision", api.lookupContentByRevision("leroymerlin", "prod", "content2", "56b891d78a456d13026afc1d"));
 readPromise("lookupContentLatestRevision", api.lookupContentLatestRevision("leroymerlin", "prod", "content2"));
@@ -81,13 +79,9 @@ readCreateReleasePromise("createRelease", api.createRelease("leroymerlin", "prod
 readPromise("searchContent", api.searchContent("leroymerlin", "prod", "query1"));
 readPromise("getAvailablePages", api.getAvailablePages("leroymerlin", "prod"));
 
-
-console.log("\nFinished.\n");
-
 function readPromise(caller, promise) {
 	promise.then(function(result) {
-		console.log(caller + ": SUCCESS\n----------------------");
-		console.log(JSON.stringify(result) +"\n"); 
+		console.log(caller + ": SUCCESS");
 	}, function(err) {
 		console.log(caller + ": ERROR\n----------------------");
 		console.log(JSON.stringify(err) +"\n");
@@ -96,8 +90,7 @@ function readPromise(caller, promise) {
 
 function readCreateReleasePromise(caller, promise) {
 	promise.then(function(result) {
-		console.log(caller + ": SUCCESS\n----------------------");
-		console.log(JSON.stringify(result) +"\n"); 
+		console.log(caller + ": SUCCESS");
 		readAddToSomeNewReleasePromise("addToRelease", api.addToRelease("leroymerlin", "prod", addToSomeNewRelease));
 	}, function(err) {
 		console.log(caller + ": ERROR\n----------------------");
@@ -107,8 +100,7 @@ function readCreateReleasePromise(caller, promise) {
 
 function readAddToSomeNewReleasePromise(caller, promise) {
 	promise.then(function(result) {
-		console.log(caller + ": SUCCESS\n----------------------");
-		console.log(JSON.stringify(result) +"\n"); 
+		console.log(caller + ": SUCCESS");
 		readStageSomeNewReleasePromise("stageRelease", api.stageRelease("leroymerlin", "prod", stageSomeNewRelease));
 	}, function(err) {
 		console.log(caller + ": ERROR\n----------------------");
@@ -118,19 +110,8 @@ function readAddToSomeNewReleasePromise(caller, promise) {
 
 function readStageSomeNewReleasePromise(caller, promise) {
 	promise.then(function(result) {
-		console.log(caller + ": SUCCESS\n----------------------");
-		console.log(JSON.stringify(result) +"\n"); 
-		readPublishSomeNewReleasePromise("publishStagedRelease", api.publishStagedRelease("leroymerlin", "prod", publishSomeNewRelease));
-	}, function(err) {
-		console.log(caller + ": ERROR\n----------------------");
-		console.log(JSON.stringify(err) +"\n");
-	});
-}
-
-function readPublishSomeNewReleasePromise(caller, promise) {
-	promise.then(function(result) {
-		console.log(caller + ": SUCCESS\n----------------------");
-		console.log(JSON.stringify(result) +"\n"); 
+		console.log(caller + ": SUCCESS");
+		readPromise("publishStagedRelease", api.publishStagedRelease("leroymerlin", "prod", publishSomeNewRelease));
 	}, function(err) {
 		console.log(caller + ": ERROR\n----------------------");
 		console.log(JSON.stringify(err) +"\n");

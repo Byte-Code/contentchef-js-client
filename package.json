@@ -4,9 +4,7 @@
   "description": "ContentChef.io javascript client",
   "main": "require('content-chef-delivery-js-client');",
   "scripts": {
-    "commit": "git-cz",
-    "test": "mocha test/index.test.js -w",
-    "test:single": "istanbul cover -x *.test.js _mocha -- -R spec test/index.test.js"
+    "test:coverage": "node ./test/setup-mongo.js; istanbul cover ./test/delivery-test.js; "
   },
   "files": "dist",
   "repository": {
@@ -18,15 +16,11 @@
   "homepage": "https://bitbucket.org/bytecode-lm/content-chef-delivery-js-client#readme",
   "devDependencies": {
     "browserify": "latest",
-    "chai": "3.4.1",
-    "commitizen": "2.4.6",
-    "cz-conventional-changelog": "1.1.4",
     "ghooks": "1.0.1",
     "grunt": "~0.4.5",
     "grunt-browserify": "4.0.1",
     "grunt-contrib-concat": "0.5.1",
     "grunt-contrib-jshint": "~0.10.0",
-    "grunt-contrib-nodeunit": "~0.4.1",
     "grunt-contrib-uglify": "0.5.1",
     "grunt-contrib-watch": "0.6.1",
     "grunt-mocha": "0.4.13",
@@ -34,8 +28,7 @@
     "istanbul": "0.4.0",
     "jshint": "latest",
     "load-grunt-tasks": "^3.2.0",
-    "mocha": "2.3.4",
-    "sinon": "1.17.2"
+    "mocha": "2.3.4"
   },
   "dependencies": {
     "axios": "0.7.0",
@@ -47,7 +40,7 @@
   },
   "config": {
     "ghooks": {
-      "pre-commit": "npm run test:single"
+      "pre-commit": "npm run test:coverage"
     }
   },
   "directories": {
