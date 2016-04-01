@@ -60,12 +60,12 @@ function GenericError(response) {
 
 module.exports = {
 
-    getItem: function(fullUrl, successFunction, apiKeyJson) {
+    getItem: function(fullUrl, successFunction, header) {
 
         var config = {
-            headers: apiKeyJson
+            headers: header
         };
-
+        
         return new Promise(function(resolve, reject) {
             axios.get(fullUrl, config)
             .then(function(result) {

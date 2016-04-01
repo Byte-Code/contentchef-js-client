@@ -1,7 +1,7 @@
 
 var http = require('./http-module');
 var url = "";
-var token = {};
+var header = {};
 
 module.exports = {
 
@@ -10,109 +10,111 @@ module.exports = {
     },
 
     setApiToken: function(apiToken) {
-        token = apiToken;
+        header = {"x-square-api-token" : apiToken};
     },
 
     lookupContentByRevision: function(spaceId, deliveryId, contentId, contentRevision) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getContent/' + encodeURIComponent(contentId) + '/' + encodeURIComponent(contentRevision);
 
-        return http.getItem(theFullUrl, mapSuccessfulResponseToContent, token);
+        return http.getItem(theFullUrl, mapSuccessfulResponseToContent, header);
     },
 
     lookupContentLatestRevision: function(spaceId, deliveryId, contentId) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getLatestContent/' + encodeURIComponent(contentId);
 
-        return http.getItem(theFullUrl, mapSuccessfulResponseToContent, token);
+        return http.getItem(theFullUrl, mapSuccessfulResponseToContent, header);
     },
 
     lookupContentBySlug: function(spaceId, deliveryId, contentSlug, contentRevision) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getContentBySlug/' + encodeURIComponent(contentSlug) + '/' + encodeURIComponent(contentRevision);
 
-        return http.getItem(theFullUrl, mapSuccessfulResponseToContent, token);
+        return http.getItem(theFullUrl, mapSuccessfulResponseToContent, header);
     },
 
     lookupContentLatestRevisionBySlug: function(spaceId, deliveryId, contentSlug) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getLatestContentBySlug/' + encodeURIComponent(contentSlug);
 
-        return http.getItem(theFullUrl, mapSuccessfulResponseToContent, token);
+        return http.getItem(theFullUrl, mapSuccessfulResponseToContent, header);
     },
 
     listContentsByTag: function(spaceId, deliveryId, tag) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listContentsByTag/' + encodeURIComponent(tag) ;
 
-        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, token);
+        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
     },
 
     listContentsByTagAndDefinition: function(spaceId, deliveryId, tag, definitionId) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listContentsByTagAndDefinition/' + encodeURIComponent(tag) + '/' + encodeURIComponent(definitionId) ;
 
-        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, token);
+        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
     },
 
     listContentsByDefinition: function(spaceId, deliveryId, definitionId) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listContentsByDefinitionId/' + encodeURIComponent(definitionId) ;
 
-        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, token);
+        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
     },
 
     listContentsByDefinitionFromTo: function(spaceId, deliveryId, definitionId, from, to) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listContentsByDefinitionId/' + encodeURIComponent(definitionId) + '/' + encodeURIComponent(from) + '/' + encodeURIComponent(to) ;
 
-        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, token);
+        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
     },
 
-    listUnpublishedContentsByDefinition: function(spaceId, deliveryId, definitionId) {
-        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listUnpublishedContentsByDefinitionId/' + encodeURIComponent(definitionId) ;
-
-        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, token);
+    listUnpublishedContentsByDefinition: function(spaceId, deliveryId, definitionId, authToken) {
+        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listUnpublishedContentsByDefinitionId/' + encodeURIComponent(definitionId);
+        var authHeader = {}
+        for (var key in header) authHeader[key] = header[key];
+        authHeader["api-key"] = authToken;
+        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, authHeader);
     },
 
     lookupWebPagesSitemapByUrl: function(spaceId, deliveryId, baseURL, site) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getWebpagesSitemap/' + encodeURIComponent(baseURL) + '/' + encodeURIComponent(site);
 
-        return http.getItem(theFullUrl, mapSuccessfulResponseToSiteMap, token);
+        return http.getItem(theFullUrl, mapSuccessfulResponseToSiteMap, header);
     },
 
     lookupPageById : function(spaceId, deliveryId, pageId, site) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getWebPageById/' + encodeURIComponent(site)  + '/' + encodeURIComponent(pageId);
 
-        return http.getItem(theFullUrl, mapSuccessfulResponseToWebPage, token);
+        return http.getItem(theFullUrl, mapSuccessfulResponseToWebPage, header);
     },
 
     lookupPageByUrl : function(spaceId, deliveryId, pageUrl, site) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getWebPageByUrl/' + encodeURIComponent(site)  + '/' + encodeURIComponent(pageUrl);
 
-        return http.getItem(theFullUrl, mapSuccessfulResponseToWebPage, token);
+        return http.getItem(theFullUrl, mapSuccessfulResponseToWebPage, header);
     },
 
     storeQuery: function(spaceId, deliveryId, params) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId)  + '/storeQuery';
 
-        return http.postItem(theFullUrl, params, token);
+        return http.postItem(theFullUrl, params, header);
     },
 
     createRelease: function(spaceId, deliveryId, params) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId)  + '/createRelease';
 
-        return http.postItem(theFullUrl, params, token);
+        return http.postItem(theFullUrl, params, header);
     },
 
     addToRelease: function(spaceId, deliveryId, params) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId)  + '/addToRelease';
 
-        return http.postItem(theFullUrl, params, token);
+        return http.postItem(theFullUrl, params, header);
     },
 
     stageRelease: function(spaceId, deliveryId, params) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId)  + '/stageRelease';
 
-        return http.postItem(theFullUrl, params, token);
+        return http.postItem(theFullUrl, params, header);
     },
 
     publishStagedRelease: function(spaceId, deliveryId, params) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId)  + '/publishStagedRelease';
 
-        return http.postItem(theFullUrl, params, token);
+        return http.postItem(theFullUrl, params, header);
     },
 
     searchContent: function(spaceId, deliveryId, queryName, queryParam) {
@@ -123,14 +125,14 @@ module.exports = {
             theFullUrl = theFullUrl + '?queryParam' + encodeURIComponent(queryParam);
         }
 
-        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, token);
+        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
     },
 
     getAvailablePages: function(spaceId, deliveryId) {
 
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getAvailablePages';
 
-        return http.getItem(theFullUrl, mapSuccessfulResponseToWebPageList, token);
+        return http.getItem(theFullUrl, mapSuccessfulResponseToWebPageList, header);
     }
 };
 
