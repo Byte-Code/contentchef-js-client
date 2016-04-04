@@ -3,8 +3,12 @@
 
     "use strict";
 
-    // reference for proxying calls to new api 
-    var newChefApi = {};
+    var oldChef = require('./../src/api-v1');
+    var newChef = require('./../src/api-v2');
+
+    var oldChefApi = {}; // reference for proxying calls to old api 
+    var newChefApi = {}; // reference for proxying calls to new api 
+    
 
     /**
      * The kit's main entry point; initialize your API like this: ContentChef.Api(baseUrl, apiToken, apiCache, cacheTimeToLive)
@@ -33,14 +37,14 @@
         GENERIC_ERROR : new GenericError(),
 
         initialize: function(baseUrl, origin, apiToken, apiCache, cacheTimeToLive) {
-            this.url = baseUrl +  adapter.prototype.API_URL;
+            this.url = baseUrl + adapter.prototype.API_URL;
             this.origin = origin;
             this.apiToken = apiToken || "";
             this.apiCache = apiCache || defaultGlobalCache();
             this.dataCacheTTL = cacheTimeToLive || 10;
 
-            var newChef = require('./../src/api-v2');
-            newChefApi = newChef.ContentChef.Api(this.url , this.apiToken, this.apiCache, this.dataCacheTTL);
+            oldChefApi = oldChef.ContentChef.Api(this.url, this.origin, this.apiToken, this.apiCache, this.dataCacheTTL);
+            newChefApi = newChef.ContentChef.Api(this.url, this.apiToken, this.apiCache, this.dataCacheTTL);
 
             return this;
         },
@@ -53,8 +57,7 @@
             	return newChefApi.lookupPageByUrl(spaceId, deliveryId, site, pageUrl);
 			} else {
 				pageUrl = p1;
-            	var theFullUrl = this.url + 'getWebPageByUrl/' + encodeURIComponent(this.origin)  + '/' + encodeURIComponent(pageUrl);
-            	return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebPage,mapErrorResponse);
+                return oldChefApi.lookupPageByUrl(pageUrl);
 			}
         },
 
@@ -66,8 +69,7 @@
             	return newChefApi.lookupPageById(spaceId, deliveryId, site, pageId);
 			} else {
 				pageId = p1;
-            	var theFullUrl = this.url + 'getWebPageById/' + encodeURIComponent(this.origin) + '/' + encodeURIComponent(pageId);
-            	return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebPage,mapErrorResponse);
+            	return oldChefApi.lookupPageById(pageId);
             }
         },
 
@@ -80,9 +82,7 @@
         	} else {
 				contentId = p1;
                 definitionId = p2;
-            	var theFullUrl = this.url + 'getLatestContent/' +
-                	encodeURIComponent(this.origin)  + '/' + encodeURIComponent(contentId) + '/' + encodeURIComponent(definitionId);
-            	return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContent,mapErrorResponse);
+            	return oldChefApi.lookupContentLatestRevision(contentId, definitionId);
             }
         },
 
@@ -95,17 +95,13 @@
         	} else {
 				contentSlug = p1;
                 definitionId = p2;
-            	var theFullUrl = this.url + 'getLatestContentBySlug/' +
-                	encodeURIComponent(this.origin)  + '/' + encodeURIComponent(contentSlug) + '/' + encodeURIComponent(definitionId);
-            	return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContent,mapErrorResponse);
+                return oldChefApi.lookupContentLatestRevisionBySlug(contentSlug, definitionId);
 			}
         },
 
         lookupContentRevision: function(contentId, contentRevision) {
         	// v1.0
-           	var theFullUrl = this.url + 'getContent/' +
-               	encodeURIComponent(this.origin)  + '/' + encodeURIComponent(contentId) + '/' + encodeURIComponent(contentRevision);
-            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContent,mapErrorResponse);
+            return oldChefApi.lookupContentRevision(contentId, contentRevision) ;
             
         },
 
@@ -116,9 +112,7 @@
 
         lookupContentRevisionBySlug: function(contentSlug, contentRevision) {
         	// v1.0
-            var theFullUrl = this.url + 'getContentBySlug/' +
-               	encodeURIComponent(this.origin)  + '/' + encodeURIComponent(contentSlug) + '/' + encodeURIComponent(contentRevision);
-           	return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContent,mapErrorResponse);
+            return oldChefApi.lookupContentRevisionBySlug(contentSlug, contentRevision);
         },
 
         lookupContentBySlug: function(spaceId, deliveryId, contentSlug, contentRevision) {
@@ -128,9 +122,7 @@
 
         listAllContentByDefinition: function(definitionId) {
         	// v1.0
-           	var theFullUrl = this.url + 'listContentsByDefinitionId' +
-               	'/' + encodeURIComponent(this.origin) + '/' + encodeURIComponent(definitionId) ;
-			return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContentList,mapErrorResponse);
+           	return oldChefApi.lookupContentBySlug(definitionId);
         },
 
         listContentsByDefinition: function(spaceId, deliveryId, definitionId) {
@@ -147,11 +139,7 @@
         	} else {
                 queryName = p1;
                 queryParam = p2;
-            	var theFullUrl = this.url + 'searchContent' + '/' + encodeURIComponent(queryName) ;
-            	if (queryParam) {
-                	theFullUrl = theFullUrl + '?queryParam=' + encodeURIComponent(queryParam);
-            	}
-            	return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContentList,mapErrorResponse);
+                return oldChefApi.searchContent(queryName, queryParam);
         	}
 
         },
@@ -161,8 +149,7 @@
 				var spaceId = p1, deliveryId = p2;
             	return newChefApi.getAvailablePages(spaceId, deliveryId);
         	} else {
-            	var theFullUrl = this.url + 'getAvailablePages' + '/' + encodeURIComponent(this.origin) ;
-            	return lookupItem(theFullUrl, this.apiToken, mapSuccessfulResponseToWebPageReferenceList,mapErrorResponse);
+                return oldChefApi.getAvailablePages();
             }
         },
 
