@@ -1,7 +1,10 @@
 
-(function(Global, undefined) {
+(function (Global, undefined) {
 
     "use strict";
+
+    // reference for proxying calls to new api 
+    var newChefApi = {};
 
     /**
      * The kit's main entry point; initialize your API like this: ContentChef.Api(baseUrl, apiToken, apiCache, cacheTimeToLive)
@@ -10,116 +13,334 @@
      * @alias Api
      * @constructor
      * @param {string} baseUrl - The base URL of the contentchef.io API endpoint
+     * @param {string} origin - The origin of the contents in the authoring microservice
      * @param {string} apiToken - The apiToken
      * @param {function} apiCache - A cache object that will be used for caching API responses (if not provided a default one will be used)
      * @param {int} cacheTimeToLive - The time to leave , in seconds, for the items in the cache (if not provided a default will be used)
      * @returns {Api} - The created api object
      */
-    var contentChef = function(deliveryUrl, apiToken, apiCache, cacheTimeToLive) {
-        var theApi = contentChef.fn.initialize(deliveryUrl, apiToken, apiCache, cacheTimeToLive);
+    var adapter = function (baseUrl, origin, apiToken, apiCache, cacheTimeToLive) {
+        var theApi = adapter.fn.initialize(baseUrl, origin, apiToken, apiCache, cacheTimeToLive);
 
         return theApi;
     };
 
-    var delivery = require('./delivery-module');
+    adapter.fn = adapter.prototype = {
 
-    contentChef.fn = contentChef.prototype = {
+        API_URL : '/contentchef-delivery/v1/',
 
-        API_URL_DELIVERY: '/contentchef-delivery/v1/',
+        NOT_FOUND : new NotFound(),
+        GENERIC_ERROR : new GenericError(),
 
-        initialize: function(deliveryUrl, apiToken, apiCache, cacheTimeToLive) {
-
-            delivery.setUrl(deliveryUrl); //+ contentChef.prototype.API_URL_DELIVERY)
-            delivery.setApiToken(apiToken); //+ contentChef.prototype.API_URL_DELIVERY)
-
+        initialize: function(baseUrl, origin, apiToken, apiCache, cacheTimeToLive) {
+            this.url = baseUrl +  adapter.prototype.API_URL;
+            this.origin = origin;
+            this.apiToken = apiToken || "";
             this.apiCache = apiCache || defaultGlobalCache();
             this.dataCacheTTL = cacheTimeToLive || 10;
+
+            var newChef = require('./../src/api-v2');
+            newChefApi = newChef.ContentChef.Api(this.url , this.apiToken, this.apiCache, this.dataCacheTTL);
+
             return this;
         },
 
+        lookupPageByUrl : function(p1, p2, p3, p4) {
 
-        lookupContentByRevision: function(spaceId, deliveryId, contentId, contentRevision) {
-            return delivery.lookupContentByRevision(spaceId, deliveryId, contentId, contentRevision);
+            var spaceId = p1, deliveryId = p2, site = p3, pageUrl = p4;
+
+        	if (typeof p2 !== 'undefined') {
+            	return newChefApi.lookupPageByUrl(spaceId, deliveryId, site, pageUrl);
+			} else {
+				pageUrl = p1;
+            	var theFullUrl = this.url + 'getWebPageByUrl/' + encodeURIComponent(this.origin)  + '/' + encodeURIComponent(pageUrl);
+            	return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebPage,mapErrorResponse);
+			}
         },
 
-        lookupContentLatestRevision: function(spaceId, deliveryId, contentId) {
-            return delivery.lookupContentLatestRevision(spaceId, deliveryId, contentId);
+        lookupPageById : function(p1, p2, p3, p4) {
+
+            var spaceId = p1, deliveryId = p2, site = p3, pageId = p4;
+
+        	if (typeof p2 !== 'undefined') {
+            	return newChefApi.lookupPageById(spaceId, deliveryId, site, pageId);
+			} else {
+				pageId = p1;
+            	var theFullUrl = this.url + 'getWebPageById/' + encodeURIComponent(this.origin) + '/' + encodeURIComponent(pageId);
+            	return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebPage,mapErrorResponse);
+            }
+        },
+
+        lookupContentLatestRevision: function(p1, p2, p3) {
+
+            var spaceId = p1, deliveryId = p2, contentId = p3;
+
+        	if (typeof p3 !== 'undefined') {
+            	return newChefApi.lookupContentLatestRevision(spaceId, deliveryId, contentId);
+        	} else {
+				contentId = p1;
+                definitionId = p2;
+            	var theFullUrl = this.url + 'getLatestContent/' +
+                	encodeURIComponent(this.origin)  + '/' + encodeURIComponent(contentId) + '/' + encodeURIComponent(definitionId);
+            	return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContent,mapErrorResponse);
+            }
+        },
+
+        lookupContentLatestRevisionBySlug: function(p1, p2, p3) {
+
+            var spaceId = p1, deliveryId = p2, contentSlug = p3;
+
+        	if (typeof p3 !== 'undefined') {
+            	return newChefApi.lookupContentLatestRevisionBySlug(spaceId, deliveryId, contentSlug);
+        	} else {
+				contentSlug = p1;
+                definitionId = p2;
+            	var theFullUrl = this.url + 'getLatestContentBySlug/' +
+                	encodeURIComponent(this.origin)  + '/' + encodeURIComponent(contentSlug) + '/' + encodeURIComponent(definitionId);
+            	return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContent,mapErrorResponse);
+			}
+        },
+
+        lookupContentRevision: function(contentId, contentRevision) {
+        	// v1.0
+           	var theFullUrl = this.url + 'getContent/' +
+               	encodeURIComponent(this.origin)  + '/' + encodeURIComponent(contentId) + '/' + encodeURIComponent(contentRevision);
+            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContent,mapErrorResponse);
+            
+        },
+
+        lookupContentByRevision: function(spaceId, deliveryId, contentId, contentRevision) {
+        	// v2.0
+            return newChefApi.lookupContentByRevision(spaceId, deliveryId, contentId, contentRevision);
+        },
+
+        lookupContentRevisionBySlug: function(contentSlug, contentRevision) {
+        	// v1.0
+            var theFullUrl = this.url + 'getContentBySlug/' +
+               	encodeURIComponent(this.origin)  + '/' + encodeURIComponent(contentSlug) + '/' + encodeURIComponent(contentRevision);
+           	return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContent,mapErrorResponse);
         },
 
         lookupContentBySlug: function(spaceId, deliveryId, contentSlug, contentRevision) {
-            return delivery.lookupContentBySlug(spaceId, deliveryId, contentSlug, contentRevision);
+            // v2.0	
+            return newChefApi.lookupContentBySlug(spaceId, deliveryId, contentSlug, contentRevision);
         },
 
-        lookupContentLatestRevisionBySlug: function(spaceId, deliveryId, contentSlug) {
-            return delivery.lookupContentLatestRevisionBySlug(spaceId, deliveryId, contentSlug);
-        },
-
-        listContentsByTag: function(spaceId, deliveryId, tag) {
-            return delivery.listContentsByTag(spaceId, deliveryId, tag);
-        },
-
-        listContentsByTagAndDefinition: function(spaceId, deliveryId, tag, definitionId) {
-            return delivery.listContentsByTagAndDefinition(spaceId, deliveryId, tag, definitionId);
+        listAllContentByDefinition: function(definitionId) {
+        	// v1.0
+           	var theFullUrl = this.url + 'listContentsByDefinitionId' +
+               	'/' + encodeURIComponent(this.origin) + '/' + encodeURIComponent(definitionId) ;
+			return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContentList,mapErrorResponse);
         },
 
         listContentsByDefinition: function(spaceId, deliveryId, definitionId) {
-            return delivery.listContentsByDefinition(spaceId, deliveryId, definitionId);
+        	// v2.0
+            return newChefApi.listContentsByDefinition(spaceId, deliveryId, definitionId);
         },
 
+        searchContent: function(p1, p2, p3, p4) {
+                
+            var spaceId = p1, deliveryId = p2, queryName = p3, queryParam = p4;
+
+        	if (typeof p3 !== 'undefined') {
+            	return newChefApi.searchContent(spaceId, deliveryId, queryName, queryParam);
+        	} else {
+                queryName = p1;
+                queryParam = p2;
+            	var theFullUrl = this.url + 'searchContent' + '/' + encodeURIComponent(queryName) ;
+            	if (queryParam) {
+                	theFullUrl = theFullUrl + '?queryParam=' + encodeURIComponent(queryParam);
+            	}
+            	return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContentList,mapErrorResponse);
+        	}
+
+        },
+
+        getAvailablePages: function(p1, p2) {
+        	if (typeof p1 !== 'undefined') {
+				var spaceId = p1, deliveryId = p2;
+            	return newChefApi.getAvailablePages(spaceId, deliveryId);
+        	} else {
+            	var theFullUrl = this.url + 'getAvailablePages' + '/' + encodeURIComponent(this.origin) ;
+            	return lookupItem(theFullUrl, this.apiToken, mapSuccessfulResponseToWebPageReferenceList,mapErrorResponse);
+            }
+        },
+
+        listContentsByTag: function(spaceId, deliveryId, tag) {
+        	// v2.0
+            return newChefApi.listContentsByTag(spaceId, deliveryId, tag);
+        },
+
+        listContentsByTagAndDefinition: function(spaceId, deliveryId, tag, definitionId) {
+        	// v2.0
+            return newChefApi.listContentsByTagAndDefinition(spaceId, deliveryId, tag, definitionId);
+        },   
+
         listContentsByDefinitionFromTo: function(spaceId, deliveryId, definitionId, from, to) {
-            return delivery.listContentsByDefinitionFromTo(spaceId, deliveryId, definitionId, from, to);
+        	// v2.0
+            return newChefApi.listContentsByDefinitionFromTo(spaceId, deliveryId, definitionId, from, to);
         },
 
         listUnpublishedContentsByDefinition: function(spaceId, deliveryId, definitionId, apiKeyForUnpublishedContent) {
-            return delivery.listUnpublishedContentsByDefinition(spaceId, deliveryId, definitionId, apiKeyForUnpublishedContent);
+        	// v2.0
+            return newChefApi.listUnpublishedContentsByDefinition(spaceId, deliveryId, definitionId, apiKeyForUnpublishedContent);
         },
 
         lookupWebPagesSitemapByUrl: function(spaceId, deliveryId, baseURL, site) {
-            return delivery.lookupWebPagesSitemapByUrl(spaceId, deliveryId, baseURL, site);
-        },
-
-        lookupPageById: function(spaceId, deliveryId, site, pageId) {
-            return delivery.lookupPageById(spaceId, deliveryId, pageId, site);
-        },
-
-        lookupPageByUrl: function(spaceId, deliveryId, site, pageUrl) {
-            return delivery.lookupPageByUrl(spaceId, deliveryId, pageUrl, site);
+        	// v2.0
+            return newChefApi.lookupWebPagesSitemapByUrl(spaceId, deliveryId, baseURL, site);
         },
 
         storeQuery: function(spaceId, deliveryId, params) {
-            return delivery.storeQuery(spaceId, deliveryId, params);
+        	// v2.0
+            return newChefApi.storeQuery(spaceId, deliveryId, params);
         },
         
         createRelease: function(spaceId, deliveryId, params) {
-            return delivery.createRelease(spaceId, deliveryId, params);
+        	// v2.0
+            return newChefApi.createRelease(spaceId, deliveryId, params);
         },
 
         addToRelease: function(spaceId, deliveryId, params) {
-            return delivery.addToRelease(spaceId, deliveryId, params);
+        	// v2.0
+            return newChefApi.addToRelease(spaceId, deliveryId, params);
         },
 
         stageRelease: function(spaceId, deliveryId, params) {
-            return delivery.stageRelease(spaceId, deliveryId, params);
+        	// v2.0
+            return newChefApi.stageRelease(spaceId, deliveryId, params);
         },
 
         publishStagedRelease: function(spaceId, deliveryId, params) {
-            return delivery.publishStagedRelease(spaceId, deliveryId, params);
-        },
-
-        searchContent: function(spaceId, deliveryId, queryName, queryParam) {
-            return delivery.searchContent(spaceId, deliveryId, queryName, queryParam);
-        },
-
-        getAvailablePages: function(spaceId, deliveryId) {
-            return delivery.getAvailablePages(spaceId, deliveryId);
+        	// v2.0
+            return newChefApi.publishStagedRelease(spaceId, deliveryId, params);
         }
 
     };
 
+    var lookupItem = function(fullUrl, apiToken, successMappingFunction, failureMappingFunction) {
+        return new Promise(function(resolve, reject) {
+            axios.get(fullUrl, {headers: {'x-square-api-key':apiToken}})
+                .then(function (result) {
+                    resolve(successMappingFunction.call(this,result.data));
+                })
+                .catch(function (result) {
+                    reject(failureMappingFunction.call(this,result));
+                });
+
+        });
+    };
+
+    function WebPage(webPageId,name,url,templateId,templateRevision,group,originId,contentAreas,variablesArea) {
+        this.webPageId = webPageId;
+        this.name = name;
+        this.url = url;
+        this.templateId = templateId;
+        this.templateRevision = templateRevision;
+        this.group = group;
+        this.originId = originId;
+        this.contentAreas = contentAreas;
+        this.variablesArea = variablesArea;
+    }
+
+    WebPage.prototype = {};
+
+    function WebPageReference(webPageId,name,url,templateId,templateRevision,group,originId,revisionId) {
+        this.webPageId = webPageId;
+        this.name = name;
+        this.url = url;
+        this.templateId = templateId;
+        this.templateRevision = templateRevision;
+        this.group = group;
+        this.originId = originId;
+        this.revisionId = revisionId;
+    }
+
+    WebPageReference.prototype = {};
+
+    var transformAreas = function (contentAreas) {
+
+        var areas = {};
+
+        for (var i = 0; i<contentAreas.length;i++) {
+            var contentArea = contentAreas[i];
+            var areaName = contentArea.areaName;
+            var contents = contentArea.contents;
+            areas[areaName] = contents.length == 1? contents[0] : contentArea.contents;
+        }
+
+        return areas;
+    };
+
+    var mapSuccessfulResponseToWebPage = function(data) {
+
+        return new WebPage(data.webPageId,
+            data.name,
+            data.url,
+            data.templateId,
+            data.templateRevision,
+            data.group,
+            data['#originId'],
+            transformAreas(data.contentAreas),
+            data.variablesArea);
+    };
+
+    var mapSuccessfulResponseToWebPageReferenceList = function(data) {
+        var webPageReferences=[];
+        for (var i=0;i<data.length;i++) {
+            var item = data[i];
+            webPageReferences.push(new WebPageReference(
+                item.webPageId,
+                item.name,
+                item.url,
+                item.templateId,
+                item.templateRevision,
+                item.group,
+                item['#originId'],
+                item.revisionId
+            ));
+        }
+        return data;
+    };
+
+    var mapSuccessfulResponseToWebContent = function(data) {
+        return data;
+    };
+
+    var mapSuccessfulResponseToWebContentList = function(data) {
+        return data;
+    };
+
+    function NotFound() {
+        this.message = 'Not found';
+    }
+
+    NotFound.prototype = {};
+
+    function GenericError() {
+        this.message = 'Generic error';
+    }
+
+    GenericError.prototype = {};
+
+    function mapErrorResponse(result) {
+        if (result.status != 400) {
+            return adapter.fn.GENERIC_ERROR;
+        }
+
+        var failureBody = result.data.failureBody;
+        if (failureBody && failureBody.failure && failureBody.failure == 'not.found') {
+            return adapter.fn.NOT_FOUND;
+        }
+
+        return adapter.fn.GENERIC_ERROR;
+
+    }
+
     function defaultGlobalCache() {
         var isBrowser = typeof global != 'object';
 
-        var g = isBrowser ? window : global;
+        var g = isBrowser?window:global;
 
         if (!g.contentChefCache) {
             // todo create global cache object
@@ -129,7 +350,6 @@
     }
 
     Global.ContentChef = {
-        Api: contentChef
+        Api: adapter
     };
-
-}(typeof exports === 'object' && exports ? exports : (typeof module === "object" && module && typeof module.exports === "object" ? module.exports : window)));
+} (typeof exports === 'object' && exports ? exports : (typeof module === "object" && module && typeof module.exports === "object" ? module.exports : window)));

@@ -56,7 +56,7 @@ var publishSomeNewRelease = {
     "releaseId" : "someNewRelease"
 };
 
-console.log("Testing in progress...\n")
+console.log("Testing in progress...\n");
 
 readPromise("lookupContentByRevision", api.lookupContentByRevision("leroymerlin", "prod", "content2", "56b891d78a456d13026afc1d"));
 readPromise("lookupContentLatestRevision", api.lookupContentLatestRevision("leroymerlin", "prod", "content2"));
