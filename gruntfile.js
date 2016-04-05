@@ -8,7 +8,7 @@ module.exports = function(grunt) {
         separator: ';'
       },
       dist: {
-        src: ['src/**/*.js'],
+        src: ['dist/bundle.js'],
         dest: 'dist/<%= pkg.name %>.js'
       }
     },
@@ -22,9 +22,18 @@ module.exports = function(grunt) {
         }
       }
     },
+    webpack: {
+      a: {
+        entry: "./src/api",
+        output: {
+          path: "./dist",
+	  filename: "bundle.js"
+        }
+      }
+    },
     mochaTest: {
       test : {
-        src: ['test/**/*.js']
+        src: ['./test/**/*.js']
       }
 
     },
@@ -47,6 +56,8 @@ module.exports = function(grunt) {
 
   grunt.registerTask('test', ['jshint', 'mochaTest']);
 
-  grunt.registerTask('default', ['jshint', 'mochaTest', 'concat', 'uglify']);
+  grunt.registerTask('default', ['jshint', 'webpack', 'concat', 'uglify']);
+
+  grunt.registerTask('build', ['webpack']);
 
 };
