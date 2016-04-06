@@ -31,20 +31,13 @@
 
     adapter.fn = adapter.prototype = {
 
-        API_URL : '/contentchef-delivery/v1/',
-
         NOT_FOUND : new NotFound(),
         GENERIC_ERROR : new GenericError(),
 
         initialize: function(baseUrl, origin, apiToken, apiCache, cacheTimeToLive) {
-            this.url = baseUrl + adapter.prototype.API_URL;
-            this.origin = origin;
-            this.apiToken = apiToken || "";
-            this.apiCache = apiCache || defaultGlobalCache();
-            this.dataCacheTTL = cacheTimeToLive || 10;
 
-            oldChefApi = oldChef.ContentChef.Api(this.url, this.origin, this.apiToken, this.apiCache, this.dataCacheTTL);
-            newChefApi = newChef.ContentChef.Api(this.url, this.apiToken, this.apiCache, this.dataCacheTTL);
+            oldChefApi = oldChef.ContentChef.Api(baseUrl, origin, apiToken, apiCache, cacheTimeToLive);
+            newChefApi = newChef.ContentChef.Api(baseUrl, apiToken, apiCache, cacheTimeToLive);
 
             return this;
         },
@@ -53,23 +46,23 @@
 
             var spaceId = p1, deliveryId = p2, site = p3, pageUrl = p4;
 
-        	if (typeof p2 !== 'undefined') {
-            	return newChefApi.lookupPageByUrl(spaceId, deliveryId, site, pageUrl);
-			} else {
-				pageUrl = p1;
+            if (typeof p2 !== 'undefined') {
+                return newChefApi.lookupPageByUrl(spaceId, deliveryId, site, pageUrl);
+            } else {
+                pageUrl = p1;
                 return oldChefApi.lookupPageByUrl(pageUrl);
-			}
+            }
         },
 
         lookupPageById : function(p1, p2, p3, p4) {
 
             var spaceId = p1, deliveryId = p2, site = p3, pageId = p4;
 
-        	if (typeof p2 !== 'undefined') {
-            	return newChefApi.lookupPageById(spaceId, deliveryId, site, pageId);
-			} else {
-				pageId = p1;
-            	return oldChefApi.lookupPageById(pageId);
+            if (typeof p2 !== 'undefined') {
+                return newChefApi.lookupPageById(spaceId, deliveryId, site, pageId);
+            } else {
+                pageId = p1;
+                return oldChefApi.lookupPageById(pageId);
             }
         },
 
@@ -77,12 +70,12 @@
 
             var spaceId = p1, deliveryId = p2, contentId = p3;
 
-        	if (typeof p3 !== 'undefined') {
-            	return newChefApi.lookupContentLatestRevision(spaceId, deliveryId, contentId);
-        	} else {
-				contentId = p1;
-                definitionId = p2;
-            	return oldChefApi.lookupContentLatestRevision(contentId, definitionId);
+            if (typeof p3 !== 'undefined') {
+                return newChefApi.lookupContentLatestRevision(spaceId, deliveryId, contentId);
+            } else {
+                contentId = p1;
+                var definitionId = p2;
+                return oldChefApi.lookupContentLatestRevision(contentId, definitionId);
             }
         },
 
@@ -90,43 +83,43 @@
 
             var spaceId = p1, deliveryId = p2, contentSlug = p3;
 
-        	if (typeof p3 !== 'undefined') {
-            	return newChefApi.lookupContentLatestRevisionBySlug(spaceId, deliveryId, contentSlug);
-        	} else {
-				contentSlug = p1;
-                definitionId = p2;
+            if (typeof p3 !== 'undefined') {
+                return newChefApi.lookupContentLatestRevisionBySlug(spaceId, deliveryId, contentSlug);
+            } else {
+                contentSlug = p1;
+                var definitionId = p2;
                 return oldChefApi.lookupContentLatestRevisionBySlug(contentSlug, definitionId);
-			}
+            }
         },
 
         lookupContentRevision: function(contentId, contentRevision) {
-        	// v1.0
+            // v1.0
             return oldChefApi.lookupContentRevision(contentId, contentRevision) ;
             
         },
 
         lookupContentByRevision: function(spaceId, deliveryId, contentId, contentRevision) {
-        	// v2.0
+            // v2.0
             return newChefApi.lookupContentByRevision(spaceId, deliveryId, contentId, contentRevision);
         },
 
         lookupContentRevisionBySlug: function(contentSlug, contentRevision) {
-        	// v1.0
+            // v1.0
             return oldChefApi.lookupContentRevisionBySlug(contentSlug, contentRevision);
         },
 
         lookupContentBySlug: function(spaceId, deliveryId, contentSlug, contentRevision) {
-            // v2.0	
+            // v2.0    
             return newChefApi.lookupContentBySlug(spaceId, deliveryId, contentSlug, contentRevision);
         },
 
         listAllContentByDefinition: function(definitionId) {
-        	// v1.0
-           	return oldChefApi.lookupContentBySlug(definitionId);
+            // v1.0
+               return oldChefApi.listAllContentByDefinition(definitionId);
         },
 
         listContentsByDefinition: function(spaceId, deliveryId, definitionId) {
-        	// v2.0
+            // v2.0
             return newChefApi.listContentsByDefinition(spaceId, deliveryId, definitionId);
         },
 
@@ -134,72 +127,72 @@
                 
             var spaceId = p1, deliveryId = p2, queryName = p3, queryParam = p4;
 
-        	if (typeof p3 !== 'undefined') {
-            	return newChefApi.searchContent(spaceId, deliveryId, queryName, queryParam);
-        	} else {
+            if (typeof p3 !== 'undefined') {
+                return newChefApi.searchContent(spaceId, deliveryId, queryName, queryParam);
+            } else {
                 queryName = p1;
                 queryParam = p2;
                 return oldChefApi.searchContent(queryName, queryParam);
-        	}
+            }
 
         },
 
         getAvailablePages: function(p1, p2) {
-        	if (typeof p1 !== 'undefined') {
-				var spaceId = p1, deliveryId = p2;
-            	return newChefApi.getAvailablePages(spaceId, deliveryId);
-        	} else {
+            if (typeof p1 !== 'undefined') {
+                var spaceId = p1, deliveryId = p2;
+                return newChefApi.getAvailablePages(spaceId, deliveryId);
+            } else {
                 return oldChefApi.getAvailablePages();
             }
         },
 
         listContentsByTag: function(spaceId, deliveryId, tag) {
-        	// v2.0
+            // v2.0
             return newChefApi.listContentsByTag(spaceId, deliveryId, tag);
         },
 
         listContentsByTagAndDefinition: function(spaceId, deliveryId, tag, definitionId) {
-        	// v2.0
+            // v2.0
             return newChefApi.listContentsByTagAndDefinition(spaceId, deliveryId, tag, definitionId);
         },   
 
         listContentsByDefinitionFromTo: function(spaceId, deliveryId, definitionId, from, to) {
-        	// v2.0
+            // v2.0
             return newChefApi.listContentsByDefinitionFromTo(spaceId, deliveryId, definitionId, from, to);
         },
 
         listUnpublishedContentsByDefinition: function(spaceId, deliveryId, definitionId, apiKeyForUnpublishedContent) {
-        	// v2.0
+            // v2.0
             return newChefApi.listUnpublishedContentsByDefinition(spaceId, deliveryId, definitionId, apiKeyForUnpublishedContent);
         },
 
         lookupWebPagesSitemapByUrl: function(spaceId, deliveryId, baseURL, site) {
-        	// v2.0
+            // v2.0
             return newChefApi.lookupWebPagesSitemapByUrl(spaceId, deliveryId, baseURL, site);
         },
 
         storeQuery: function(spaceId, deliveryId, params) {
-        	// v2.0
+            // v2.0
             return newChefApi.storeQuery(spaceId, deliveryId, params);
         },
         
         createRelease: function(spaceId, deliveryId, params) {
-        	// v2.0
+            // v2.0
             return newChefApi.createRelease(spaceId, deliveryId, params);
         },
 
         addToRelease: function(spaceId, deliveryId, params) {
-        	// v2.0
+            // v2.0
             return newChefApi.addToRelease(spaceId, deliveryId, params);
         },
 
         stageRelease: function(spaceId, deliveryId, params) {
-        	// v2.0
+            // v2.0
             return newChefApi.stageRelease(spaceId, deliveryId, params);
         },
 
         publishStagedRelease: function(spaceId, deliveryId, params) {
-        	// v2.0
+            // v2.0
             return newChefApi.publishStagedRelease(spaceId, deliveryId, params);
         }
 
@@ -339,4 +332,5 @@
     Global.ContentChef = {
         Api: adapter
     };
+    Global.Api = adapter;
 } (typeof exports === 'object' && exports ? exports : (typeof module === "object" && module && typeof module.exports === "object" ? module.exports : window)));

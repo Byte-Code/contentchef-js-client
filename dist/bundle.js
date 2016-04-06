@@ -44,13 +44,20 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["ContentChef"] = __webpack_require__(1);
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/* WEBPACK VAR INJECTION */(function(module, global) {
 	(function (Global, undefined) {
 
 	    "use strict";
 
-	    var oldChef = __webpack_require__(2);
-	    var newChef = __webpack_require__(3);
+	    var oldChef = __webpack_require__(3);
+	    var newChef = __webpack_require__(4);
 
 	    var oldChefApi = {}; // reference for proxying calls to old api 
 	    var newChefApi = {}; // reference for proxying calls to new api 
@@ -77,20 +84,13 @@
 
 	    adapter.fn = adapter.prototype = {
 
-	        API_URL : '/contentchef-delivery/v1/',
-
 	        NOT_FOUND : new NotFound(),
 	        GENERIC_ERROR : new GenericError(),
 
 	        initialize: function(baseUrl, origin, apiToken, apiCache, cacheTimeToLive) {
-	            this.url = baseUrl + adapter.prototype.API_URL;
-	            this.origin = origin;
-	            this.apiToken = apiToken || "";
-	            this.apiCache = apiCache || defaultGlobalCache();
-	            this.dataCacheTTL = cacheTimeToLive || 10;
 
-	            oldChefApi = oldChef.ContentChef.Api(this.url, this.origin, this.apiToken, this.apiCache, this.dataCacheTTL);
-	            newChefApi = newChef.ContentChef.Api(this.url, this.apiToken, this.apiCache, this.dataCacheTTL);
+	            oldChefApi = oldChef.ContentChef.Api(baseUrl, origin, apiToken, apiCache, cacheTimeToLive);
+	            newChefApi = newChef.ContentChef.Api(baseUrl, apiToken, apiCache, cacheTimeToLive);
 
 	            return this;
 	        },
@@ -99,23 +99,23 @@
 
 	            var spaceId = p1, deliveryId = p2, site = p3, pageUrl = p4;
 
-	        	if (typeof p2 !== 'undefined') {
-	            	return newChefApi.lookupPageByUrl(spaceId, deliveryId, site, pageUrl);
-				} else {
-					pageUrl = p1;
+	            if (typeof p2 !== 'undefined') {
+	                return newChefApi.lookupPageByUrl(spaceId, deliveryId, site, pageUrl);
+	            } else {
+	                pageUrl = p1;
 	                return oldChefApi.lookupPageByUrl(pageUrl);
-				}
+	            }
 	        },
 
 	        lookupPageById : function(p1, p2, p3, p4) {
 
 	            var spaceId = p1, deliveryId = p2, site = p3, pageId = p4;
 
-	        	if (typeof p2 !== 'undefined') {
-	            	return newChefApi.lookupPageById(spaceId, deliveryId, site, pageId);
-				} else {
-					pageId = p1;
-	            	return oldChefApi.lookupPageById(pageId);
+	            if (typeof p2 !== 'undefined') {
+	                return newChefApi.lookupPageById(spaceId, deliveryId, site, pageId);
+	            } else {
+	                pageId = p1;
+	                return oldChefApi.lookupPageById(pageId);
 	            }
 	        },
 
@@ -123,12 +123,12 @@
 
 	            var spaceId = p1, deliveryId = p2, contentId = p3;
 
-	        	if (typeof p3 !== 'undefined') {
-	            	return newChefApi.lookupContentLatestRevision(spaceId, deliveryId, contentId);
-	        	} else {
-					contentId = p1;
-	                definitionId = p2;
-	            	return oldChefApi.lookupContentLatestRevision(contentId, definitionId);
+	            if (typeof p3 !== 'undefined') {
+	                return newChefApi.lookupContentLatestRevision(spaceId, deliveryId, contentId);
+	            } else {
+	                contentId = p1;
+	                var definitionId = p2;
+	                return oldChefApi.lookupContentLatestRevision(contentId, definitionId);
 	            }
 	        },
 
@@ -136,43 +136,43 @@
 
 	            var spaceId = p1, deliveryId = p2, contentSlug = p3;
 
-	        	if (typeof p3 !== 'undefined') {
-	            	return newChefApi.lookupContentLatestRevisionBySlug(spaceId, deliveryId, contentSlug);
-	        	} else {
-					contentSlug = p1;
-	                definitionId = p2;
+	            if (typeof p3 !== 'undefined') {
+	                return newChefApi.lookupContentLatestRevisionBySlug(spaceId, deliveryId, contentSlug);
+	            } else {
+	                contentSlug = p1;
+	                var definitionId = p2;
 	                return oldChefApi.lookupContentLatestRevisionBySlug(contentSlug, definitionId);
-				}
+	            }
 	        },
 
 	        lookupContentRevision: function(contentId, contentRevision) {
-	        	// v1.0
+	            // v1.0
 	            return oldChefApi.lookupContentRevision(contentId, contentRevision) ;
 	            
 	        },
 
 	        lookupContentByRevision: function(spaceId, deliveryId, contentId, contentRevision) {
-	        	// v2.0
+	            // v2.0
 	            return newChefApi.lookupContentByRevision(spaceId, deliveryId, contentId, contentRevision);
 	        },
 
 	        lookupContentRevisionBySlug: function(contentSlug, contentRevision) {
-	        	// v1.0
+	            // v1.0
 	            return oldChefApi.lookupContentRevisionBySlug(contentSlug, contentRevision);
 	        },
 
 	        lookupContentBySlug: function(spaceId, deliveryId, contentSlug, contentRevision) {
-	            // v2.0	
+	            // v2.0    
 	            return newChefApi.lookupContentBySlug(spaceId, deliveryId, contentSlug, contentRevision);
 	        },
 
 	        listAllContentByDefinition: function(definitionId) {
-	        	// v1.0
-	           	return oldChefApi.lookupContentBySlug(definitionId);
+	            // v1.0
+	               return oldChefApi.listAllContentByDefinition(definitionId);
 	        },
 
 	        listContentsByDefinition: function(spaceId, deliveryId, definitionId) {
-	        	// v2.0
+	            // v2.0
 	            return newChefApi.listContentsByDefinition(spaceId, deliveryId, definitionId);
 	        },
 
@@ -180,72 +180,72 @@
 	                
 	            var spaceId = p1, deliveryId = p2, queryName = p3, queryParam = p4;
 
-	        	if (typeof p3 !== 'undefined') {
-	            	return newChefApi.searchContent(spaceId, deliveryId, queryName, queryParam);
-	        	} else {
+	            if (typeof p3 !== 'undefined') {
+	                return newChefApi.searchContent(spaceId, deliveryId, queryName, queryParam);
+	            } else {
 	                queryName = p1;
 	                queryParam = p2;
 	                return oldChefApi.searchContent(queryName, queryParam);
-	        	}
+	            }
 
 	        },
 
 	        getAvailablePages: function(p1, p2) {
-	        	if (typeof p1 !== 'undefined') {
-					var spaceId = p1, deliveryId = p2;
-	            	return newChefApi.getAvailablePages(spaceId, deliveryId);
-	        	} else {
+	            if (typeof p1 !== 'undefined') {
+	                var spaceId = p1, deliveryId = p2;
+	                return newChefApi.getAvailablePages(spaceId, deliveryId);
+	            } else {
 	                return oldChefApi.getAvailablePages();
 	            }
 	        },
 
 	        listContentsByTag: function(spaceId, deliveryId, tag) {
-	        	// v2.0
+	            // v2.0
 	            return newChefApi.listContentsByTag(spaceId, deliveryId, tag);
 	        },
 
 	        listContentsByTagAndDefinition: function(spaceId, deliveryId, tag, definitionId) {
-	        	// v2.0
+	            // v2.0
 	            return newChefApi.listContentsByTagAndDefinition(spaceId, deliveryId, tag, definitionId);
 	        },   
 
 	        listContentsByDefinitionFromTo: function(spaceId, deliveryId, definitionId, from, to) {
-	        	// v2.0
+	            // v2.0
 	            return newChefApi.listContentsByDefinitionFromTo(spaceId, deliveryId, definitionId, from, to);
 	        },
 
 	        listUnpublishedContentsByDefinition: function(spaceId, deliveryId, definitionId, apiKeyForUnpublishedContent) {
-	        	// v2.0
+	            // v2.0
 	            return newChefApi.listUnpublishedContentsByDefinition(spaceId, deliveryId, definitionId, apiKeyForUnpublishedContent);
 	        },
 
 	        lookupWebPagesSitemapByUrl: function(spaceId, deliveryId, baseURL, site) {
-	        	// v2.0
+	            // v2.0
 	            return newChefApi.lookupWebPagesSitemapByUrl(spaceId, deliveryId, baseURL, site);
 	        },
 
 	        storeQuery: function(spaceId, deliveryId, params) {
-	        	// v2.0
+	            // v2.0
 	            return newChefApi.storeQuery(spaceId, deliveryId, params);
 	        },
 	        
 	        createRelease: function(spaceId, deliveryId, params) {
-	        	// v2.0
+	            // v2.0
 	            return newChefApi.createRelease(spaceId, deliveryId, params);
 	        },
 
 	        addToRelease: function(spaceId, deliveryId, params) {
-	        	// v2.0
+	            // v2.0
 	            return newChefApi.addToRelease(spaceId, deliveryId, params);
 	        },
 
 	        stageRelease: function(spaceId, deliveryId, params) {
-	        	// v2.0
+	            // v2.0
 	            return newChefApi.stageRelease(spaceId, deliveryId, params);
 	        },
 
 	        publishStagedRelease: function(spaceId, deliveryId, params) {
-	        	// v2.0
+	            // v2.0
 	            return newChefApi.publishStagedRelease(spaceId, deliveryId, params);
 	        }
 
@@ -385,11 +385,13 @@
 	    Global.ContentChef = {
 	        Api: adapter
 	    };
+	    Global.Api = adapter;
 	} (typeof exports === 'object' && exports ? exports : (typeof module === "object" && module && typeof module.exports === "object" ? module.exports : window)));
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)(module), (function() { return this; }())))
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module), (function() { return this; }())))
 
 /***/ },
-/* 1 */
+/* 2 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -405,7 +407,7 @@
 
 
 /***/ },
-/* 2 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module, global) {(function (Global, undefined) {
@@ -651,10 +653,10 @@
 	        Api: contentChef
 	    };
 	} (typeof exports === 'object' && exports ? exports : (typeof module === "object" && module && typeof module.exports === "object" ? module.exports : window)));
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module), (function() { return this; }())))
 
 /***/ },
-/* 3 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module, global) {
@@ -680,11 +682,11 @@
 	        return theApi;
 	    };
 
-	    var delivery = __webpack_require__(4);
+	    var delivery = __webpack_require__(5);
 
 	    contentChef.fn = contentChef.prototype = {
 
-	        API_URL_DELIVERY: '/contentchef-delivery/v1/',
+	        API_URL_DELIVERY: '/contentchef-delivery/v2/',
 
 	        initialize: function(deliveryUrl, apiToken, apiCache, cacheTimeToLive) {
 
@@ -793,14 +795,14 @@
 
 	}(typeof exports === 'object' && exports ? exports : (typeof module === "object" && module && typeof module.exports === "object" ? module.exports : window)));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module), (function() { return this; }())))
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
-	var http = __webpack_require__(5);
+	var http = __webpack_require__(6);
 	var url = "";
 	var header = {};
 
@@ -1007,12 +1009,12 @@
 
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
-	var promise = __webpack_require__(6);
-	var axios = __webpack_require__(10);
+	var promise = __webpack_require__(7);
+	var axios = __webpack_require__(11);
 	axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 	var BAD_REQUEST = 400;
@@ -1105,7 +1107,7 @@
 
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var require;var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
@@ -1239,7 +1241,7 @@
 	    function lib$es6$promise$asap$$attemptVertx() {
 	      try {
 	        var r = require;
-	        var vertx = __webpack_require__(8);
+	        var vertx = __webpack_require__(9);
 	        lib$es6$promise$asap$$vertxNext = vertx.runOnLoop || vertx.runOnContext;
 	        return lib$es6$promise$asap$$useVertxTimer();
 	      } catch(e) {
@@ -2064,7 +2066,7 @@
 	    };
 
 	    /* global define:true module:true window: true */
-	    if ("function" === 'function' && __webpack_require__(9)['amd']) {
+	    if ("function" === 'function' && __webpack_require__(10)['amd']) {
 	      !(__WEBPACK_AMD_DEFINE_RESULT__ = function() { return lib$es6$promise$umd$$ES6Promise; }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else if (typeof module !== 'undefined' && module['exports']) {
 	      module['exports'] = lib$es6$promise$umd$$ES6Promise;
@@ -2076,10 +2078,10 @@
 	}).call(this);
 
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7), (function() { return this; }()), __webpack_require__(1)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8), (function() { return this; }()), __webpack_require__(2)(module)))
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports) {
 
 	// shim for using process in browser
@@ -2176,34 +2178,34 @@
 
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports) {
 
 	module.exports = function() { throw new Error("define cannot be used indirect"); };
 
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(11);
+	module.exports = __webpack_require__(12);
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var defaults = __webpack_require__(12);
-	var utils = __webpack_require__(13);
-	var dispatchRequest = __webpack_require__(14);
-	var InterceptorManager = __webpack_require__(21);
+	var defaults = __webpack_require__(13);
+	var utils = __webpack_require__(14);
+	var dispatchRequest = __webpack_require__(15);
+	var InterceptorManager = __webpack_require__(22);
 
 	var axios = module.exports = function (config) {
 	  // Allow for axios('example/url'[, config]) a la fetch API
@@ -2250,7 +2252,7 @@
 	axios.all = function (promises) {
 	  return Promise.all(promises);
 	};
-	axios.spread = __webpack_require__(22);
+	axios.spread = __webpack_require__(23);
 
 	// Expose interceptors
 	axios.interceptors = {
@@ -2289,12 +2291,12 @@
 
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(13);
+	var utils = __webpack_require__(14);
 
 	var PROTECTION_PREFIX = /^\)\]\}',?\n/;
 	var DEFAULT_CONTENT_TYPE = {
@@ -2357,7 +2359,7 @@
 
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2612,7 +2614,7 @@
 
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -2629,11 +2631,11 @@
 	    try {
 	      // For browsers use XHR adapter
 	      if ((typeof XMLHttpRequest !== 'undefined') || (typeof ActiveXObject !== 'undefined')) {
-	        __webpack_require__(15)(resolve, reject, config);
+	        __webpack_require__(16)(resolve, reject, config);
 	      }
 	      // For node use HTTP adapter
 	      else if (typeof process !== 'undefined') {
-	        __webpack_require__(15)(resolve, reject, config);
+	        __webpack_require__(16)(resolve, reject, config);
 	      }
 	    } catch (e) {
 	      reject(e);
@@ -2642,21 +2644,21 @@
 	};
 
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)))
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	/*global ActiveXObject:true*/
 
-	var defaults = __webpack_require__(12);
-	var utils = __webpack_require__(13);
-	var buildUrl = __webpack_require__(16);
-	var parseHeaders = __webpack_require__(17);
-	var transformData = __webpack_require__(18);
+	var defaults = __webpack_require__(13);
+	var utils = __webpack_require__(14);
+	var buildUrl = __webpack_require__(17);
+	var parseHeaders = __webpack_require__(18);
+	var transformData = __webpack_require__(19);
 
 	module.exports = function xhrAdapter(resolve, reject, config) {
 	  // Transform request data
@@ -2716,8 +2718,8 @@
 	  // This is only done if running in a standard browser environment.
 	  // Specifically not if we're in a web worker, or react-native.
 	  if (utils.isStandardBrowserEnv()) {
-	    var cookies = __webpack_require__(19);
-	    var urlIsSameOrigin = __webpack_require__(20);
+	    var cookies = __webpack_require__(20);
+	    var urlIsSameOrigin = __webpack_require__(21);
 
 	    // Add xsrf header
 	    var xsrfValue = urlIsSameOrigin(config.url) ?
@@ -2767,12 +2769,12 @@
 
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(13);
+	var utils = __webpack_require__(14);
 
 	function encode(val) {
 	  return encodeURIComponent(val).
@@ -2832,12 +2834,12 @@
 
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(13);
+	var utils = __webpack_require__(14);
 
 	/**
 	 * Parse headers into an object
@@ -2872,12 +2874,12 @@
 
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(13);
+	var utils = __webpack_require__(14);
 
 	/**
 	 * Transform the data for a request or a response
@@ -2897,7 +2899,7 @@
 
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2908,7 +2910,7 @@
 	 *  Please see lib/utils.isStandardBrowserEnv before including this file.
 	 */
 
-	var utils = __webpack_require__(13);
+	var utils = __webpack_require__(14);
 
 	module.exports = {
 	  write: function write(name, value, expires, path, domain, secure) {
@@ -2946,7 +2948,7 @@
 
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2957,7 +2959,7 @@
 	 *  Please see lib/utils.isStandardBrowserEnv before including this file.
 	 */
 
-	var utils = __webpack_require__(13);
+	var utils = __webpack_require__(14);
 	var msie = /(msie|trident)/i.test(navigator.userAgent);
 	var urlParsingNode = document.createElement('a');
 	var originUrl;
@@ -3010,12 +3012,12 @@
 
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(13);
+	var utils = __webpack_require__(14);
 
 	function InterceptorManager() {
 	  this.handlers = [];
@@ -3068,7 +3070,7 @@
 
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports) {
 
 	'use strict';

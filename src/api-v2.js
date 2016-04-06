@@ -25,7 +25,7 @@
 
     contentChef.fn = contentChef.prototype = {
 
-        API_URL_DELIVERY: '/contentchef-delivery/v1/',
+        API_URL_DELIVERY: '/contentchef-delivery/v2/',
 
         initialize: function(deliveryUrl, apiToken, apiCache, cacheTimeToLive) {
 

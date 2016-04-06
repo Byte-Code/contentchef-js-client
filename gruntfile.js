@@ -23,12 +23,20 @@ module.exports = function(grunt) {
       }
     },
     webpack: {
-      a: {
+      build: {
         entry: "./src/api",
         output: {
           path: "./dist",
 	  filename: "bundle.js"
-        }
+	},
+	module: {
+	  loaders: [
+            { 
+	      test: "./src/api.js", 
+	      loader: 'expose?ContentChef' 
+	    }
+	  ]
+	}
       }
     },
     mochaTest: {
