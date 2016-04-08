@@ -136,17 +136,15 @@ module.exports = {
     }
 };
 
-function Content(contentId, revisionId, originId, definitionInfo, tags, content) {
+function Content(contentId, revisionId, definitionInfo, tags, content) {
     this.contentId = contentId;
     this.revisionId = revisionId;
-    this.originId = originId;
     this.definitionInfo = definitionInfo;
     this.tags = tags;
     this.content = content;
 }
 
-function WebPage(originId, webPageId, url, name, group, revisionId, templateId, templateRevision, variablesArea, contentAreas) {
-    this.originId = originId;
+function WebPage(webPageId, url, name, group, revisionId, templateId, templateRevision, variablesArea, contentAreas) {
     this.webPageId = webPageId;
     this.url = url;
     this.name = name;
@@ -162,7 +160,6 @@ var mapSuccessfulResponseToContent = function(data) {
     return new Content(
         data.contentId,
         data.revisionId,
-        data['#originId'],
         data.definitionInformation,
         data.tags,
         data.content);
@@ -179,7 +176,6 @@ var mapSuccessfulResponseToContentList = function(data) {
 
 var mapSuccessfulResponseToWebPage = function(data) {
     return new WebPage(
-        data['#originId'],
         data.webPageId,
         data.url,
         data.name,

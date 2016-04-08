@@ -27,21 +27,21 @@ module.exports = function(grunt) {
         entry: "./src/api",
         output: {
           path: "./dist",
-	  filename: "bundle.js"
-	},
-	module: {
-	  loaders: [
-            { 
-	      test: "./src/api.js", 
-	      loader: 'expose?ContentChef' 
-	    }
-	  ]
-	}
+          filename: "bundle.js"
+        },
+        module: {
+          loaders: [
+          { 
+            test: "./src/api.js", 
+            loader: 'expose?ContentChef' 
+          }
+          ]
+        }
       }
     },
     mochaTest: {
       test : {
-        src: ['./test/**/*.js']
+        src: ['test/**/*.js']
       }
 
     },
@@ -65,7 +65,5 @@ module.exports = function(grunt) {
   grunt.registerTask('test', ['jshint', 'mochaTest']);
 
   grunt.registerTask('default', ['jshint', 'webpack', 'concat', 'uglify']);
-
-  grunt.registerTask('build', ['webpack']);
 
 };
