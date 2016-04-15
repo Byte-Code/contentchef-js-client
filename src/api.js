@@ -1,5 +1,6 @@
 
 (function(Global, undefined) {
+
     "use strict";
 
     /**
@@ -14,103 +15,105 @@
      * @param {int} cacheTimeToLive - The time to leave , in seconds, for the items in the cache (if not provided a default will be used)
      * @returns {Api} - The created api object
      */
-    var contentChef = function(deliveryUrl, apiToken, apiCache, cacheTimeToLive) {
-        var theApi = contentChef.fn.initialize(deliveryUrl, apiToken, apiCache, cacheTimeToLive);
-
-        return theApi;
+    var contentChef = function(deliveryUrl, spaceId, deliveryId, apiToken, apiCache, cacheTimeToLive) {
+        return contentChef.fn.initialize(deliveryUrl, spaceId, deliveryId, apiToken, apiCache, cacheTimeToLive);
     };
 
     var delivery = require('./delivery-module');
 
     contentChef.fn = contentChef.prototype = {
 
-        API_URL_DELIVERY: '/contentchef-delivery/v1/',
+        initialize: function(deliveryUrl, spaceId, deliveryId, apiToken, apiCache, cacheTimeToLive) {
 
-        initialize: function(deliveryUrl, apiToken, apiCache, cacheTimeToLive) {
+            var API_URL_DELIVERY = '/contentchef-delivery/v2/';
 
-            delivery.setUrl(deliveryUrl); //+ contentChef.prototype.API_URL_DELIVERY)
-            delivery.setApiToken(apiToken); //+ contentChef.prototype.API_URL_DELIVERY)
+            delivery.setUrl(deliveryUrl + API_URL_DELIVERY);
+            delivery.setApiToken(apiToken + API_URL_DELIVERY);
+            
+            this.spaceId = spaceId;
+            this.deliveryId = deliveryId;
 
-            this.apiCache = apiCache || defaultGlobalCache();
-            this.dataCacheTTL = cacheTimeToLive || 10;
+            this.apiCache = apiCache || defaultGlobalCache(); // not used for now
+            this.dataCacheTTL = cacheTimeToLive || 10;  // not used for now
+
             return this;
         },
 
 
-        lookupContentByRevision: function(spaceId, deliveryId, contentId, contentRevision) {
-            return delivery.lookupContentByRevision(spaceId, deliveryId, contentId, contentRevision);
+        lookupContentByRevision: function(contentId, contentRevision) {
+            return delivery.lookupContentByRevision(this.spaceId, this.deliveryId, contentId, contentRevision);
         },
 
-        lookupContentLatestRevision: function(spaceId, deliveryId, contentId) {
-            return delivery.lookupContentLatestRevision(spaceId, deliveryId, contentId);
+        lookupContentLatestRevision: function(contentId) {
+            return delivery.lookupContentLatestRevision(this.spaceId, this.deliveryId, contentId);
         },
 
-        lookupContentBySlug: function(spaceId, deliveryId, contentSlug, contentRevision) {
-            return delivery.lookupContentBySlug(spaceId, deliveryId, contentSlug, contentRevision);
+        lookupContentBySlug: function(contentSlug, contentRevision) {
+            return delivery.lookupContentBySlug(this.spaceId, this.deliveryId, contentSlug, contentRevision);
         },
 
-        lookupContentLatestRevisionBySlug: function(spaceId, deliveryId, contentSlug) {
-            return delivery.lookupContentLatestRevisionBySlug(spaceId, deliveryId, contentSlug);
+        lookupContentLatestRevisionBySlug: function(contentSlug) {
+            return delivery.lookupContentLatestRevisionBySlug(this.spaceId, this.deliveryId, contentSlug);
         },
 
-        listContentsByTag: function(spaceId, deliveryId, tag) {
-            return delivery.listContentsByTag(spaceId, deliveryId, tag);
+        listContentsByTag: function(tag) {
+            return delivery.listContentsByTag(this.spaceId, this.deliveryId, tag);
         },
 
-        listContentsByTagAndDefinition: function(spaceId, deliveryId, tag, definitionId) {
-            return delivery.listContentsByTagAndDefinition(spaceId, deliveryId, tag, definitionId);
+        listContentsByTagAndDefinition: function(tag, definitionId) {
+            return delivery.listContentsByTagAndDefinition(this.spaceId, this.deliveryId, tag, definitionId);
         },
 
-        listContentsByDefinition: function(spaceId, deliveryId, definitionId) {
-            return delivery.listContentsByDefinition(spaceId, deliveryId, definitionId);
+        listContentsByDefinition: function(definitionId) {
+            return delivery.listContentsByDefinition(this.spaceId, this.deliveryId, definitionId);
         },
 
-        listContentsByDefinitionFromTo: function(spaceId, deliveryId, definitionId, from, to) {
-            return delivery.listContentsByDefinitionFromTo(spaceId, deliveryId, definitionId, from, to);
+        listContentsByDefinitionFromTo: function(definitionId, from, to) {
+            return delivery.listContentsByDefinitionFromTo(this.spaceId, this.deliveryId, definitionId, from, to);
         },
 
-        listUnpublishedContentsByDefinition: function(spaceId, deliveryId, definitionId, apiKeyForUnpublishedContent) {
-            return delivery.listUnpublishedContentsByDefinition(spaceId, deliveryId, definitionId, apiKeyForUnpublishedContent);
+        listUnpublishedContentsByDefinition: function(definitionId, apiKeyForUnpublishedContent) {
+            return delivery.listUnpublishedContentsByDefinition(this.spaceId, this.deliveryId, definitionId, apiKeyForUnpublishedContent);
         },
 
-        lookupWebPagesSitemapByUrl: function(spaceId, deliveryId, baseURL, site) {
-            return delivery.lookupWebPagesSitemapByUrl(spaceId, deliveryId, baseURL, site);
+        lookupWebPagesSitemapByUrl: function(baseURL, site) {
+            return delivery.lookupWebPagesSitemapByUrl(this.spaceId, this.deliveryId, baseURL, site);
         },
 
-        lookupPageById: function(spaceId, deliveryId, site, pageId) {
-            return delivery.lookupPageById(spaceId, deliveryId, pageId, site);
+        lookupPageById: function(site, pageId) {
+            return delivery.lookupPageById(this.spaceId, this.deliveryId, pageId, site);
         },
 
-        lookupPageByUrl: function(spaceId, deliveryId, site, pageUrl) {
-            return delivery.lookupPageByUrl(spaceId, deliveryId, pageUrl, site);
+        lookupPageByUrl: function(site, pageUrl) {
+            return delivery.lookupPageByUrl(this.spaceId, this.deliveryId, pageUrl, site);
         },
 
-        storeQuery: function(spaceId, deliveryId, params) {
-            return delivery.storeQuery(spaceId, deliveryId, params);
+        storeQuery: function(params) {
+            return delivery.storeQuery(this.spaceId, this.deliveryId, params);
         },
         
-        createRelease: function(spaceId, deliveryId, params) {
-            return delivery.createRelease(spaceId, deliveryId, params);
+        createRelease: function(params) {
+            return delivery.createRelease(this.spaceId, this.deliveryId, params);
         },
 
-        addToRelease: function(spaceId, deliveryId, params) {
-            return delivery.addToRelease(spaceId, deliveryId, params);
+        addToRelease: function(params) {
+            return delivery.addToRelease(this.spaceId, this.deliveryId, params);
         },
 
-        stageRelease: function(spaceId, deliveryId, params) {
-            return delivery.stageRelease(spaceId, deliveryId, params);
+        stageRelease: function(params) {
+            return delivery.stageRelease(this.spaceId, this.deliveryId, params);
         },
 
-        publishStagedRelease: function(spaceId, deliveryId, params) {
-            return delivery.publishStagedRelease(spaceId, deliveryId, params);
+        publishStagedRelease: function(params) {
+            return delivery.publishStagedRelease(this.spaceId, this.deliveryId, params);
         },
 
-        searchContent: function(spaceId, deliveryId, queryName, queryParam) {
-            return delivery.searchContent(spaceId, deliveryId, queryName, queryParam);
+        searchContent: function(queryName, queryParam) {
+            return delivery.searchContent(this.spaceId, this.deliveryId, queryName, queryParam);
         },
 
-        getAvailablePages: function(spaceId, deliveryId) {
-            return delivery.getAvailablePages(spaceId, deliveryId);
+        getAvailablePages: function() {
+            return delivery.getAvailablePages(this.spaceId, this.deliveryId);
         }
 
     };
@@ -130,5 +133,6 @@
     Global.ContentChef = {
         Api: contentChef
     };
+    Global.Api = contentChef;
 
 }(typeof exports === 'object' && exports ? exports : (typeof module === "object" && module && typeof module.exports === "object" ? module.exports : window)));

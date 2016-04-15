@@ -14,7 +14,7 @@ var unpublishedContent = {
   "content" : {
     "foo" : "bar"
   }, 
-  "repository" : "leroymerlin", 
+  "repository" : "d2t", 
   "contentId" : "content1", 
   "itemType" : "content", 
   "releaseId" : "unpublishedReleaseOnDelivery", 
@@ -34,7 +34,7 @@ var publishedContent = {
     "foo" : "bar",
     "slug" : "slug2"
   }, 
-  "repository" : "leroymerlin", 
+  "repository" : "d2t", 
   "contentId" : "content2", 
   "itemType" : "content", 
   "releaseId" : "publishedReleaseOnDelivery", 
@@ -62,11 +62,11 @@ var unpublishedWebPage = {
     "contents" : [
     {
       "contentId" : "contentFromRelease", 
-      "#repository" : "leroymerlin", 
+      "#repository" : "d2t", 
       "contentDefinitionId" : "definition1", 
       "#definitionId" : "reflinked", 
       "#definitionRevision" : "56a760163a1fde89024a7d99", 
-      "#definitionRepository" : "leroymerlin"
+      "#definitionRepository" : "d2t"
     }
     ]
   }
@@ -94,11 +94,11 @@ var publishedWebPage = {
     "contents" : [
     {
       "contentId" : "contentFromRelease", 
-      "#repository" : "leroymerlin", 
+      "#repository" : "d2t", 
       "contentDefinitionId" : "definition1", 
       "#definitionId" : "reflinked", 
       "#definitionRevision" : "56a760163a1fde89024a7d99", 
-      "#definitionRepository" : "leroymerlin"
+      "#definitionRepository" : "d2t"
     }
     ]
   }
@@ -106,7 +106,7 @@ var publishedWebPage = {
 };
 
 var query = {
-  "find" : "{\"repository\" : \"leroymerlin\"}",
+  "find" : "{\"repository\" : \"d2t\"}",
   "queryName" : "query1"
 };
 

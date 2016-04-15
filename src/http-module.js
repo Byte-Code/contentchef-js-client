@@ -1,6 +1,5 @@
 
-
-var promise = require('es6-promise');
+// var promise = require('es6-promise');
 var axios = require('axios');
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
@@ -60,12 +59,12 @@ function GenericError(response) {
 
 module.exports = {
 
-    getItem: function(fullUrl, successFunction, apiKeyJson) {
+    getItem: function(fullUrl, successFunction, header) {
 
         var config = {
-            headers: apiKeyJson
+            headers: header
         };
-
+        
         return new Promise(function(resolve, reject) {
             axios.get(fullUrl, config)
             .then(function(result) {
