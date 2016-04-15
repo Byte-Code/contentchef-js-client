@@ -3,21 +3,18 @@
   "version": "2.0.0",
   "description": "ContentChef.io javascript client",
   "main": "require('content-chef-delivery-js-client');",
-  "scripts": {
-    "test:coverage": "node ./test/setup-mongo.js; istanbul cover ./test/delivery-test.js; "
-  },
   "files": "dist",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@bitbucket.org/bytecode-lm/contentchef-js-client.git"
   },
-  "author": "Sinisa Louc (http://contentchef.io/)",
+  "author": "Sinisa Louc",
   "license": "Apache-2.0",
   "homepage": "https://bitbucket.org/bytecode-lm/content-chef-delivery-js-client#readme",
   "devDependencies": {
     "webpack": "1.12.14",
     "expose-loader": "0.7.1",
-    "ghooks": "1.0.1",
+    "chai-as-promised": "^5.3.0",
     "grunt": "~0.4.5",
     "grunt-webpack": "1.0.11",
     "grunt-contrib-concat": "0.5.1",
@@ -26,10 +23,10 @@
     "grunt-contrib-watch": "0.6.1",
     "grunt-mocha": "0.4.13",
     "grunt-mocha-test": "0.12.7",
-    "istanbul": "0.4.0",
     "jshint": "latest",
     "load-grunt-tasks": "^3.2.0",
-    "mocha": "2.3.4"
+    "mocha": "2.3.4",
+    "chai": "3.4.1"
   },
   "dependencies": {
     "axios": "0.7.0",
@@ -38,10 +35,6 @@
   },
   "czConfig": {
     "path": "node_modules/cz-conventional-changelog"
-  },
-  "config": {
-    "ghooks": {
-    }
   },
   "directories": {
     "test": "test"

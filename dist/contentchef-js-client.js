@@ -358,11 +358,12 @@
 	    this.content = content;
 	}
 
-	function WebPage(webPageId, url, name, group, revisionId, templateId, templateRevision, variablesArea, contentAreas) {
+	function WebPage(webPageId, url, name, group, site, revisionId, templateId, templateRevision, variablesArea, contentAreas) {
 	    this.webPageId = webPageId;
 	    this.url = url;
 	    this.name = name;
 	    this.group = group;
+	    this.site = site;
 	    this.revisionId = revisionId;
 	    this.templateId = templateId;
 	    this.templateRevision = templateRevision;
@@ -394,6 +395,7 @@
 	        data.url,
 	        data.name,
 	        data.group,
+	        data.site,
 	        data.revisionId,
 	        data.templateId,
 	        data.templateRevision,
