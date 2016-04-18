@@ -112,6 +112,10 @@
             return delivery.searchContent(this.spaceId, this.deliveryId, queryName, queryParam);
         },
 
+        searchContentFromTo: function(queryName, from, to, queryParam) {
+            return delivery.searchContentFromTo(this.spaceId, this.deliveryId, queryName, from, to, queryParam);
+        },
+
         getAvailablePages: function() {
             return delivery.getAvailablePages(this.spaceId, this.deliveryId);
         }

@@ -110,6 +110,11 @@ var query = {
   "queryName" : "query1"
 };
 
+var query2 = {
+  "find" : "{\"repository\" : \"$QUERY\"}",
+  "queryName" : "query2"
+};
+
 MongoClient.connect("mongodb://localhost:27017/dev_contentchef_delivery_v2", function(err, db) {
   if(err) { return console.dir(err); }
 
@@ -120,6 +125,7 @@ MongoClient.connect("mongodb://localhost:27017/dev_contentchef_delivery_v2", fun
   var releases = db.collection('release', function(err, collection) {});
 
   queries.insert(query);
+  queries.insert(query2);
   deliveryItems.insert(unpublishedContent);
   deliveryItems.insert(publishedContent);
   deliveryItems.insert(unpublishedWebPage);

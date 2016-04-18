@@ -122,7 +122,17 @@ module.exports = {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/searchContent/' + encodeURIComponent(queryName) ;
 
         if (queryParam) {
-            theFullUrl = theFullUrl + '?queryParam' + encodeURIComponent(queryParam);
+            theFullUrl = theFullUrl + '?queryParam=' + encodeURIComponent(queryParam);
+        }
+        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
+    },
+
+    searchContentFromTo: function(spaceId, deliveryId, queryName, from, to, queryParam) {
+
+        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/searchContent/' + encodeURIComponent(queryName) + '/' + from + '/' + to ;
+
+        if (queryParam) {
+            theFullUrl = theFullUrl + '?queryParam=' + encodeURIComponent(queryParam);
         }
 
         return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
