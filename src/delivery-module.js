@@ -10,7 +10,7 @@ module.exports = {
     },
 
     setApiToken: function(apiToken) {
-        header = {"x-square-api-token" : apiToken};
+        header = {"x-square-api-key" : apiToken};
     },
 
     lookupContentByRevision: function(spaceId, deliveryId, contentId, contentRevision) {
