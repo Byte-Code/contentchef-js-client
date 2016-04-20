@@ -25,7 +25,7 @@
 
         initialize: function(deliveryUrl, spaceId, deliveryId, apiToken, apiCache, cacheTimeToLive) {
 
-            var API_URL_DELIVERY = '/contentchef-delivery/v2/';
+            var API_URL_DELIVERY = '/contentchef-delivery/v2';
 
             delivery.setUrl(deliveryUrl + API_URL_DELIVERY);
             delivery.setApiToken(apiToken + API_URL_DELIVERY);
