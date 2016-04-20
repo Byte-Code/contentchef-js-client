@@ -76,10 +76,14 @@ module.exports = {
         });
     },
 
-    postItem: function(fullUrl, params) {
+    postItem: function(fullUrl, params, header) {
+
+        var config = {
+            headers: header
+        };
 
         return new Promise(function(resolve, reject) {
-            axios.post(fullUrl, params)
+            axios.post(fullUrl, params, config)
             .then(function(result) {
                 resolve(result.data);
             })
