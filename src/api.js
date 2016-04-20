@@ -25,10 +25,10 @@
 
         initialize: function(deliveryUrl, spaceId, deliveryId, apiToken, apiCache, cacheTimeToLive) {
 
-            var API_URL_DELIVERY = '/contentchef-delivery/v2/';
+            var API_URL_DELIVERY = '/contentchef-delivery/v2';
 
             delivery.setUrl(deliveryUrl + API_URL_DELIVERY);
-            delivery.setApiToken(apiToken + API_URL_DELIVERY);
+            delivery.setApiToken(apiToken);
             
             this.spaceId = spaceId;
             this.deliveryId = deliveryId;
@@ -110,6 +110,10 @@
 
         searchContent: function(queryName, queryParam) {
             return delivery.searchContent(this.spaceId, this.deliveryId, queryName, queryParam);
+        },
+
+        searchContentFromTo: function(queryName, from, to, queryParam) {
+            return delivery.searchContentFromTo(this.spaceId, this.deliveryId, queryName, from, to, queryParam);
         },
 
         getAvailablePages: function() {
