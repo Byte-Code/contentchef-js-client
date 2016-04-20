@@ -28,7 +28,7 @@
             var API_URL_DELIVERY = '/contentchef-delivery/v2';
 
             delivery.setUrl(deliveryUrl + API_URL_DELIVERY);
-            delivery.setApiToken(apiToken + API_URL_DELIVERY);
+            delivery.setApiToken(apiToken);
             
             this.spaceId = spaceId;
             this.deliveryId = deliveryId;
