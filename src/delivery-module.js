@@ -146,12 +146,15 @@ module.exports = {
     }
 };
 
-function Content(contentId, revisionId, definitionInfo, tags, content) {
+function Content(contentId, revisionId, definitionInfo, tags, content, size) {
     this.contentId = contentId;
     this.revisionId = revisionId;
     this.definitionInfo = definitionInfo;
     this.tags = tags;
     this.content = content;
+    if (typeof(size) !== 'undefined') {
+    	this.size = size;
+    }
 }
 
 function WebPage(webPageId, url, name, group, site, revisionId, templateId, templateRevision, variablesArea, contentAreas) {
@@ -173,7 +176,8 @@ var mapSuccessfulResponseToContent = function(data) {
         data.revisionId,
         data.definitionInformation,
         data.tags,
-        data.content);
+        data.content,
+	data.size);
 };
 
 var mapSuccessfulResponseToContentList = function(data) {
