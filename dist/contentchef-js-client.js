@@ -78,10 +78,10 @@
 
 	        initialize: function(deliveryUrl, spaceId, deliveryId, apiToken, apiCache, cacheTimeToLive) {
 
-	            var API_URL_DELIVERY = '/contentchef-delivery/v2/';
+	            var API_URL_DELIVERY = '/contentchef-delivery/v2';
 
-	            delivery.setUrl(deliveryUrl + API_URL_DELIVERY);
-	            delivery.setApiToken(apiToken + API_URL_DELIVERY);
+	            delivery.setUrl(deliveryUrl );//+ API_URL_DELIVERY);
+	            delivery.setApiToken(apiToken);
 	            
 	            this.spaceId = spaceId;
 	            this.deliveryId = deliveryId;
@@ -165,6 +165,10 @@
 	            return delivery.searchContent(this.spaceId, this.deliveryId, queryName, queryParam);
 	        },
 
+	        searchContentFromTo: function(queryName, from, to, queryParam) {
+	            return delivery.searchContentFromTo(this.spaceId, this.deliveryId, queryName, from, to, queryParam);
+	        },
+
 	        getAvailablePages: function() {
 	            return delivery.getAvailablePages(this.spaceId, this.deliveryId);
 	        }
@@ -224,7 +228,7 @@
 	    },
 
 	    setApiToken: function(apiToken) {
-	        header = {"x-square-api-token" : apiToken};
+	        header = {"x-square-api-key" : apiToken};
 	    },
 
 	    lookupContentByRevision: function(spaceId, deliveryId, contentId, contentRevision) {
@@ -336,7 +340,17 @@
 	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/searchContent/' + encodeURIComponent(queryName) ;
 
 	        if (queryParam) {
-	            theFullUrl = theFullUrl + '?queryParam' + encodeURIComponent(queryParam);
+	            theFullUrl = theFullUrl + '?queryParam=' + encodeURIComponent(queryParam);
+	        }
+	        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
+	    },
+
+	    searchContentFromTo: function(spaceId, deliveryId, queryName, from, to, queryParam) {
+
+	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/searchContent/' + encodeURIComponent(queryName) + '/' + from + '/' + to ;
+
+	        if (queryParam) {
+	            theFullUrl = theFullUrl + '?queryParam=' + encodeURIComponent(queryParam);
 	        }
 
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
@@ -350,12 +364,15 @@
 	    }
 	};
 
-	function Content(contentId, revisionId, definitionInfo, tags, content) {
+	function Content(contentId, revisionId, definitionInfo, tags, content, size) {
 	    this.contentId = contentId;
 	    this.revisionId = revisionId;
 	    this.definitionInfo = definitionInfo;
 	    this.tags = tags;
 	    this.content = content;
+	    if (typeof(size) !== 'undefined') {
+	    	this.size = size;
+	    }
 	}
 
 	function WebPage(webPageId, url, name, group, site, revisionId, templateId, templateRevision, variablesArea, contentAreas) {
@@ -377,7 +394,8 @@
 	        data.revisionId,
 	        data.definitionInformation,
 	        data.tags,
-	        data.content);
+	        data.content,
+		data.size);
 	};
 
 	var mapSuccessfulResponseToContentList = function(data) {
@@ -499,10 +517,14 @@
 	        });
 	    },
 
-	    postItem: function(fullUrl, params) {
+	    postItem: function(fullUrl, params, header) {
+
+	        var config = {
+	            headers: header
+	        };
 
 	        return new Promise(function(resolve, reject) {
-	            axios.post(fullUrl, params)
+	            axios.post(fullUrl, params, config)
 	            .then(function(result) {
 	                resolve(result.data);
 	            })

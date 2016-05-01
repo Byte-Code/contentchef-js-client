@@ -118,6 +118,14 @@
 
         getAvailablePages: function() {
             return delivery.getAvailablePages(this.spaceId, this.deliveryId);
+        },
+
+        triggerTaxonomy: function() {
+            return delivery.triggerTaxonomy(this.spaceId, this.deliveryId);
+        },
+
+        getTaxonomyAggregation: function() {
+            return delivery.getTaxonomyAggregation(this.spaceId, this.deliveryId, taxonomyId);
         }
 
     };

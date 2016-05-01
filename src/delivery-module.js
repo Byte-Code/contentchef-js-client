@@ -118,9 +118,7 @@ module.exports = {
     },
 
     searchContent: function(spaceId, deliveryId, queryName, queryParam) {
-
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/searchContent/' + encodeURIComponent(queryName) ;
-
         if (queryParam) {
             theFullUrl = theFullUrl + '?queryParam=' + encodeURIComponent(queryParam);
         }
@@ -128,22 +126,28 @@ module.exports = {
     },
 
     searchContentFromTo: function(spaceId, deliveryId, queryName, from, to, queryParam) {
-
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/searchContent/' + encodeURIComponent(queryName) + '/' + from + '/' + to ;
-
         if (queryParam) {
             theFullUrl = theFullUrl + '?queryParam=' + encodeURIComponent(queryParam);
         }
-
         return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
     },
 
     getAvailablePages: function(spaceId, deliveryId) {
-
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getAvailablePages';
-
         return http.getItem(theFullUrl, mapSuccessfulResponseToWebPageList, header);
+    },
+
+    triggerTaxonomy: function() {
+        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId);
+        return http.postItem(theFullUrl, params, header);
+    },
+
+    getTaxonomyAggregation: function(taxonomyId) {
+        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId)+ '/' + encodeURIComponent(taxonomyId) ;
+        return http.getItem(theFullUrl, mapSuccessfulResponseToTaxAgg, header);
     }
+
 };
 
 function Content(contentId, revisionId, definitionInfo, tags, content, size) {
@@ -213,5 +217,9 @@ var mapSuccessfulResponseToWebPageList = function(data) {
 };
 
 var mapSuccessfulResponseToSiteMap = function(data) {
+    return data;
+};
+
+var mapSuccessfulResponseToTaxAgg = function(data) {
     return data;
 };
