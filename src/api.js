@@ -124,7 +124,7 @@
             return delivery.triggerTaxonomy(this.spaceId, this.deliveryId);
         },
 
-        getTaxonomyAggregation: function() {
+        getTaxonomyAggregation: function(taxonomyId) {
             return delivery.getTaxonomyAggregation(this.spaceId, this.deliveryId, taxonomyId);
         }
 
