@@ -143,7 +143,7 @@ module.exports = {
         return http.postItem(theFullUrl, params, header);
     },
 
-    getTaxonomyAggregation: function(taxonomyId) {
+    getTaxonomyAggregation: function(spaceId, deliveryId, taxonomyId) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId)+ '/' + encodeURIComponent(taxonomyId) ;
         return http.getItem(theFullUrl, mapSuccessfulResponseToTaxAgg, header);
     }
