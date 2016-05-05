@@ -144,7 +144,11 @@ module.exports = {
     },
 
     getTaxonomyAggregation: function(spaceId, deliveryId, taxonomyId) {
-        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId)+ '/' + encodeURIComponent(taxonomyId) ;
+        var theFullUrl = url +
+          '/' + encodeURIComponent(spaceId) +
+          '/' + encodeURIComponent(deliveryId) +
+          '/getTaxonomyAggregation' +
+          '/' + encodeURIComponent(taxonomyId) ;
         return http.getItem(theFullUrl, mapSuccessfulResponseToTaxAgg, header);
     }
 
