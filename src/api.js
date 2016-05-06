@@ -124,6 +124,10 @@
             return delivery.triggerTaxonomy(this.spaceId, this.deliveryId);
         },
 
+        searchByTaxonomy: function(taxonomyId, facets) {
+            return delivery.getTaxonomyAggregation(this.spaceId, this.deliveryId, taxonomyId, facets);
+        },
+
         getTaxonomyAggregation: function(taxonomyId) {
             return delivery.getTaxonomyAggregation(this.spaceId, this.deliveryId, taxonomyId);
         }

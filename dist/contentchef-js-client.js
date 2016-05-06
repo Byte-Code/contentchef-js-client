@@ -80,7 +80,7 @@
 
 	            var API_URL_DELIVERY = '/contentchef-delivery/v2';
 
-	            delivery.setUrl(deliveryUrl );//+ API_URL_DELIVERY);
+	            delivery.setUrl(deliveryUrl + API_URL_DELIVERY);
 	            delivery.setApiToken(apiToken);
 	            
 	            this.spaceId = spaceId;
@@ -171,6 +171,18 @@
 
 	        getAvailablePages: function() {
 	            return delivery.getAvailablePages(this.spaceId, this.deliveryId);
+	        },
+
+	        triggerTaxonomy: function() {
+	            return delivery.triggerTaxonomy(this.spaceId, this.deliveryId);
+	        },
+
+	        searchByTaxonomy: function(taxonomyId, facets) {
+	            return delivery.getTaxonomyAggregation(this.spaceId, this.deliveryId, taxonomyId, facets);
+	        },
+
+	        getTaxonomyAggregation: function(taxonomyId) {
+	            return delivery.getTaxonomyAggregation(this.spaceId, this.deliveryId, taxonomyId);
 	        }
 
 	    };
@@ -336,32 +348,44 @@
 	    },
 
 	    searchContent: function(spaceId, deliveryId, queryName, queryParam) {
-
 	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/searchContent/' + encodeURIComponent(queryName) ;
-
-	        if (queryParam) {
+	        if (typeof queryParam !== 'undefined') {
 	            theFullUrl = theFullUrl + '?queryParam=' + encodeURIComponent(queryParam);
 	        }
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
 	    },
 
 	    searchContentFromTo: function(spaceId, deliveryId, queryName, from, to, queryParam) {
-
 	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/searchContent/' + encodeURIComponent(queryName) + '/' + from + '/' + to ;
-
-	        if (queryParam) {
+	        if (typeof queryParam !== 'undefined') {
 	            theFullUrl = theFullUrl + '?queryParam=' + encodeURIComponent(queryParam);
 	        }
-
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
 	    },
 
 	    getAvailablePages: function(spaceId, deliveryId) {
-
 	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getAvailablePages';
-
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToWebPageList, header);
+	    },
+
+	    triggerTaxonomy: function() {
+	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId);
+	        return http.postItem(theFullUrl, params, header);
+	    },
+
+	    searchByTaxonomy: function(taxonomyId, facets) {
+	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId)+ '/' + encodeURIComponent(taxonomyId) ; 
+	        if (typeof facets !== 'undefined') {
+	            theFullUrl = theFullUrl + '?facets=' + encodeURIComponent(facets);
+	        }
+	        return http.getItem(theFullUrl, mapSuccessfulResponseToContentIdList, header);
+	    },
+
+	    getTaxonomyAggregation: function(taxonomyId) {
+	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId)+ '/' + encodeURIComponent(taxonomyId) ;
+	        return http.getItem(theFullUrl, mapSuccessfulResponseToTaxAgg, header);
 	    }
+
 	};
 
 	function Content(contentId, revisionId, definitionInfo, tags, content, size) {
@@ -407,6 +431,10 @@
 	    return contents;
 	};
 
+	var mapSuccessfulResponseToContentIdList = function(data) {
+	    return data;
+	};
+
 	var mapSuccessfulResponseToWebPage = function(data) {
 	    return new WebPage(
 	        data.webPageId,
@@ -431,6 +459,10 @@
 	};
 
 	var mapSuccessfulResponseToSiteMap = function(data) {
+	    return data;
+	};
+
+	var mapSuccessfulResponseToTaxAgg = function(data) {
 	    return data;
 	};
 

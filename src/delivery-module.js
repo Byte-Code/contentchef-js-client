@@ -119,7 +119,7 @@ module.exports = {
 
     searchContent: function(spaceId, deliveryId, queryName, queryParam) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/searchContent/' + encodeURIComponent(queryName) ;
-        if (queryParam) {
+        if (typeof queryParam !== 'undefined') {
             theFullUrl = theFullUrl + '?queryParam=' + encodeURIComponent(queryParam);
         }
         return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
@@ -127,7 +127,7 @@ module.exports = {
 
     searchContentFromTo: function(spaceId, deliveryId, queryName, from, to, queryParam) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/searchContent/' + encodeURIComponent(queryName) + '/' + from + '/' + to ;
-        if (queryParam) {
+        if (typeof queryParam !== 'undefined') {
             theFullUrl = theFullUrl + '?queryParam=' + encodeURIComponent(queryParam);
         }
         return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
@@ -150,7 +150,16 @@ module.exports = {
           '/getTaxonomyAggregation' +
           '/' + encodeURIComponent(taxonomyId) ;
         return http.getItem(theFullUrl, mapSuccessfulResponseToTaxAgg, header);
+    },
+
+    searchByTaxonomy: function(taxonomyId, facets) {
+        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId)+ '/' + encodeURIComponent(taxonomyId) ; 
+        if (typeof facets !== 'undefined') {
+            theFullUrl = theFullUrl + '?facets=' + encodeURIComponent(facets);
+        }
+        return http.getItem(theFullUrl, mapSuccessfulResponseToContentIdList, header);
     }
+
 
 };
 
@@ -195,6 +204,10 @@ var mapSuccessfulResponseToContentList = function(data) {
         contents.push(mapSuccessfulResponseToContent(item));
     }
     return contents;
+};
+
+var mapSuccessfulResponseToContentIdList = function(data) {
+    return data;
 };
 
 var mapSuccessfulResponseToWebPage = function(data) {
