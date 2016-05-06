@@ -457,13 +457,13 @@
 	        },
 
 	        lookupPageByUrl : function(pageUrl) {
-	            var theFullUrl = this.url + '/' + encodeURIComponent(this.spaceId) + '/' + encodeURIComponent(this.deliveryId) + '/getWebPageByUrl/' + encodeURIComponent(this.site)  + '/' + encodeURIComponent(pageUrl);
+	            var theFullUrl = this.url + '/' + encodeURIComponent(this.spaceId) + '/' + encodeURIComponent(this.deliveryId) + '/getWebPageByUrl/' + encodeURIComponent(pageUrl) + '/' + encodeURIComponent(this.site);
 
 	            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebPage,mapErrorResponse);
 	        },
 
 	        lookupPageById : function(pageId) {
-	            var theFullUrl = url + '/' + encodeURIComponent(this.spaceId) + '/' + encodeURIComponent(this.deliveryId) + '/getWebPageById/' + encodeURIComponent(this.site)  + '/' + encodeURIComponent(pageId);
+	            var theFullUrl = url + '/' + encodeURIComponent(this.spaceId) + '/' + encodeURIComponent(this.deliveryId) + '/getWebPageById/' + encodeURIComponent(pageId) + '/' + encodeURIComponent(this.site);
 
 	            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebPage,mapErrorResponse);
 	        },
@@ -880,13 +880,13 @@
 	    },
 
 	    lookupPageById : function(spaceId, deliveryId, pageId, site) {
-	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getWebPageById/' + encodeURIComponent(site)  + '/' + encodeURIComponent(pageId);
+	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getWebPageById/' + encodeURIComponent(pageId) + '/' + encodeURIComponent(site);
 
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToWebPage, header);
 	    },
 
 	    lookupPageByUrl : function(spaceId, deliveryId, pageUrl, site) {
-	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getWebPageByUrl/' + encodeURIComponent(site)  + '/' + encodeURIComponent(pageUrl);
+	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getWebPageByUrl/' + encodeURIComponent(pageUrl) + '/' + encodeURIComponent(site);
 
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToWebPage, header);
 	    },
