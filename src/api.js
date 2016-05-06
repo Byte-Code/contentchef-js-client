@@ -8,7 +8,7 @@
 
     var oldChefApi = {}; // reference for proxying calls to old api 
     var newChefApi = {}; // reference for proxying calls to new api 
-    
+
 
     /**
      * The kit's main entry point; initialize your API like this: ContentChef.Api(baseUrl, apiToken, apiCache, cacheTimeToLive)
@@ -22,9 +22,12 @@
      * @param {function} apiCache - A cache object that will be used for caching API responses (if not provided a default one will be used)
      * @param {int} cacheTimeToLive - The time to leave , in seconds, for the items in the cache (if not provided a default will be used)
      * @returns {Api} - The created api object
+     * @param {string} spaceId - not needed from v2
+     * @param {string} deliveryId - not needed from v2
+     * @param {string} site - not needed from v2
      */
-    var adapter = function (baseUrl, origin, apiToken, apiCache, cacheTimeToLive) {
-        var theApi = adapter.fn.initialize(baseUrl, origin, apiToken, apiCache, cacheTimeToLive);
+    var adapter = function (baseUrl, origin, apiToken, apiCache, cacheTimeToLive, spaceId, deliveryId, site) {
+        var theApi = adapter.fn.initialize(baseUrl, origin, apiToken, apiCache, cacheTimeToLive, spaceId, deliveryId, site);
 
         return theApi;
     };
@@ -34,9 +37,9 @@
         NOT_FOUND : new NotFound(),
         GENERIC_ERROR : new GenericError(),
 
-        initialize: function(baseUrl, origin, apiToken, apiCache, cacheTimeToLive) {
+        initialize: function(baseUrl, origin, apiToken, apiCache, cacheTimeToLive, spaceId, deliveryId, site) {
 
-            oldChefApi = oldChef.ContentChef.Api(baseUrl, origin, apiToken, apiCache, cacheTimeToLive);
+            oldChefApi = oldChef.ContentChef.Api(baseUrl, origin, apiToken, apiCache, cacheTimeToLive,spaceId, deliveryId, site);
             newChefApi = newChef.ContentChef.Api(baseUrl, apiToken, apiCache, cacheTimeToLive);
 
             return this;

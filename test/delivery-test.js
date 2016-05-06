@@ -1,5 +1,5 @@
 
-var cc = require('./../src/api');
+var cc = require('./../src/api-v2.js');
 var api = cc.ContentChef.Api("http://localhost:9002", "", "");
 
 var createSomeNewRelease = { 

@@ -61,7 +61,7 @@
 
 	    var oldChefApi = {}; // reference for proxying calls to old api 
 	    var newChefApi = {}; // reference for proxying calls to new api 
-	    
+
 
 	    /**
 	     * The kit's main entry point; initialize your API like this: ContentChef.Api(baseUrl, apiToken, apiCache, cacheTimeToLive)
@@ -75,9 +75,12 @@
 	     * @param {function} apiCache - A cache object that will be used for caching API responses (if not provided a default one will be used)
 	     * @param {int} cacheTimeToLive - The time to leave , in seconds, for the items in the cache (if not provided a default will be used)
 	     * @returns {Api} - The created api object
+	     * @param {string} spaceId - not needed from v2
+	     * @param {string} deliveryId - not needed from v2
+	     * @param {string} site - not needed from v2
 	     */
-	    var adapter = function (baseUrl, origin, apiToken, apiCache, cacheTimeToLive) {
-	        var theApi = adapter.fn.initialize(baseUrl, origin, apiToken, apiCache, cacheTimeToLive);
+	    var adapter = function (baseUrl, origin, apiToken, apiCache, cacheTimeToLive, spaceId, deliveryId, site) {
+	        var theApi = adapter.fn.initialize(baseUrl, origin, apiToken, apiCache, cacheTimeToLive, spaceId, deliveryId, site);
 
 	        return theApi;
 	    };
@@ -87,9 +90,9 @@
 	        NOT_FOUND : new NotFound(),
 	        GENERIC_ERROR : new GenericError(),
 
-	        initialize: function(baseUrl, origin, apiToken, apiCache, cacheTimeToLive) {
+	        initialize: function(baseUrl, origin, apiToken, apiCache, cacheTimeToLive, spaceId, deliveryId, site) {
 
-	            oldChefApi = oldChef.ContentChef.Api(baseUrl, origin, apiToken, apiCache, cacheTimeToLive);
+	            oldChefApi = oldChef.ContentChef.Api(baseUrl, origin, apiToken, apiCache, cacheTimeToLive,spaceId, deliveryId, site);
 	            newChefApi = newChef.ContentChef.Api(baseUrl, apiToken, apiCache, cacheTimeToLive);
 
 	            return this;
@@ -420,14 +423,16 @@
 	     * @alias Api
 	     * @constructor
 	     * @param {string} baseUrl - The base URL of the contentchef.io API endpoint
-	     * @param {string} origin - The base URL of the contentchef.io API endpoint
 	     * @param {string} apiToken - The apiToken
 	     * @param {function} apiCache - A cache object that will be used for caching API responses (if not provided a default one will be used)
 	     * @param {int} cacheTimeToLive - The time to leave , in seconds, for the items in the cache (if not provided a default will be used)
 	     * @returns {Api} - The created api object
+	     * @param {string} spaceId
+	     * @param {string} deliveryId
+	     * @param {string} site
 	     */
-	    var contentChef = function (baseUrl, apiToken,apiCache,cacheTimeToLive) {
-	        var theApi = contentChef.fn.initialize(baseUrl, apiToken, apiCache, cacheTimeToLive);
+	    var contentChef = function (baseUrl, apiToken,apiCache,cacheTimeToLive,spaceId, deliveryId, site) {
+	        var theApi = contentChef.fn.initialize(baseUrl, apiToken, apiCache, cacheTimeToLive,spaceId, deliveryId, site);
 
 	        return theApi;
 	    };
@@ -439,67 +444,85 @@
 	        NOT_FOUND : new NotFound(),
 	        GENERIC_ERROR : new GenericError(),
 
-	        initialize: function(baseUrl, origin, apiToken, apiCache, cacheTimeToLive) {
+	        initialize: function(baseUrl, origin, apiToken, apiCache, cacheTimeToLive,spaceId, deliveryId, site) {
 	            this.url = baseUrl +  contentChef.prototype.API_URL;
 	            this.origin = origin;
 	            this.apiToken = apiToken;
 	            this.apiCache = apiCache || defaultGlobalCache();
 	            this.dataCacheTTL = cacheTimeToLive || 10;
+	            this.spaceId = spaceId;
+	            this.deliveryId = deliveryId;
+	            this.site = site;
 	            return this;
 	        },
 
 	        lookupPageByUrl : function(pageUrl) {
-	            var theFullUrl = this.url + 'getWebPageByUrl/' + encodeURIComponent(this.origin)  + '/' + encodeURIComponent(pageUrl);
+	            //var theFullUrl = this.url + 'getWebPageByUrl/' + encodeURIComponent(this.origin)  + '/' + encodeURIComponent(pageUrl);
+	            var theFullUrl = this.url + '/' + encodeURIComponent(this.spaceId) + '/' + encodeURIComponent(this.deliveryId) + '/getWebPageByUrl/' + encodeURIComponent(this.site)  + '/' + encodeURIComponent(pageUrl);
 
 	            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebPage,mapErrorResponse);
 	        },
 
 	        lookupPageById : function(pageId) {
-	            var theFullUrl = this.url + 'getWebPageById/' + encodeURIComponent(this.origin)  + '/' + encodeURIComponent(pageId);
+	            //var theFullUrl = this.url + 'getWebPageById/' + encodeURIComponent(this.origin)  + '/' + encodeURIComponent(pageId);
+	            var theFullUrl = url + '/' + encodeURIComponent(this.spaceId) + '/' + encodeURIComponent(this.deliveryId) + '/getWebPageById/' + encodeURIComponent(this.site)  + '/' + encodeURIComponent(pageId);
 
 	            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebPage,mapErrorResponse);
 	        },
 
 	        lookupContentLatestRevision: function(contentId, definitionId) {
-	            var theFullUrl = this.url + 'getLatestContent/' +
-	                encodeURIComponent(this.origin)  + '/' + encodeURIComponent(contentId) + '/' + encodeURIComponent(definitionId);
+	            //var theFullUrl = this.url + 'getLatestContent/' +
+	            //    encodeURIComponent(this.origin)  + '/' + encodeURIComponent(contentId) + '/' + encodeURIComponent(definitionId);
+
+	            var theFullUrl = url + '/' + encodeURIComponent(this.spaceId) + '/' + encodeURIComponent(this.deliveryId) + '/getLatestContent/' + encodeURIComponent(contentId);
 
 	            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContent,mapErrorResponse);
 	        },
 
 	        lookupContentLatestRevisionBySlug: function(contentSlug, definitionId) {
-	            var theFullUrl = this.url + 'getLatestContentBySlug/' +
-	                encodeURIComponent(this.origin)  + '/' + encodeURIComponent(contentSlug) + '/' + encodeURIComponent(definitionId);
+	            //var theFullUrl = this.url + 'getLatestContentBySlug/' +
+	            //    encodeURIComponent(this.origin)  + '/' + encodeURIComponent(contentSlug) + '/' + encodeURIComponent(definitionId);
+
+	            var theFullUrl = url + '/' + encodeURIComponent(this.spaceId) + '/' + encodeURIComponent(this.deliveryId) + '/getLatestContentBySlug/' + encodeURIComponent(contentSlug);
 
 	            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContent,mapErrorResponse);
 	        },
 
 	        lookupContentRevision: function(contentId, contentRevision) {
-	            var theFullUrl = this.url + 'getContent/' +
-	                encodeURIComponent(this.origin)  + '/' + encodeURIComponent(contentId) + '/' + encodeURIComponent(contentRevision);
+	            //var theFullUrl = this.url + 'getContent/' +
+	            //    encodeURIComponent(this.origin)  + '/' + encodeURIComponent(contentId) + '/' + encodeURIComponent(contentRevision);
+
+	            var theFullUrl = url + '/' + encodeURIComponent(this.spaceId) + '/' + encodeURIComponent(this.deliveryId) + '/getContent/' + encodeURIComponent(contentId) + '/' + encodeURIComponent(contentRevision);
 
 	            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContent,mapErrorResponse);
 	        },
 
 	        lookupContentRevisionBySlug: function(contentSlug, contentRevision) {
-	            var theFullUrl = this.url + 'getContentBySlug/' +
-	                encodeURIComponent(this.origin)  + '/' + encodeURIComponent(contentSlug) + '/' + encodeURIComponent(contentRevision);
+	            //var theFullUrl = this.url + 'getContentBySlug/' +
+	            //    encodeURIComponent(this.origin)  + '/' + encodeURIComponent(contentSlug) + '/' + encodeURIComponent(contentRevision);
+
+	            var theFullUrl = url + '/' + encodeURIComponent(this.spaceId) + '/' + encodeURIComponent(this.deliveryId) + '/getContentBySlug/' + encodeURIComponent(contentSlug) + '/' + encodeURIComponent(contentRevision);
 
 	            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContent,mapErrorResponse);
 	        },
 
 	        listAllContentByDefinition: function(definitionId) {
-	            var theFullUrl = this.url + 'listContentsByDefinitionId' +
-	                '/' + encodeURIComponent(this.origin)  +
-	                '/' + encodeURIComponent(definitionId) ;
+	            //var theFullUrl = this.url + 'listContentsByDefinitionId' +
+	            //    '/' + encodeURIComponent(this.origin)  +
+	            //    '/' + encodeURIComponent(definitionId) ;
+
+	            var theFullUrl = url + '/' + encodeURIComponent(this.spaceId) + '/' + encodeURIComponent(this.deliveryId) + '/listContentsByDefinitionId/' + encodeURIComponent(definitionId) ;
 
 	            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebContentList,mapErrorResponse);
 	        },
 
 	        searchContent: function(queryName,queryParam) {
 
-	            var theFullUrl = this.url + 'searchContent' +
-	                '/' + encodeURIComponent(queryName) ;
+	            //var theFullUrl = this.url + 'searchContent' +
+	            //    '/' + encodeURIComponent(queryName) ;
+
+	            var theFullUrl = url + '/' + encodeURIComponent(this.spaceId) + '/' + encodeURIComponent(this.deliveryId) + '/searchContent/' + encodeURIComponent(queryName) ;
+
 
 	            if (queryParam) {
 	                theFullUrl = theFullUrl + '?queryParam=' + encodeURIComponent(queryParam);
@@ -510,8 +533,10 @@
 
 	        getAvailablePages: function() {
 
-	            var theFullUrl = this.url + 'getAvailablePages' +
-	                '/' + encodeURIComponent(this.origin) ;
+	            //var theFullUrl = this.url + 'getAvailablePages' +
+	            //    '/' + encodeURIComponent(this.origin) ;
+
+	            var theFullUrl = url + '/' + encodeURIComponent(this.spaceId) + '/' + encodeURIComponent(this.deliveryId) + '/getAvailablePages';
 
 	            return lookupItem(theFullUrl,this.apiToken,mapSuccessfulResponseToWebPageReferenceList,mapErrorResponse);
 	        }
