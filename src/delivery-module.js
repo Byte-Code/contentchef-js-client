@@ -76,13 +76,13 @@ module.exports = {
     },
 
     lookupPageById : function(spaceId, deliveryId, pageId, site) {
-        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getWebPageById/' + encodeURIComponent(site)  + '/' + encodeURIComponent(pageId);
+        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getWebPageById/' + encodeURIComponent(pageId) + '/' + encodeURIComponent(site);
 
         return http.getItem(theFullUrl, mapSuccessfulResponseToWebPage, header);
     },
 
     lookupPageByUrl : function(spaceId, deliveryId, pageUrl, site) {
-        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getWebPageByUrl/' + encodeURIComponent(site)  + '/' + encodeURIComponent(pageUrl);
+        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getWebPageByUrl/' + encodeURIComponent(pageUrl) + '/' + encodeURIComponent(site);
 
         return http.getItem(theFullUrl, mapSuccessfulResponseToWebPage, header);
     },
