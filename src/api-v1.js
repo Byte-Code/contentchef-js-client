@@ -24,7 +24,7 @@
 
     contentChef.fn = contentChef.prototype = {
 
-        API_URL : '/contentchef-delivery/v1/',
+        API_URL : '/contentchef-delivery/v2',
 
         NOT_FOUND : new NotFound(),
         GENERIC_ERROR : new GenericError(),
