@@ -444,9 +444,8 @@
 	        NOT_FOUND : new NotFound(),
 	        GENERIC_ERROR : new GenericError(),
 
-	        initialize: function(baseUrl, origin, apiToken, apiCache, cacheTimeToLive,spaceId, deliveryId, site) {
+	        initialize: function(baseUrl, apiToken, apiCache, cacheTimeToLive,spaceId, deliveryId, site) {
 	            this.url = baseUrl +  contentChef.prototype.API_URL;
-	            this.origin = origin;
 	            this.apiToken = apiToken;
 	            this.apiCache = apiCache || defaultGlobalCache();
 	            this.dataCacheTTL = cacheTimeToLive || 10;
