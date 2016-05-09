@@ -152,9 +152,13 @@ module.exports = {
         return http.getItem(theFullUrl, mapSuccessfulResponseToTaxAgg, header);
     },
 
-    searchByTaxonomy: function(taxonomyId, facets) {
-        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId)+ '/' + encodeURIComponent(taxonomyId) ; 
-        if (typeof facets !== 'undefined') {
+    searchByTaxonomy: function(spaceId, deliveryId, taxonomyId, facets) {
+        var theFullUrl = url +
+          '/' + encodeURIComponent(spaceId) +
+          '/' + encodeURIComponent(deliveryId) +
+          '/searchByTaxonomy' +
+          '/' + encodeURIComponent(taxonomyId);
+        if (typeof facets !== 'undefined' && facets.length > 0) {
             theFullUrl = theFullUrl + '?facets=' + encodeURIComponent(facets);
         }
         return http.getItem(theFullUrl, mapSuccessfulResponseToContentIdList, header);
