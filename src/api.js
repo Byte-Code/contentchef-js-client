@@ -125,7 +125,7 @@
         },
 
         searchByTaxonomy: function(taxonomyId, facets) {
-            return delivery.getTaxonomyAggregation(this.spaceId, this.deliveryId, taxonomyId, facets);
+            return delivery.searchByTaxonomy(this.spaceId, this.deliveryId, taxonomyId, facets);
         },
 
         getTaxonomyAggregation: function(taxonomyId) {
