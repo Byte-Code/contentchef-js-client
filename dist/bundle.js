@@ -68,26 +68,31 @@
 	     * @param {int} cacheTimeToLive - The time to leave , in seconds, for the items in the cache (if not provided a default will be used)
 	     * @returns {Api} - The created api object
 	     */
-	    var contentChef = function(deliveryUrl, spaceId, deliveryId, apiToken, apiCache, cacheTimeToLive) {
-	        return contentChef.fn.initialize(deliveryUrl, spaceId, deliveryId, apiToken, apiCache, cacheTimeToLive);
+	    var contentChef = function(deliveryUrl, spaceId, deliveryId, apiToken, apiCache, cacheTimeToLive, apiUrlDelivery) {
+	        return contentChef.fn.initialize(deliveryUrl, spaceId, deliveryId, apiToken, apiCache, cacheTimeToLive, apiUrlDelivery);
 	    };
 
 	    var delivery = __webpack_require__(3);
 
 	    contentChef.fn = contentChef.prototype = {
 
-	        initialize: function(deliveryUrl, spaceId, deliveryId, apiToken, apiCache, cacheTimeToLive) {
+	        initialize: function(deliveryUrl, spaceId, deliveryId, apiToken, apiCache, cacheTimeToLive, apiUrlDelivery) {
 
 	            var API_URL_DELIVERY = '/contentchef-delivery/v2';
-
-	            delivery.setUrl(deliveryUrl + API_URL_DELIVERY);
-	            delivery.setApiToken(apiToken);
 	            
 	            this.spaceId = spaceId;
 	            this.deliveryId = deliveryId;
 
 	            this.apiCache = apiCache || defaultGlobalCache(); // not used for now
 	            this.dataCacheTTL = cacheTimeToLive || 10;  // not used for now
+	            
+	            if (typeof apiUrlDelivery == 'undefined') {
+	                this.apiUrlDelivery = API_URL_DELIVERY;
+	            }
+	            else this.apiUrlDelivery = apiUrlDelivery;
+
+	            delivery.setUrl(deliveryUrl + this.apiUrlDelivery);
+	            delivery.setApiToken(apiToken);
 
 	            return this;
 	        },
@@ -127,6 +132,10 @@
 
 	        listUnpublishedContentsByDefinition: function(definitionId, apiKeyForUnpublishedContent) {
 	            return delivery.listUnpublishedContentsByDefinition(this.spaceId, this.deliveryId, definitionId, apiKeyForUnpublishedContent);
+	        },
+
+	        listContentsByListOfContentIds: function(listOfContentIds) {
+	            return delivery.listContentsByListOfContentIds(this.spaceId, this.deliveryId, listOfContentIds);
 	        },
 
 	        lookupWebPagesSitemapByUrl: function(baseURL, site) {
@@ -178,7 +187,7 @@
 	        },
 
 	        searchByTaxonomy: function(taxonomyId, facets) {
-	            return delivery.getTaxonomyAggregation(this.spaceId, this.deliveryId, taxonomyId, facets);
+	            return delivery.searchByTaxonomy(this.spaceId, this.deliveryId, taxonomyId, facets);
 	        },
 
 	        getTaxonomyAggregation: function(taxonomyId) {
@@ -291,6 +300,12 @@
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
 	    },
 
+	    listContentsByListOfContentIds: function(spaceId, deliveryId, listOfContentIds) {
+	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listContentsByListOfContentIds/' + encodeURIComponent(listOfContentIds);
+
+	        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
+	    },
+
 	    listUnpublishedContentsByDefinition: function(spaceId, deliveryId, definitionId, authToken) {
 	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listUnpublishedContentsByDefinitionId/' + encodeURIComponent(definitionId);
 	        var authHeader = {};
@@ -373,18 +388,27 @@
 	        return http.postItem(theFullUrl, params, header);
 	    },
 
-	    searchByTaxonomy: function(taxonomyId, facets) {
-	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId)+ '/' + encodeURIComponent(taxonomyId) ; 
-	        if (typeof facets !== 'undefined') {
+	    getTaxonomyAggregation: function(spaceId, deliveryId, taxonomyId) {
+	        var theFullUrl = url +
+	          '/' + encodeURIComponent(spaceId) +
+	          '/' + encodeURIComponent(deliveryId) +
+	          '/getTaxonomyAggregation' +
+	          '/' + encodeURIComponent(taxonomyId) ;
+	        return http.getItem(theFullUrl, mapSuccessfulResponseToTaxAgg, header);
+	    },
+
+	    searchByTaxonomy: function(spaceId, deliveryId, taxonomyId, facets) {
+	        var theFullUrl = url +
+	          '/' + encodeURIComponent(spaceId) +
+	          '/' + encodeURIComponent(deliveryId) +
+	          '/searchByTaxonomy' +
+	          '/' + encodeURIComponent(taxonomyId);
+	        if (typeof facets !== 'undefined' && facets.length > 0) {
 	            theFullUrl = theFullUrl + '?facets=' + encodeURIComponent(facets);
 	        }
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToContentIdList, header);
-	    },
-
-	    getTaxonomyAggregation: function(taxonomyId) {
-	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId)+ '/' + encodeURIComponent(taxonomyId) ;
-	        return http.getItem(theFullUrl, mapSuccessfulResponseToTaxAgg, header);
 	    }
+
 
 	};
 
