@@ -18,6 +18,9 @@ var contentJson = {
   "revisionId": "56b891d78a456d13026afc1d",
   "tags": [
     "tag1"
+  ],
+  "facets": [
+    "taxonomy1_slug_slug2"
   ]
 };
 

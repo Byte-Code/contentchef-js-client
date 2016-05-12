@@ -38,7 +38,8 @@ var publishedContent2 = {
   "contentId" : "content2", 
   "itemType" : "content", 
   "releaseId" : "publishedReleaseOnDelivery", 
-  "published" : true
+  "published" : true,
+  "facets" : ["taxonomy1_slug_slug2"]
 };
 
 var publishedContent3 = { 
@@ -58,7 +59,8 @@ var publishedContent3 = {
   "contentId" : "content3", 
   "itemType" : "content", 
   "releaseId" : "publishedReleaseOnDelivery", 
-  "published" : true
+  "published" : true,
+  "facets" : ["taxonomy1_slug_slug2"]
 };
 
 var unpublishedWebPage = { 
@@ -125,6 +127,39 @@ var publishedWebPage = {
   ]
 };
 
+var taxonomy = { 
+  "contentId" : "taxonomy1", 
+  "definitionInformation" : {
+    "definitionId" : "taxonomy"
+  }, 
+  "tags" : [], 
+  "content" : {
+    "referencedDefinition" : "definition1", 
+    "filter" : {
+      "foo" : "bar"
+    }, 
+    "facets" : [
+      "slug"
+    ]
+  }, 
+  "itemType" : "content", 
+  "releaseId" : "release12345", 
+  "published" : true, 
+  "revisionId" : "572a2b920e00000e00a78fa1"
+}
+
+var aggregation = { 
+  "id" : "taxonomy1", 
+  "facets" : [
+  {
+    "key" : "foo", 
+    "label" : "Foo", 
+    "values" : [
+    ]
+  }
+  ]
+}
+
 var query = {
   "find" : "{\"repository\" : \"d2t\"}",
   "queryName" : "query1"
@@ -143,12 +178,15 @@ MongoClient.connect("mongodb://localhost:27017/dev_contentchef_delivery_v2", fun
   var queries = db.collection('query', function(err, collection) {});
   var deliveryItems = db.collection('deliveryItem', function(err, collection) {});
   var releases = db.collection('release', function(err, collection) {});
+  var taxonomyAggregations = db.collection('taxonomyAggregation', function(err, collection) {});
 
   queries.insert(query);
   queries.insert(query2);
   deliveryItems.insert(unpublishedContent);
   deliveryItems.insert(publishedContent2);
   deliveryItems.insert(publishedContent3);
+  deliveryItems.insert(taxonomy);
+  taxonomyAggregations.insert(aggregation);
   deliveryItems.insert(unpublishedWebPage);
   deliveryItems.insert(publishedWebPage);
 

@@ -173,7 +173,7 @@ module.exports = {
 
 };
 
-function Content(contentId, revisionId, definitionInfo, tags, content, size) {
+function Content(contentId, revisionId, definitionInfo, tags, content, size, facets) {
     this.contentId = contentId;
     this.revisionId = revisionId;
     this.definitionInfo = definitionInfo;
@@ -181,6 +181,9 @@ function Content(contentId, revisionId, definitionInfo, tags, content, size) {
     this.content = content;
     if (typeof(size) !== 'undefined') {
     	this.size = size;
+    }
+    if (typeof(facets) !== 'undefined') {
+        this.facets = facets;
     }
 }
 
@@ -204,7 +207,8 @@ var mapSuccessfulResponseToContent = function(data) {
         data.definitionInformation,
         data.tags,
         data.content,
-	data.size);
+	data.size,
+    data.facets);
 };
 
 var mapSuccessfulResponseToContentList = function(data) {
