@@ -1,6 +1,6 @@
 
 var cc = require('./../src/api');
-var api = cc.ContentChef.Api("http://localhost:9002", "d2t", "dev", "apiTokenWhatever");
+var api = cc.ContentChef.Api("http://localhost:9002", "d2t", "dev", "apiTokenWhatever", "apiCacheWhatever", 10, "");
 
 var chai = require("chai");
 chai.use(require("chai-as-promised"));

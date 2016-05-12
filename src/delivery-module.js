@@ -61,6 +61,12 @@ module.exports = {
         return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
     },
 
+    listContentsByListOfContentIds: function(spaceId, deliveryId, listOfContentIds) {
+        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listContentsByListOfContentIds/' + encodeURIComponent(listOfContentIds);
+
+        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
+    },
+
     listUnpublishedContentsByDefinition: function(spaceId, deliveryId, definitionId, authToken) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listUnpublishedContentsByDefinitionId/' + encodeURIComponent(definitionId);
         var authHeader = {};

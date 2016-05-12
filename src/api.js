@@ -15,26 +15,31 @@
      * @param {int} cacheTimeToLive - The time to leave , in seconds, for the items in the cache (if not provided a default will be used)
      * @returns {Api} - The created api object
      */
-    var contentChef = function(deliveryUrl, spaceId, deliveryId, apiToken, apiCache, cacheTimeToLive) {
-        return contentChef.fn.initialize(deliveryUrl, spaceId, deliveryId, apiToken, apiCache, cacheTimeToLive);
+    var contentChef = function(deliveryUrl, spaceId, deliveryId, apiToken, apiCache, cacheTimeToLive, apiUrlDelivery) {
+        return contentChef.fn.initialize(deliveryUrl, spaceId, deliveryId, apiToken, apiCache, cacheTimeToLive, apiUrlDelivery);
     };
 
     var delivery = require('./delivery-module');
 
     contentChef.fn = contentChef.prototype = {
 
-        initialize: function(deliveryUrl, spaceId, deliveryId, apiToken, apiCache, cacheTimeToLive) {
+        initialize: function(deliveryUrl, spaceId, deliveryId, apiToken, apiCache, cacheTimeToLive, apiUrlDelivery) {
 
             var API_URL_DELIVERY = '/contentchef-delivery/v2';
-
-            delivery.setUrl(deliveryUrl + API_URL_DELIVERY);
-            delivery.setApiToken(apiToken);
             
             this.spaceId = spaceId;
             this.deliveryId = deliveryId;
 
             this.apiCache = apiCache || defaultGlobalCache(); // not used for now
             this.dataCacheTTL = cacheTimeToLive || 10;  // not used for now
+            
+            if (typeof apiUrlDelivery == 'undefined') {
+                this.apiUrlDelivery = API_URL_DELIVERY;
+            }
+            else this.apiUrlDelivery = apiUrlDelivery;
+
+            delivery.setUrl(deliveryUrl + this.apiUrlDelivery);
+            delivery.setApiToken(apiToken);
 
             return this;
         },
@@ -74,6 +79,10 @@
 
         listUnpublishedContentsByDefinition: function(definitionId, apiKeyForUnpublishedContent) {
             return delivery.listUnpublishedContentsByDefinition(this.spaceId, this.deliveryId, definitionId, apiKeyForUnpublishedContent);
+        },
+
+        listContentsByListOfContentIds: function(listOfContentIds) {
+            return delivery.listContentsByListOfContentIds(this.spaceId, this.deliveryId, listOfContentIds);
         },
 
         lookupWebPagesSitemapByUrl: function(baseURL, site) {
