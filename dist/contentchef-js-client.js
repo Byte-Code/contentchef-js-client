@@ -68,26 +68,31 @@
 	     * @param {int} cacheTimeToLive - The time to leave , in seconds, for the items in the cache (if not provided a default will be used)
 	     * @returns {Api} - The created api object
 	     */
-	    var contentChef = function(deliveryUrl, spaceId, deliveryId, apiToken, apiCache, cacheTimeToLive) {
-	        return contentChef.fn.initialize(deliveryUrl, spaceId, deliveryId, apiToken, apiCache, cacheTimeToLive);
+	    var contentChef = function(deliveryUrl, spaceId, deliveryId, apiToken, apiCache, cacheTimeToLive, apiUrlDelivery) {
+	        return contentChef.fn.initialize(deliveryUrl, spaceId, deliveryId, apiToken, apiCache, cacheTimeToLive, apiUrlDelivery);
 	    };
 
 	    var delivery = __webpack_require__(3);
 
 	    contentChef.fn = contentChef.prototype = {
 
-	        initialize: function(deliveryUrl, spaceId, deliveryId, apiToken, apiCache, cacheTimeToLive) {
+	        initialize: function(deliveryUrl, spaceId, deliveryId, apiToken, apiCache, cacheTimeToLive, apiUrlDelivery) {
 
-	            var API_URL_DELIVERY = '/contentchef-delivery/v2/';
-
-	            delivery.setUrl(deliveryUrl + API_URL_DELIVERY);
-	            delivery.setApiToken(apiToken + API_URL_DELIVERY);
+	            var API_URL_DELIVERY = '/contentchef-delivery/v2';
 	            
 	            this.spaceId = spaceId;
 	            this.deliveryId = deliveryId;
 
 	            this.apiCache = apiCache || defaultGlobalCache(); // not used for now
 	            this.dataCacheTTL = cacheTimeToLive || 10;  // not used for now
+	            
+	            if (typeof apiUrlDelivery == 'undefined') {
+	                this.apiUrlDelivery = API_URL_DELIVERY;
+	            }
+	            else this.apiUrlDelivery = apiUrlDelivery;
+
+	            delivery.setUrl(deliveryUrl + this.apiUrlDelivery);
+	            delivery.setApiToken(apiToken);
 
 	            return this;
 	        },
@@ -129,6 +134,10 @@
 	            return delivery.listUnpublishedContentsByDefinition(this.spaceId, this.deliveryId, definitionId, apiKeyForUnpublishedContent);
 	        },
 
+	        listContentsByListOfContentIds: function(listOfContentIds) {
+	            return delivery.listContentsByListOfContentIds(this.spaceId, this.deliveryId, listOfContentIds);
+	        },
+
 	        lookupWebPagesSitemapByUrl: function(baseURL, site) {
 	            return delivery.lookupWebPagesSitemapByUrl(this.spaceId, this.deliveryId, baseURL, site);
 	        },
@@ -165,8 +174,24 @@
 	            return delivery.searchContent(this.spaceId, this.deliveryId, queryName, queryParam);
 	        },
 
+	        searchContentFromTo: function(queryName, from, to, queryParam) {
+	            return delivery.searchContentFromTo(this.spaceId, this.deliveryId, queryName, from, to, queryParam);
+	        },
+
 	        getAvailablePages: function() {
 	            return delivery.getAvailablePages(this.spaceId, this.deliveryId);
+	        },
+
+	        triggerTaxonomy: function() {
+	            return delivery.triggerTaxonomy(this.spaceId, this.deliveryId);
+	        },
+
+	        searchByTaxonomy: function(taxonomyId, facets) {
+	            return delivery.searchByTaxonomy(this.spaceId, this.deliveryId, taxonomyId, facets);
+	        },
+
+	        getTaxonomyAggregation: function(taxonomyId) {
+	            return delivery.getTaxonomyAggregation(this.spaceId, this.deliveryId, taxonomyId);
 	        }
 
 	    };
@@ -224,7 +249,7 @@
 	    },
 
 	    setApiToken: function(apiToken) {
-	        header = {"x-square-api-token" : apiToken};
+	        header = {"x-square-api-key" : apiToken};
 	    },
 
 	    lookupContentByRevision: function(spaceId, deliveryId, contentId, contentRevision) {
@@ -271,6 +296,12 @@
 
 	    listContentsByDefinitionFromTo: function(spaceId, deliveryId, definitionId, from, to) {
 	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listContentsByDefinitionId/' + encodeURIComponent(definitionId) + '/' + encodeURIComponent(from) + '/' + encodeURIComponent(to) ;
+
+	        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
+	    },
+
+	    listContentsByListOfContentIds: function(spaceId, deliveryId, listOfContentIds) {
+	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listContentsByListOfContentIds/' + encodeURIComponent(listOfContentIds);
 
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
 	    },
@@ -332,30 +363,64 @@
 	    },
 
 	    searchContent: function(spaceId, deliveryId, queryName, queryParam) {
-
 	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/searchContent/' + encodeURIComponent(queryName) ;
-
-	        if (queryParam) {
-	            theFullUrl = theFullUrl + '?queryParam' + encodeURIComponent(queryParam);
+	        if (typeof queryParam !== 'undefined') {
+	            theFullUrl = theFullUrl + '?queryParam=' + encodeURIComponent(queryParam);
 	        }
+	        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
+	    },
 
+	    searchContentFromTo: function(spaceId, deliveryId, queryName, from, to, queryParam) {
+	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/searchContent/' + encodeURIComponent(queryName) + '/' + from + '/' + to ;
+	        if (typeof queryParam !== 'undefined') {
+	            theFullUrl = theFullUrl + '?queryParam=' + encodeURIComponent(queryParam);
+	        }
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
 	    },
 
 	    getAvailablePages: function(spaceId, deliveryId) {
-
 	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getAvailablePages';
-
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToWebPageList, header);
+	    },
+
+	    triggerTaxonomy: function() {
+	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId);
+	        return http.postItem(theFullUrl, params, header);
+	    },
+
+	    getTaxonomyAggregation: function(spaceId, deliveryId, taxonomyId) {
+	        var theFullUrl = url +
+	          '/' + encodeURIComponent(spaceId) +
+	          '/' + encodeURIComponent(deliveryId) +
+	          '/getTaxonomyAggregation' +
+	          '/' + encodeURIComponent(taxonomyId) ;
+	        return http.getItem(theFullUrl, mapSuccessfulResponseToTaxAgg, header);
+	    },
+
+	    searchByTaxonomy: function(spaceId, deliveryId, taxonomyId, facets) {
+	        var theFullUrl = url +
+	          '/' + encodeURIComponent(spaceId) +
+	          '/' + encodeURIComponent(deliveryId) +
+	          '/searchByTaxonomy' +
+	          '/' + encodeURIComponent(taxonomyId);
+	        if (typeof facets !== 'undefined' && facets.length > 0) {
+	            theFullUrl = theFullUrl + '?facets=' + encodeURIComponent(facets);
+	        }
+	        return http.getItem(theFullUrl, mapSuccessfulResponseToContentIdList, header);
 	    }
+
+
 	};
 
-	function Content(contentId, revisionId, definitionInfo, tags, content) {
+	function Content(contentId, revisionId, definitionInfo, tags, content, size) {
 	    this.contentId = contentId;
 	    this.revisionId = revisionId;
 	    this.definitionInfo = definitionInfo;
 	    this.tags = tags;
 	    this.content = content;
+	    if (typeof(size) !== 'undefined') {
+	    	this.size = size;
+	    }
 	}
 
 	function WebPage(webPageId, url, name, group, site, revisionId, templateId, templateRevision, variablesArea, contentAreas) {
@@ -377,7 +442,8 @@
 	        data.revisionId,
 	        data.definitionInformation,
 	        data.tags,
-	        data.content);
+	        data.content,
+		data.size);
 	};
 
 	var mapSuccessfulResponseToContentList = function(data) {
@@ -387,6 +453,10 @@
 	        contents.push(mapSuccessfulResponseToContent(item));
 	    }
 	    return contents;
+	};
+
+	var mapSuccessfulResponseToContentIdList = function(data) {
+	    return data;
 	};
 
 	var mapSuccessfulResponseToWebPage = function(data) {
@@ -413,6 +483,10 @@
 	};
 
 	var mapSuccessfulResponseToSiteMap = function(data) {
+	    return data;
+	};
+
+	var mapSuccessfulResponseToTaxAgg = function(data) {
 	    return data;
 	};
 
@@ -499,10 +573,14 @@
 	        });
 	    },
 
-	    postItem: function(fullUrl, params) {
+	    postItem: function(fullUrl, params, header) {
+
+	        var config = {
+	            headers: header
+	        };
 
 	        return new Promise(function(resolve, reject) {
-	            axios.post(fullUrl, params)
+	            axios.post(fullUrl, params, config)
 	            .then(function(result) {
 	                resolve(result.data);
 	            })

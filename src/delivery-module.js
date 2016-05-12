@@ -61,6 +61,12 @@ module.exports = {
         return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
     },
 
+    listContentsByListOfContentIds: function(spaceId, deliveryId, listOfContentIds) {
+        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listContentsByListOfContentIds/' + encodeURIComponent(listOfContentIds);
+
+        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
+    },
+
     listUnpublishedContentsByDefinition: function(spaceId, deliveryId, definitionId, authToken) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listUnpublishedContentsByDefinitionId/' + encodeURIComponent(definitionId);
         var authHeader = {};
@@ -118,32 +124,53 @@ module.exports = {
     },
 
     searchContent: function(spaceId, deliveryId, queryName, queryParam) {
-
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/searchContent/' + encodeURIComponent(queryName) ;
-
-        if (queryParam) {
+        if (typeof queryParam !== 'undefined') {
             theFullUrl = theFullUrl + '?queryParam=' + encodeURIComponent(queryParam);
         }
         return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
     },
 
     searchContentFromTo: function(spaceId, deliveryId, queryName, from, to, queryParam) {
-
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/searchContent/' + encodeURIComponent(queryName) + '/' + from + '/' + to ;
-
-        if (queryParam) {
+        if (typeof queryParam !== 'undefined') {
             theFullUrl = theFullUrl + '?queryParam=' + encodeURIComponent(queryParam);
         }
-
         return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
     },
 
     getAvailablePages: function(spaceId, deliveryId) {
-
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getAvailablePages';
-
         return http.getItem(theFullUrl, mapSuccessfulResponseToWebPageList, header);
+    },
+
+    triggerTaxonomy: function() {
+        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId);
+        return http.postItem(theFullUrl, params, header);
+    },
+
+    getTaxonomyAggregation: function(spaceId, deliveryId, taxonomyId) {
+        var theFullUrl = url +
+          '/' + encodeURIComponent(spaceId) +
+          '/' + encodeURIComponent(deliveryId) +
+          '/getTaxonomyAggregation' +
+          '/' + encodeURIComponent(taxonomyId) ;
+        return http.getItem(theFullUrl, mapSuccessfulResponseToTaxAgg, header);
+    },
+
+    searchByTaxonomy: function(spaceId, deliveryId, taxonomyId, facets) {
+        var theFullUrl = url +
+          '/' + encodeURIComponent(spaceId) +
+          '/' + encodeURIComponent(deliveryId) +
+          '/searchByTaxonomy' +
+          '/' + encodeURIComponent(taxonomyId);
+        if (typeof facets !== 'undefined' && facets.length > 0) {
+            theFullUrl = theFullUrl + '?facets=' + encodeURIComponent(facets);
+        }
+        return http.getItem(theFullUrl, mapSuccessfulResponseToContentIdList, header);
     }
+
+
 };
 
 function Content(contentId, revisionId, definitionInfo, tags, content, size) {
@@ -189,6 +216,10 @@ var mapSuccessfulResponseToContentList = function(data) {
     return contents;
 };
 
+var mapSuccessfulResponseToContentIdList = function(data) {
+    return data;
+};
+
 var mapSuccessfulResponseToWebPage = function(data) {
     return new WebPage(
         data.webPageId,
@@ -213,5 +244,9 @@ var mapSuccessfulResponseToWebPageList = function(data) {
 };
 
 var mapSuccessfulResponseToSiteMap = function(data) {
+    return data;
+};
+
+var mapSuccessfulResponseToTaxAgg = function(data) {
     return data;
 };

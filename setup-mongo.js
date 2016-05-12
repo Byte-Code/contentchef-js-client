@@ -21,7 +21,7 @@ var unpublishedContent = {
   "published" : false
 };
 
-var publishedContent = { 
+var publishedContent2 = { 
     "_id" : new ObjectID.createFromHexString("56b891d78a456d13026afc1d"),
   "definitionInformation" : {
     "definitionId" : "definition1", 
@@ -36,6 +36,26 @@ var publishedContent = {
   }, 
   "repository" : "d2t", 
   "contentId" : "content2", 
+  "itemType" : "content", 
+  "releaseId" : "publishedReleaseOnDelivery", 
+  "published" : true
+};
+
+var publishedContent3 = { 
+    "_id" : new ObjectID.createFromHexString("46b891d78a456d13026afc1e"),
+  "definitionInformation" : {
+    "definitionId" : "definition1", 
+    "definitionRevisionId" : "56a760163a1fde89024a7d99"
+  }, 
+  "tags" : [
+    "tag1"
+  ], 
+  "content" : {
+    "foo" : "bar",
+    "slug" : "slug2"
+  }, 
+  "repository" : "d2t", 
+  "contentId" : "content3", 
   "itemType" : "content", 
   "releaseId" : "publishedReleaseOnDelivery", 
   "published" : true
@@ -127,7 +147,8 @@ MongoClient.connect("mongodb://localhost:27017/dev_contentchef_delivery_v2", fun
   queries.insert(query);
   queries.insert(query2);
   deliveryItems.insert(unpublishedContent);
-  deliveryItems.insert(publishedContent);
+  deliveryItems.insert(publishedContent2);
+  deliveryItems.insert(publishedContent3);
   deliveryItems.insert(unpublishedWebPage);
   deliveryItems.insert(publishedWebPage);
 
