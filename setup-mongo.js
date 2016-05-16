@@ -170,7 +170,7 @@ var query2 = {
   "queryName" : "query2"
 };
 
-MongoClient.connect("mongodb://localhost:27017/dev_contentchef_delivery_v2", function(err, db) {
+MongoClient.connect("mongodb://localhost:27017/delivery_functional_test_db", function(err, db) {
   if(err) { return console.dir(err); }
 
   db.dropDatabase();
