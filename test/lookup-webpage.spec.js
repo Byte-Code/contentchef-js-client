@@ -11,6 +11,7 @@ var webPage = {
   "webPageId" : "webPage2", 
   "name" : "webPage", 
   "revisionId": "56b891d78a456d13026afc2d",
+  "deliveryRevisionId": "56b891d78a456d13026afc2d",
   "url" : "webPage2Url", 
   "site" : "site1", 
   "templateId" : "templateId", 

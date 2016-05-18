@@ -144,8 +144,8 @@ module.exports = {
         return http.getItem(theFullUrl, mapSuccessfulResponseToWebPageList, header);
     },
 
-    triggerTaxonomy: function() {
-        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId);
+    processTaxonomies: function() {
+        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/processTaxonomies';
         return http.postItem(theFullUrl, params, header);
     },
 
@@ -167,15 +167,16 @@ module.exports = {
         if (typeof facets !== 'undefined' && facets.length > 0) {
             theFullUrl = theFullUrl + '?facets=' + encodeURIComponent(facets);
         }
-        return http.getItem(theFullUrl, mapSuccessfulResponseToContentIdList, header);
+        return http.getItem(theFullUrl, mapSuccessfulResponseToContentViewList, header);
     }
 
 
 };
 
-function Content(contentId, revisionId, definitionInfo, tags, content, size, facets) {
+function Content(contentId, revisionId, deliveryRevisionId, definitionInfo, tags, content, size, facets) {
     this.contentId = contentId;
     this.revisionId = revisionId;
+    this.deliveryRevisionId = deliveryRevisionId;
     this.definitionInfo = definitionInfo;
     this.tags = tags;
     this.content = content;
@@ -187,13 +188,14 @@ function Content(contentId, revisionId, definitionInfo, tags, content, size, fac
     }
 }
 
-function WebPage(webPageId, url, name, group, site, revisionId, templateId, templateRevision, variablesArea, contentAreas) {
+function WebPage(webPageId, url, name, group, site, revisionId, deliveryRevisionId, templateId, templateRevision, variablesArea, contentAreas) {
     this.webPageId = webPageId;
     this.url = url;
     this.name = name;
     this.group = group;
     this.site = site;
     this.revisionId = revisionId;
+    this.deliveryRevisionId = deliveryRevisionId;
     this.templateId = templateId;
     this.templateRevision = templateRevision;
     this.variablesArea = variablesArea;
@@ -204,6 +206,7 @@ var mapSuccessfulResponseToContent = function(data) {
     return new Content(
         data.contentId,
         data.revisionId,
+        data.deliveryRevisionId,
         data.definitionInformation,
         data.tags,
         data.content,
@@ -220,7 +223,7 @@ var mapSuccessfulResponseToContentList = function(data) {
     return contents;
 };
 
-var mapSuccessfulResponseToContentIdList = function(data) {
+var mapSuccessfulResponseToContentViewList = function(data) {
     return data;
 };
 
@@ -232,6 +235,7 @@ var mapSuccessfulResponseToWebPage = function(data) {
         data.group,
         data.site,
         data.revisionId,
+        data.deliveryRevisionId,
         data.templateId,
         data.templateRevision,
         data.variablesArea,

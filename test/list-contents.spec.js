@@ -17,6 +17,7 @@ var content2 = {
   },
   "facets" : ["taxonomy1_slug_slug2"],
   "revisionId": "56b891d78a456d13026afc1d",
+  "deliveryRevisionId": "56b891d78a456d13026afc1d",
   "tags": [
     "tag1"
   ]
@@ -34,6 +35,7 @@ var content3 = {
   },
   "facets" : ["taxonomy1_slug_slug2"],
   "revisionId": "46b891d78a456d13026afc1e",
+  "deliveryRevisionId": "46b891d78a456d13026afc1e",
   "tags": [
     "tag1"
   ]
@@ -49,6 +51,7 @@ var unpublishedContent = {
     "definitionRevisionId": "56a760163a1fde89024a7d98"
   },
   "revisionId": "56b891d78a456d13026afc1c",
+  "deliveryRevisionId": "56b891d78a456d13026afc1c",
   "tags": [
     "tag1"
   ]
@@ -150,7 +153,7 @@ describe("Search contents by taxonomy", function() {
   });
 
   var searchResult = {
-    contentIds: ["content2", "content3"],
+    contents: ["content2", "content3"],
     facets: [
     {
       "key":"foo",

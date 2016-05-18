@@ -16,6 +16,7 @@ var contentJson = {
     "definitionRevisionId": "56a760163a1fde89024a7d99"
   },
   "revisionId": "56b891d78a456d13026afc1d",
+  "deliveryRevisionId": "56b891d78a456d13026afc1d",
   "tags": [
     "tag1"
   ],

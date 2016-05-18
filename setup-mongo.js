@@ -4,6 +4,7 @@ var ObjectID = require('mongodb').ObjectID;
 
 var unpublishedContent = { 
     "_id" : new ObjectID.createFromHexString("56b891d78a456d13026afc1c"),
+    "revisionId" : "56b891d78a456d13026afc1c",
   "definitionInformation" : {
     "definitionId" : "definition1", 
     "definitionRevisionId" : "56a760163a1fde89024a7d98"
@@ -23,6 +24,7 @@ var unpublishedContent = {
 
 var publishedContent2 = { 
     "_id" : new ObjectID.createFromHexString("56b891d78a456d13026afc1d"),
+    "revisionId" : "56b891d78a456d13026afc1d",
   "definitionInformation" : {
     "definitionId" : "definition1", 
     "definitionRevisionId" : "56a760163a1fde89024a7d99"
@@ -44,6 +46,7 @@ var publishedContent2 = {
 
 var publishedContent3 = { 
     "_id" : new ObjectID.createFromHexString("46b891d78a456d13026afc1e"),
+    "revisionId" : "46b891d78a456d13026afc1e",
   "definitionInformation" : {
     "definitionId" : "definition1", 
     "definitionRevisionId" : "56a760163a1fde89024a7d99"
@@ -65,6 +68,7 @@ var publishedContent3 = {
 
 var unpublishedWebPage = { 
     "_id" : new ObjectID.createFromHexString("56b891d78a456d13026afc2c"),
+    "revisionId" : "56b891d78a456d13026afc2c",
   "webPageId" : "webPage1", 
   "itemType" : "webPage", 
   "releaseId" : "unpublishedReleaseOnDelivery", 
@@ -97,6 +101,7 @@ var unpublishedWebPage = {
 
 var publishedWebPage = { 
     "_id" : new ObjectID.createFromHexString("56b891d78a456d13026afc2d"),
+    "revisionId" : "56b891d78a456d13026afc2d",
   "webPageId" : "webPage2", 
   "itemType" : "webPage", 
   "releaseId" : "publishedReleaseOnDelivery", 
@@ -145,7 +150,8 @@ var taxonomy = {
   "itemType" : "content", 
   "releaseId" : "release12345", 
   "published" : true, 
-  "revisionId" : "572a2b920e00000e00a78fa1"
+    "revisionId" : "572a2b920e00000e00a78fa1",
+  "deliveryRevisionId" : new ObjectID.createFromHexString("572a2b920e00000e00a78fa1"),
 }
 
 var aggregation = { 
