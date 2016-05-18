@@ -15,7 +15,9 @@ var content2 = {
     "definitionId": "definition1",
     "definitionRevisionId": "56a760163a1fde89024a7d99"
   },
+  "facets" : ["taxonomy1_slug_slug2"],
   "revisionId": "56b891d78a456d13026afc1d",
+  "deliveryRevisionId": "56b891d78a456d13026afc1d",
   "tags": [
     "tag1"
   ]
@@ -31,7 +33,9 @@ var content3 = {
     "definitionId": "definition1",
     "definitionRevisionId": "56a760163a1fde89024a7d99"
   },
+  "facets" : ["taxonomy1_slug_slug2"],
   "revisionId": "46b891d78a456d13026afc1e",
+  "deliveryRevisionId": "46b891d78a456d13026afc1e",
   "tags": [
     "tag1"
   ]
@@ -47,6 +51,7 @@ var unpublishedContent = {
     "definitionRevisionId": "56a760163a1fde89024a7d98"
   },
   "revisionId": "56b891d78a456d13026afc1c",
+  "deliveryRevisionId": "56b891d78a456d13026afc1c",
   "tags": [
     "tag1"
   ]
@@ -135,6 +140,31 @@ describe("List unpublished contents by contents and definition", function() {
 
   it("should return proper result", function(){
     return chai.expect(promise).to.eventually.include(unpublishedContent);
+  });
+
+});
+
+describe("Search contents by taxonomy", function() {
+
+  var promise;
+
+  beforeEach(function(){
+    promise = api.searchByTaxonomy("taxonomy1", "taxonomy1_slug_slug2");
+  });
+
+  var searchResult = {
+    contents: ["content2", "content3"],
+    facets: [
+    {
+      "key":"foo",
+      "label":"Foo",
+      "values":[]
+    }
+    ]
+  };
+
+  it("should return proper result", function(){
+    return chai.expect(promise).to.eventually.become(searchResult);
   });
 
 });

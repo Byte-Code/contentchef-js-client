@@ -182,8 +182,8 @@
 	            return delivery.getAvailablePages(this.spaceId, this.deliveryId);
 	        },
 
-	        triggerTaxonomy: function() {
-	            return delivery.triggerTaxonomy(this.spaceId, this.deliveryId);
+	        processTaxonomies: function() {
+	            return delivery.processTaxonomies(this.spaceId, this.deliveryId);
 	        },
 
 	        searchByTaxonomy: function(taxonomyId, facets) {
@@ -383,8 +383,8 @@
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToWebPageList, header);
 	    },
 
-	    triggerTaxonomy: function() {
-	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId);
+	    processTaxonomies: function() {
+	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/processTaxonomies';
 	        return http.postItem(theFullUrl, params, header);
 	    },
 
@@ -406,30 +406,35 @@
 	        if (typeof facets !== 'undefined' && facets.length > 0) {
 	            theFullUrl = theFullUrl + '?facets=' + encodeURIComponent(facets);
 	        }
-	        return http.getItem(theFullUrl, mapSuccessfulResponseToContentIdList, header);
+	        return http.getItem(theFullUrl, mapSuccessfulResponseToContentViewList, header);
 	    }
 
 
 	};
 
-	function Content(contentId, revisionId, definitionInfo, tags, content, size) {
+	function Content(contentId, revisionId, deliveryRevisionId, definitionInfo, tags, content, size, facets) {
 	    this.contentId = contentId;
 	    this.revisionId = revisionId;
+	    this.deliveryRevisionId = deliveryRevisionId;
 	    this.definitionInfo = definitionInfo;
 	    this.tags = tags;
 	    this.content = content;
 	    if (typeof(size) !== 'undefined') {
 	    	this.size = size;
 	    }
+	    if (typeof(facets) !== 'undefined') {
+	        this.facets = facets;
+	    }
 	}
 
-	function WebPage(webPageId, url, name, group, site, revisionId, templateId, templateRevision, variablesArea, contentAreas) {
+	function WebPage(webPageId, url, name, group, site, revisionId, deliveryRevisionId, templateId, templateRevision, variablesArea, contentAreas) {
 	    this.webPageId = webPageId;
 	    this.url = url;
 	    this.name = name;
 	    this.group = group;
 	    this.site = site;
 	    this.revisionId = revisionId;
+	    this.deliveryRevisionId = deliveryRevisionId;
 	    this.templateId = templateId;
 	    this.templateRevision = templateRevision;
 	    this.variablesArea = variablesArea;
@@ -440,10 +445,12 @@
 	    return new Content(
 	        data.contentId,
 	        data.revisionId,
+	        data.deliveryRevisionId,
 	        data.definitionInformation,
 	        data.tags,
 	        data.content,
-		data.size);
+		data.size,
+	    data.facets);
 	};
 
 	var mapSuccessfulResponseToContentList = function(data) {
@@ -455,7 +462,7 @@
 	    return contents;
 	};
 
-	var mapSuccessfulResponseToContentIdList = function(data) {
+	var mapSuccessfulResponseToContentViewList = function(data) {
 	    return data;
 	};
 
@@ -467,6 +474,7 @@
 	        data.group,
 	        data.site,
 	        data.revisionId,
+	        data.deliveryRevisionId,
 	        data.templateId,
 	        data.templateRevision,
 	        data.variablesArea,

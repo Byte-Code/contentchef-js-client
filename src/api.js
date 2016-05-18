@@ -129,8 +129,8 @@
             return delivery.getAvailablePages(this.spaceId, this.deliveryId);
         },
 
-        triggerTaxonomy: function() {
-            return delivery.triggerTaxonomy(this.spaceId, this.deliveryId);
+        processTaxonomies: function() {
+            return delivery.processTaxonomies(this.spaceId, this.deliveryId);
         },
 
         searchByTaxonomy: function(taxonomyId, facets) {
