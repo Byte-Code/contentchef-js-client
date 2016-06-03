@@ -15,9 +15,14 @@ SDK needs to be initialized with following parameters:
 - space ID  
 - delivery ID  
 - API token [optional]  
-- API cache [optional]  
-- cache TTL [optional]  
-    
+- API cache [optional, not used for now]  
+- cache time-to-live [optional]  
+
+Example:
+
+    var cc = require('./../contentchef-js-client.js');
+    cc.ContentChef.Api("http://contentchef-delivery-url.com", "john-smith-space", "mobile-platform-delivery", "api-token", "api-cache", 10);
+
 Here's a list of supported methods:
 
 
