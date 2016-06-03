@@ -10,7 +10,15 @@ So that JavaScript developers who use ContentChef CMS have an easier way of comm
 
 ### How
 
-Here's a list of supported methods with brief explanations:
+SDK needs to be initialized with following parameters:
+- URL of the ContentChef Delivery microservice  
+- space ID  
+- delivery ID  
+- API token [optional]  
+- API cache [optional]  
+- cache TTL [optional]  
+    
+Here's a list of supported methods:
 
 
     lookupContentByRevision: function(contentId, contentRevision)
