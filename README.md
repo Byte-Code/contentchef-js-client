@@ -26,50 +26,50 @@ Example:
 Here's a list of supported methods:
 
 
-    lookupContentByRevision: function(contentId, contentRevision)
+    lookupContentByRevision(contentId, contentRevision)
 
-    lookupContentLatestRevision: function(contentId)
+    lookupContentLatestRevision(contentId)
 
-    lookupContentBySlug: function(contentSlug, contentRevision)
+    lookupContentBySlug(contentSlug, contentRevision)
 
-    lookupContentLatestRevisionBySlug: function(contentSlug)
+    lookupContentLatestRevisionBySlug(contentSlug)
 
-    listContentsByTag: function(tag)
+    listContentsByTag(tag)
 
-    listContentsByTagAndDefinition: function(tag, definitionId)
+    listContentsByTagAndDefinition(tag, definitionId)
 
-    listContentsByDefinition: function(definitionId) 
+    listContentsByDefinition(definitionId) 
 
-    listContentsByDefinitionFromTo: function(definitionId, from, to) 
+    listContentsByDefinitionFromTo(definitionId, from, to) 
 
-    listUnpublishedContentsByDefinition: function(definitionId, apiKeyForUnpublishedContent) 
+    listUnpublishedContentsByDefinition(definitionId, apiKeyForUnpublishedContent) 
 
-    listContentsByListOfContentIds: function(listOfContentIds) 
+    listContentsByListOfContentIds(listOfContentIds) 
 
-    lookupWebPagesSitemapByUrl: function(baseURL, site)
+    lookupWebPagesSitemapByUrl(baseURL, site)
 
-    lookupPageById: function(site, pageId) 
+    lookupPageById(site, pageId) 
 
-    lookupPageByUrl: function(site, pageUrl) 
+    lookupPageByUrl(site, pageUrl) 
 
-    storeQuery: function(params) 
+    storeQuery(params) 
         
-    createRelease: function(params)
+    createRelease(params)
 
-    addToRelease: function(params) 
+    addToRelease(params) 
 
-    stageRelease: function(params) 
+    stageRelease(params) 
 
-    publishStagedRelease: function(params)
+    publishStagedRelease(params)
 
-    searchContent: function(queryName, queryParam)
+    searchContent(queryName, queryParam)
 
-    searchContentFromTo: function(queryName, from, to, queryParam)
+    searchContentFromTo(queryName, from, to, queryParam)
 
-    getAvailablePages: function()
+    getAvailablePages()
 
-    processTaxonomies: function()
+    processTaxonomies()
 
-    searchByTaxonomy: function(taxonomyId, facets) 
+    searchByTaxonomy(taxonomyId, facets) 
 
-    getTaxonomyAggregation: function(taxonomyId)
+    getTaxonomyAggregation(taxonomyId)
