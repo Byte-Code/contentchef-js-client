@@ -1,8 +1,8 @@
-# Contentchef JS client
+# ContentChef JavaScript SDK
 
 ### What
 
-An SDK for ContentChef. Provides easy usage of ContentChef REST API via JS methods.
+An SDK for ContentChef CMS (Delivery microservice only). Provides easy usage of ContentChef REST API via JS methods.
 
 ### Why
 
