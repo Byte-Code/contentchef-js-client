@@ -5,14 +5,14 @@ var api = cc.ContentChef.Api("http://localhost:9002", "sdk_test_space", "dev", "
 var chai = require("chai");
 chai.use(require("chai-as-promised"));
 
-var siteMap = '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">      <url>          <loc>baseUrl/webPage1Url</loc>        </url>      </urlset>';
+var siteMap = '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">      <url>          <loc>webPage2UrlwebPage1Url</loc>        </url><url>          <loc>webPage2UrlwebPage2Url</loc>        </url>      </urlset>';
 
 var webPage = {
-  "webPageId" : "webPage1", 
+  "webPageId" : "webPage2", 
   "name" : "webPage", 
   "revisionId": "56b891d78a456d13026afc2d",
   "deliveryRevisionId": "56b891d78a456d13026afc2d",
-  "url" : "webPage1Url", 
+  "url" : "webPage2Url", 
   "site" : "site1", 
   "templateId" : "templateId", 
   "templateRevision" : "latest", 
@@ -45,7 +45,7 @@ describe("Lookup web pages sitemap by URL", function() {
   var promise;
 
   beforeEach(function(){
-    promise = api.lookupWebPagesSitemapByUrl("baseUrl/", "site1");
+    promise = api.lookupWebPagesSitemapByUrl("webPage2Url", "site1");
   });
 
   it("should return proper result", function(){
@@ -59,7 +59,7 @@ describe("Lookup page by ID", function() {
   var promise;
 
   beforeEach(function(){
-    promise = api.lookupPageById("webPage1", "site1");
+    promise = api.lookupPageById("webPage2", "site1");
   });
 
   it("should return proper result", function(){
@@ -73,7 +73,7 @@ describe("Lookup page by URL", function() {
   var promise;
 
   beforeEach(function(){
-    promise = api.lookupPageByUrl("webPage1Url", "site1");
+    promise = api.lookupPageByUrl("webPage2Url", "site1");
   });
 
   it("should return proper result", function(){

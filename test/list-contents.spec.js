@@ -1,6 +1,6 @@
 
 var cc = require('./../src/api');
-var api = cc.ContentChef.Api("http://localhost:9002", "d2t", "dev", "apiTokenWhatever", "apiCacheWhatever", 10, "");
+var api = cc.ContentChef.Api("http://localhost:9002", "sdk_test_space", "dev", "apiTokenWhatever", "apiCacheWhatever", 10, "");
 
 var chai = require("chai");
 chai.use(require("chai-as-promised"));
@@ -15,7 +15,12 @@ var content2 = {
     "definitionId": "definition1",
     "definitionRevisionId": "56a760163a1fde89024a7d99"
   },
-  "facets" : ["taxonomy1_slug_slug2"],
+  "facets" : [{
+    "key":"slug",
+    "value":"slug2",
+    "normalizedValue":"taxonomy1_slug_slug2",
+    "label":"slug2"
+  }],
   "revisionId": "56b891d78a456d13026afc1d",
   "deliveryRevisionId": "56b891d78a456d13026afc1d",
   "tags": [
@@ -33,7 +38,12 @@ var content3 = {
     "definitionId": "definition1",
     "definitionRevisionId": "56a760163a1fde89024a7d99"
   },
-  "facets" : ["taxonomy1_slug_slug2"],
+  "facets" : [{
+    "key":"slug",
+    "value":"slug2",
+    "normalizedValue":"taxonomy1_slug_slug2",
+    "label":"slug2"
+  }],
   "revisionId": "46b891d78a456d13026afc1e",
   "deliveryRevisionId": "46b891d78a456d13026afc1e",
   "tags": [
@@ -65,8 +75,12 @@ describe("List contents by tag", function() {
     promise = api.listContentsByTag("tag1");
   });
 
-  it("should return proper result", function(){
-    return chai.expect(promise).to.eventually.become([content2, content3]);
+  it("should contain content2", function(){
+    return chai.expect(promise).to.eventually.include(content2);
+  });
+
+  it("should contain content3", function(){
+    return chai.expect(promise).to.eventually.include(content3);
   });
 
 });
@@ -79,8 +93,12 @@ describe("List contents by tag and definition", function() {
     promise = api.listContentsByTagAndDefinition("tag1", "definition1");
   });
 
-  it("should return proper result", function(){
-    return chai.expect(promise).to.eventually.become([content2, content3]);
+  it("should contain content2", function(){
+    return chai.expect(promise).to.eventually.include(content2);
+  });
+
+  it("should contain content3", function(){
+    return chai.expect(promise).to.eventually.include(content3);
   });
 
 });
@@ -93,8 +111,12 @@ describe("List contents by definition", function() {
     promise = api.listContentsByDefinition("definition1");
   });
 
-  it("should return proper result", function(){
-    return chai.expect(promise).to.eventually.become([content2, content3]);
+  it("should contain content2", function(){
+    return chai.expect(promise).to.eventually.include(content2);
+  });
+
+  it("should contain content3", function(){
+    return chai.expect(promise).to.eventually.include(content3);
   });
 
 });
@@ -103,15 +125,34 @@ describe("List contents by definition and from-to", function() {
 
   var promise;
 
-  var contentWithSize = Object.create(content2);
-  contentWithSize.size = 2;
+  var contentWithSize2 = Object.assign({},content2);
+  contentWithSize2.size = 2;
+
+  var contentWithSize3 = Object.assign({},content3);
+  contentWithSize3.size = 2;
 
   beforeEach(function(){
     promise = api.listContentsByDefinitionFromTo("definition1", 0, 1);
   });
 
-  it("should return proper result", function(){
-    return chai.expect(promise).to.eventually.become([contentWithSize]);
+  it("should contain content2", function(){
+    return chai.expect(promise).to.eventually.include(contentWithSize2);
+  });
+
+  it("should contain content3", function(){
+    return chai.expect(promise).to.eventually.include(contentWithSize3);
+  });
+
+  beforeEach(function(){
+    promise2 = api.listContentsByDefinitionFromTo("definition1", 0, 0);
+  });
+
+  it("should contain content2", function(){
+    return chai.expect(promise2).to.eventually.include(contentWithSize2);
+  });
+
+  it("should not contain content3", function(){
+    return chai.expect(promise2).to.not.eventually.include(contentWithSize3);
   });
 
 });
@@ -124,8 +165,12 @@ describe("List contents by list of content IDs", function() {
     promise = api.listContentsByListOfContentIds("content2,content3");
   });
 
-  it("should return proper result", function(){
-    return chai.expect(promise).to.eventually.become([content2,content3]);
+  it("should contain content2", function(){
+    return chai.expect(promise).to.eventually.include(content2);
+  });
+
+  it("should contain content3", function(){
+    return chai.expect(promise).to.eventually.include(content3);
   });
 
 });
@@ -153,11 +198,11 @@ describe("Search contents by taxonomy", function() {
   });
 
   var searchResult = {
-    contents: ["content2", "content3"],
+    contents: [{"contentId":"content3"},{"contentId":"content2"}],
     facets: [
     {
       "key":"foo",
-      "label":"Foo",
+      "keyLabel":"Foo",
       "values":[]
     }
     ]

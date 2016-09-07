@@ -41,7 +41,12 @@ var publishedContent2 = {
   "itemType" : "content", 
   "releaseId" : "publishedReleaseOnDelivery", 
   "published" : true,
-  "facets" : ["taxonomy1_slug_slug2"]
+  "facets" : [{
+    "key":"slug",
+    "value":"slug2",
+    "normalizedValue":"taxonomy1_slug_slug2",
+    "label":"slug2"
+  }]
 };
 
 var publishedContent3 = { 
@@ -63,51 +68,23 @@ var publishedContent3 = {
   "itemType" : "content", 
   "releaseId" : "publishedReleaseOnDelivery", 
   "published" : true,
-  "facets" : ["taxonomy1_slug_slug2"]
-};
-
-var unpublishedWebPage = { 
-    "_id" : new ObjectID.createFromHexString("56b891d78a456d13026afc2c"),
-    "revisionId" : "56b891d78a456d13026afc2c",
-  "webPageId" : "webPage1", 
-  "itemType" : "webPage", 
-  "releaseId" : "unpublishedReleaseOnDelivery", 
-  "published" : false,
-  "name" : "webPage", 
-  "url" : "webPage1Url", 
-  "site" : "site1", 
-  "templateId" : "templateId", 
-  "templateRevision" : "latest", 
-  "group" : "group1", 
-  "variablesArea" : {}, 
-  "contentAreas" : [
-  {
-    "areaName" : "area1", 
-    "areaDescription" : "area1", 
-    "areaType" : "reflinked",
-    "contents" : [
-    {
-      "contentId" : "contentFromRelease", 
-      "#repository" : "d2t", 
-      "contentDefinitionId" : "definition1", 
-      "#definitionId" : "reflinked", 
-      "#definitionRevision" : "56a760163a1fde89024a7d99", 
-      "#definitionRepository" : "d2t"
-    }
-    ]
-  }
-  ]
+  "facets" : [{
+    "key":"slug",
+    "value":"slug2",
+    "normalizedValue":"taxonomy1_slug_slug2",
+    "label":"slug2"
+  }]
 };
 
 var publishedWebPage = { 
     "_id" : new ObjectID.createFromHexString("56b891d78a456d13026afc2d"),
     "revisionId" : "56b891d78a456d13026afc2d",
-  "webPageId" : "webPage2", 
+  "webPageId" : "webPage1", 
   "itemType" : "webPage", 
   "releaseId" : "publishedReleaseOnDelivery", 
   "published" : true,
   "name" : "webPage", 
-  "url" : "webPage2Url", 
+  "url" : "webPage1Url", 
   "site" : "site1", 
   "templateId" : "templateId", 
   "templateRevision" : "latest", 
@@ -139,13 +116,16 @@ var taxonomy = {
   }, 
   "tags" : [], 
   "content" : {
-    "referencedDefinition" : "definition1", 
-    "filter" : {
-      "foo" : "bar"
-    }, 
-    "facets" : [
-      "slug"
-    ]
+    "referencedDefinitions" : ["definition1"], 
+    "filters" : [{
+      "key" : "foo",
+      "value" : "bar"
+    }], 
+    "facets" : [{
+      "id" : "slug",
+      "fields" : ["slug"],
+      "labelFields" : ["slug"]
+    }]
   }, 
   "itemType" : "content", 
   "releaseId" : "release12345", 
@@ -159,7 +139,7 @@ var aggregation = {
   "facets" : [
   {
     "key" : "foo", 
-    "label" : "Foo", 
+    "keyLabel" : "Foo", 
     "values" : [
     ]
   }
@@ -167,7 +147,7 @@ var aggregation = {
 }
 
 var query = {
-  "find" : "{\"repository\" : \"d2t\"}",
+  "find" : "{\"repository\" : \"sdk_test_space\"}",
   "queryName" : "query1"
 };
 
@@ -193,7 +173,6 @@ MongoClient.connect("mongodb://localhost:27017/delivery_functional_test_db", fun
   deliveryItems.insert(publishedContent3);
   deliveryItems.insert(taxonomy);
   taxonomyAggregations.insert(aggregation);
-  deliveryItems.insert(unpublishedWebPage);
   deliveryItems.insert(publishedWebPage);
 
   db.close();

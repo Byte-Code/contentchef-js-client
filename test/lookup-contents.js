@@ -20,12 +20,9 @@ var contentJson = {
   "tags": [
     "tag1"
   ],
-  "facets": [{
-    "key":"slug",
-    "value":"slug2",
-    "normalizedValue":"taxonomy1_slug_slug2",
-    "label":"slug2"
-  }]
+  "facets": [
+    "taxonomy1_slug_slug2"
+  ]
 };
 
 describe("Lookup content by ID and revision", function() {

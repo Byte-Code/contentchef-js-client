@@ -43,26 +43,11 @@ module.exports = function(grunt) {
       test : {
         src: ['test/**/*.spec.js']
       }
-    },
-    jshint: {
-      files: ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js'],
-      options: {
-        // options here to override JSHint defaults
-        globals: {
-          console: true,
-          module: true,
-          document: true
-        }
-      }
-    },
-    watch: {
-      files: ['<%= jshint.files %>'],
-      tasks: ['jshint']
     }
   });
 
-  grunt.registerTask('test', ['jshint', 'mochaTest']);
+  grunt.registerTask('test', ['mochaTest']);
 
-  grunt.registerTask('default', ['jshint', 'webpack', 'concat', 'uglify']);
+  grunt.registerTask('default', ['webpack', 'concat', 'uglify']);
 
 };

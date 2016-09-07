@@ -73,3 +73,19 @@ Here's a list of supported methods:
     searchByTaxonomy(taxonomyId, facets) 
 
     getTaxonomyAggregation(taxonomyId)
+
+### Tests
+ 
+1) add the following space resolving parameter to your env vars (this is needed only once per machine):
+
+```
+export STATIC_MONGODB_DELIVERY_RES_STRATEGY="true"
+export STATIC_MONGODB_DELIVERY_SPACES_MAP="sdk_test_space@dev=mongodb://localhost:27017/delivery_functional_test_db"
+```
+2) run `node setup-mongo.js` to prepare the test data. 
+
+3) run ContentChef Delivery microservice on port 9002 using `activator "run 9002"` command
+
+4) run `grunt test` command to initiate the SDK tests
+
+Note that tests will be run on a temporary database called "delivery_functional_test_db" which will be removed once tests are finished.
