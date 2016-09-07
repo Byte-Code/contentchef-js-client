@@ -37,6 +37,12 @@ module.exports = {
         return http.getItem(theFullUrl, mapSuccessfulResponseToContent, header);
     },
 
+    lookupContentLatestRevisionBySlugAndDefinition: function(spaceId, deliveryId, contentSlug, contentDefinition) {
+        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getLatestContentBySlugAndDefinition/' + encodeURIComponent(contentSlug) + "/" + encodeURIComponent(contentDefinition);
+
+        return http.getItem(theFullUrl, mapSuccessfulResponseToContent, header);
+    },
+
     listContentsByTag: function(spaceId, deliveryId, tag) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listContentsByTag/' + encodeURIComponent(tag) ;
 

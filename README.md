@@ -34,6 +34,8 @@ Here's a list of supported methods:
 
     lookupContentLatestRevisionBySlug(contentSlug)
 
+    lookupContentLatestRevisionBySlugAndDefinition(contentSlug, contentDefinition)
+
     listContentsByTag(tag)
 
     listContentsByTagAndDefinition(tag, definitionId)

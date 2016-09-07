@@ -84,5 +84,19 @@ describe("Lookup latest content by slug", function() {
 
 });
 
+describe("Lookup latest content by slug and definition", function() {
+
+  var promise;
+
+  beforeEach(function(){
+    promise = api.lookupContentLatestRevisionBySlugAndDefinition("slug2", "definition1");
+  });
+
+  it("should return proper result", function(){
+    return chai.expect(promise).to.eventually.become(contentJson);
+  });
+
+});
+
 
 

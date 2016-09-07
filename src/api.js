@@ -61,6 +61,10 @@
             return delivery.lookupContentLatestRevisionBySlug(this.spaceId, this.deliveryId, contentSlug);
         },
 
+        lookupContentLatestRevisionBySlugAndDefinition: function(contentSlug, contentDefinition) {
+            return delivery.lookupContentLatestRevisionBySlugAndDefinition(this.spaceId, this.deliveryId, contentSlug, contentDefinition);
+        },
+
         listContentsByTag: function(tag) {
             return delivery.listContentsByTag(this.spaceId, this.deliveryId, tag);
         },

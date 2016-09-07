@@ -23,8 +23,8 @@ var unpublishedContent = {
 };
 
 var publishedContent2 = { 
-    "_id" : new ObjectID.createFromHexString("56b891d78a456d13026afc1d"),
-    "revisionId" : "56b891d78a456d13026afc1d",
+  "_id" : new ObjectID.createFromHexString("56b891d78a456d13026afc1d"),
+  "revisionId" : "56b891d78a456d13026afc1d",
   "definitionInformation" : {
     "definitionId" : "definition1", 
     "definitionRevisionId" : "56a760163a1fde89024a7d99"
