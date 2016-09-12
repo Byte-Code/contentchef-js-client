@@ -179,13 +179,16 @@ module.exports = {
 
 };
 
-function Content(contentId, revisionId, deliveryRevisionId, definitionInfo, tags, content, size, facets) {
+function Content(contentId, revisionId, deliveryRevisionId, definitionInfo, tags, content, taxonomy, size, facets) {
     this.contentId = contentId;
     this.revisionId = revisionId;
     this.deliveryRevisionId = deliveryRevisionId;
     this.definitionInfo = definitionInfo;
     this.tags = tags;
     this.content = content;
+    if (typeof(taxonomy) !== 'undefined') {
+        this.taxonomy = taxonomy;
+    }
     if (typeof(size) !== 'undefined') {
     	this.size = size;
     }
@@ -216,6 +219,7 @@ var mapSuccessfulResponseToContent = function(data) {
         data.definitionInformation,
         data.tags,
         data.content,
+        data.taxonomy,
 	data.size,
     data.facets);
 };

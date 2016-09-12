@@ -35,7 +35,21 @@ var publishedContent2 = {
   "content" : {
     "foo" : "bar",
     "slug" : "slug2"
-  }, 
+  },
+  "taxonomy": {
+    "id" : "taxonomy1" ,
+    "matchCriteria" : [{
+      "definition" : "definition1",
+      "filters" :[{
+        "key" : "foo",
+        "value" : "bar"
+      }]
+    }], "facets" : [{
+      "id" : "slug",
+      "fields" : ["slug"],
+      "labelFields" : ["slug"]
+    }]
+  },
   "repository" : "d2t", 
   "contentId" : "content2", 
   "itemType" : "content", 
@@ -109,31 +123,6 @@ var publishedWebPage = {
   ]
 };
 
-var taxonomy = { 
-  "contentId" : "taxonomy1", 
-  "definitionInformation" : {
-    "definitionId" : "taxonomy"
-  }, 
-  "tags" : [], 
-  "content" : {
-    "referencedDefinitions" : ["definition1"], 
-    "filters" : [{
-      "key" : "foo",
-      "value" : "bar"
-    }], 
-    "facets" : [{
-      "id" : "slug",
-      "fields" : ["slug"],
-      "labelFields" : ["slug"]
-    }]
-  }, 
-  "itemType" : "content", 
-  "releaseId" : "release12345", 
-  "published" : true, 
-    "revisionId" : "572a2b920e00000e00a78fa1",
-  "deliveryRevisionId" : new ObjectID.createFromHexString("572a2b920e00000e00a78fa1"),
-}
-
 var aggregation = { 
   "id" : "taxonomy1", 
   "facets" : [
@@ -171,7 +160,6 @@ MongoClient.connect("mongodb://localhost:27017/delivery_functional_test_db", fun
   deliveryItems.insert(unpublishedContent);
   deliveryItems.insert(publishedContent2);
   deliveryItems.insert(publishedContent3);
-  deliveryItems.insert(taxonomy);
   taxonomyAggregations.insert(aggregation);
   deliveryItems.insert(publishedWebPage);
 

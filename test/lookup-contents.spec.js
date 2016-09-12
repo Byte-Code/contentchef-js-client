@@ -25,7 +25,21 @@ var contentJson = {
     "value":"slug2",
     "normalizedValue":"taxonomy1_slug_slug2",
     "label":"slug2"
-  }]
+  }],
+  "taxonomy": {
+    "id" : "taxonomy1" ,
+    "matchCriteria" : [{
+      "definition" : "definition1",
+      "filters" :[{
+        "key" : "foo",
+        "value" : "bar"
+      }]
+    }], "facets" : [{
+      "id" : "slug",
+      "fields" : ["slug"],
+      "labelFields" : ["slug"]
+    }]
+  },
 };
 
 describe("Lookup content by ID and revision", function() {

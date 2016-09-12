@@ -25,7 +25,21 @@ var content2 = {
   "deliveryRevisionId": "56b891d78a456d13026afc1d",
   "tags": [
     "tag1"
-  ]
+  ],
+  "taxonomy": {
+    "id" : "taxonomy1" ,
+    "matchCriteria" : [{
+      "definition" : "definition1",
+      "filters" : [{
+        "key" : "foo",
+        "value" : "bar"
+      }]
+    }], "facets" : [{
+      "id" : "slug",
+      "fields" : ["slug"],
+      "labelFields" : ["slug"]
+    }]
+  },
 };
 
 var content3 = {
