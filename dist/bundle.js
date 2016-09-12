@@ -114,6 +114,10 @@
 	            return delivery.lookupContentLatestRevisionBySlug(this.spaceId, this.deliveryId, contentSlug);
 	        },
 
+	        lookupContentLatestRevisionBySlugAndDefinition: function(contentSlug, contentDefinition) {
+	            return delivery.lookupContentLatestRevisionBySlugAndDefinition(this.spaceId, this.deliveryId, contentSlug, contentDefinition);
+	        },
+
 	        listContentsByTag: function(tag) {
 	            return delivery.listContentsByTag(this.spaceId, this.deliveryId, tag);
 	        },
@@ -276,6 +280,12 @@
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToContent, header);
 	    },
 
+	    lookupContentLatestRevisionBySlugAndDefinition: function(spaceId, deliveryId, contentSlug, contentDefinition) {
+	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getLatestContentBySlugAndDefinition/' + encodeURIComponent(contentSlug) + "/" + encodeURIComponent(contentDefinition);
+
+	        return http.getItem(theFullUrl, mapSuccessfulResponseToContent, header);
+	    },
+
 	    listContentsByTag: function(spaceId, deliveryId, tag) {
 	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listContentsByTag/' + encodeURIComponent(tag) ;
 
@@ -412,13 +422,16 @@
 
 	};
 
-	function Content(contentId, revisionId, deliveryRevisionId, definitionInfo, tags, content, size, facets) {
+	function Content(contentId, revisionId, deliveryRevisionId, definitionInfo, tags, content, taxonomy, size, facets) {
 	    this.contentId = contentId;
 	    this.revisionId = revisionId;
 	    this.deliveryRevisionId = deliveryRevisionId;
 	    this.definitionInfo = definitionInfo;
 	    this.tags = tags;
 	    this.content = content;
+	    if (typeof(taxonomy) !== 'undefined') {
+	        this.taxonomy = taxonomy;
+	    }
 	    if (typeof(size) !== 'undefined') {
 	    	this.size = size;
 	    }
@@ -449,6 +462,7 @@
 	        data.definitionInformation,
 	        data.tags,
 	        data.content,
+	        data.taxonomy,
 		data.size,
 	    data.facets);
 	};
