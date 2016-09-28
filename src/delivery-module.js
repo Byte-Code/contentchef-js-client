@@ -237,6 +237,20 @@ var mapSuccessfulResponseToContentViewList = function(data) {
     return data;
 };
 
+var transformAreas = function (contentAreas) {
+
+    var areas = {};
+
+    for (var i = 0; i<contentAreas.length;i++) {
+        var contentArea = contentAreas[i];
+        var areaName = contentArea.areaName;
+        var contents = contentArea.contents;
+        areas[areaName] = contents.length == 1? contents[0] : contentArea.contents;
+    }
+
+    return areas;
+};
+
 var mapSuccessfulResponseToWebPage = function(data) {
     return new WebPage(
         data.webPageId,
@@ -249,7 +263,7 @@ var mapSuccessfulResponseToWebPage = function(data) {
         data.templateId,
         data.templateRevision,
         data.variablesArea,
-        data.contentAreas);
+        transformAreas(data.contentAreas));
 };
 
 var mapSuccessfulResponseToWebPageList = function(data) {
