@@ -20,11 +20,17 @@ var contentJson = {
   "tags": [
     "tag1"
   ],
-  "facets": [{
-    "key":"slug",
-    "value":"slug2",
-    "normalizedValue":"taxonomy1_slug_slug2",
-    "label":"slug2"
+  "linkingContents" : [{
+    "id": "taxonomy1",
+    "contentId": "content2",
+    "contentDefinition": "definition1",
+    "facets" : [{
+      "key":"slug",
+      "value":"slug2",
+      "normalizedValue":"taxonomy1_slug_slug2",
+      "label":"slug2",
+      "valueLabel":"someLabel"
+    }]
   }],
   "taxonomy": {
     "id" : "taxonomy1" ,

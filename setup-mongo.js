@@ -3,14 +3,14 @@ var MongoClient = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
 
 var unpublishedContent = { 
-    "_id" : new ObjectID.createFromHexString("56b891d78a456d13026afc1c"),
-    "revisionId" : "56b891d78a456d13026afc1c",
+  "_id" : new ObjectID.createFromHexString("56b891d78a456d13026afc1c"),
+  "revisionId" : "56b891d78a456d13026afc1c",
   "definitionInformation" : {
     "definitionId" : "definition1", 
     "definitionRevisionId" : "56a760163a1fde89024a7d98"
   }, 
   "tags" : [
-    "tag1"
+  "tag1"
   ], 
   "content" : {
     "foo" : "bar"
@@ -30,7 +30,7 @@ var publishedContent2 = {
     "definitionRevisionId" : "56a760163a1fde89024a7d99"
   }, 
   "tags" : [
-    "tag1"
+  "tag1"
   ], 
   "content" : {
     "foo" : "bar",
@@ -55,23 +55,29 @@ var publishedContent2 = {
   "itemType" : "content", 
   "releaseId" : "publishedReleaseOnDelivery", 
   "published" : true,
-  "facets" : [{
-    "key":"slug",
-    "value":"slug2",
-    "normalizedValue":"taxonomy1_slug_slug2",
-    "label":"slug2"
+  "linkingContents" : [{
+    "id": "taxonomy1",
+    "contentId": "content2",
+    "contentDefinition": "definition1",
+    "facets" : [{
+      "key":"slug",
+      "value":"slug2",
+      "normalizedValue":"taxonomy1_slug_slug2",
+      "label":"slug2",
+      "valueLabel":"someLabel"
+    }]
   }]
 };
 
 var publishedContent3 = { 
-    "_id" : new ObjectID.createFromHexString("46b891d78a456d13026afc1e"),
-    "revisionId" : "46b891d78a456d13026afc1e",
+  "_id" : new ObjectID.createFromHexString("46b891d78a456d13026afc1e"),
+  "revisionId" : "46b891d78a456d13026afc1e",
   "definitionInformation" : {
     "definitionId" : "definition1", 
     "definitionRevisionId" : "56a760163a1fde89024a7d99"
   }, 
   "tags" : [
-    "tag1"
+  "tag1"
   ], 
   "content" : {
     "foo" : "bar",
@@ -82,17 +88,23 @@ var publishedContent3 = {
   "itemType" : "content", 
   "releaseId" : "publishedReleaseOnDelivery", 
   "published" : true,
-  "facets" : [{
-    "key":"slug",
-    "value":"slug2",
-    "normalizedValue":"taxonomy1_slug_slug2",
-    "label":"slug2"
+  "linkingContents" : [{
+    "id": "taxonomy1",
+    "contentId": "content2",
+    "contentDefinition": "definition1",
+    "facets" : [{
+      "key":"slug",
+      "value":"slug2",
+      "normalizedValue":"taxonomy1_slug_slug2",
+      "label":"slug2",
+      "valueLabel":"someLabel"
+    }]
   }]
 };
 
 var publishedWebPage = { 
-    "_id" : new ObjectID.createFromHexString("56b891d78a456d13026afc2d"),
-    "revisionId" : "56b891d78a456d13026afc2d",
+  "_id" : new ObjectID.createFromHexString("56b891d78a456d13026afc2d"),
+  "revisionId" : "56b891d78a456d13026afc2d",
   "webPageId" : "webPage1", 
   "itemType" : "webPage", 
   "releaseId" : "publishedReleaseOnDelivery", 

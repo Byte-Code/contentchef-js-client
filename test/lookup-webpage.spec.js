@@ -20,12 +20,8 @@ var webPage = {
   "variablesArea" : {
 
   }, 
-  "contentAreas" : [
-  {
-    "areaName" : "area1", 
-    "areaDescription" : "area1", 
-    "areaType" : "reflinked", 
-    "contents" : [
+  "contentAreas" : {
+    "area1" : [
     {
       "contentId" : "contentFromRelease", 
       "#repository" : "d2t", 
@@ -37,7 +33,6 @@ var webPage = {
     }
     ]
   }
-  ]
 };
 
 describe("Lookup web pages sitemap by URL", function() {
@@ -59,7 +54,7 @@ describe("Lookup page by ID", function() {
   var promise;
 
   beforeEach(function(){
-    promise = api.lookupPageById("webPage1", "site1");
+    promise = api.lookupPageById("site1", "webPage1");
   });
 
   it("should return proper result", function(){
@@ -73,7 +68,7 @@ describe("Lookup page by URL", function() {
   var promise;
 
   beforeEach(function(){
-    promise = api.lookupPageByUrl("webPage1Url", "site1");
+    promise = api.lookupPageByUrl("site1", "webPage1Url");
   });
 
   it("should return proper result", function(){

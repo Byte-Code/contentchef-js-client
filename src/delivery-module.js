@@ -179,7 +179,7 @@ module.exports = {
 
 };
 
-function Content(contentId, revisionId, deliveryRevisionId, definitionInfo, tags, content, taxonomy, size, facets) {
+function Content(contentId, revisionId, deliveryRevisionId, definitionInfo, tags, content, taxonomy, size, linkingContents) {
     this.contentId = contentId;
     this.revisionId = revisionId;
     this.deliveryRevisionId = deliveryRevisionId;
@@ -192,8 +192,8 @@ function Content(contentId, revisionId, deliveryRevisionId, definitionInfo, tags
     if (typeof(size) !== 'undefined') {
     	this.size = size;
     }
-    if (typeof(facets) !== 'undefined') {
-        this.facets = facets;
+    if (typeof(linkingContents) !== 'undefined') {
+        this.linkingContents = linkingContents;
     }
 }
 
@@ -220,8 +220,8 @@ var mapSuccessfulResponseToContent = function(data) {
         data.tags,
         data.content,
         data.taxonomy,
-	data.size,
-    data.facets);
+	   data.size,
+        data.linkingContents);
 };
 
 var mapSuccessfulResponseToContentList = function(data) {
@@ -245,7 +245,7 @@ var transformAreas = function (contentAreas) {
         var contentArea = contentAreas[i];
         var areaName = contentArea.areaName;
         var contents = contentArea.contents;
-        areas[areaName] = contents.length == 1? contents[0] : contentArea.contents;
+        areas[areaName] = contents.length == 1? [contents[0]] : contentArea.contents;
     }
 
     return areas;

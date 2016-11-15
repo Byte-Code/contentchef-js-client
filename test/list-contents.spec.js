@@ -15,11 +15,17 @@ var content2 = {
     "definitionId": "definition1",
     "definitionRevisionId": "56a760163a1fde89024a7d99"
   },
-  "facets" : [{
-    "key":"slug",
-    "value":"slug2",
-    "normalizedValue":"taxonomy1_slug_slug2",
-    "label":"slug2"
+  "linkingContents" : [{
+    "id": "taxonomy1",
+    "contentId": "content2",
+    "contentDefinition": "definition1",
+    "facets" : [{
+      "key":"slug",
+      "value":"slug2",
+      "normalizedValue":"taxonomy1_slug_slug2",
+      "label":"slug2",
+      "valueLabel":"someLabel"
+    }]
   }],
   "revisionId": "56b891d78a456d13026afc1d",
   "deliveryRevisionId": "56b891d78a456d13026afc1d",
@@ -52,11 +58,17 @@ var content3 = {
     "definitionId": "definition1",
     "definitionRevisionId": "56a760163a1fde89024a7d99"
   },
-  "facets" : [{
-    "key":"slug",
-    "value":"slug2",
-    "normalizedValue":"taxonomy1_slug_slug2",
-    "label":"slug2"
+  "linkingContents" : [{
+    "id": "taxonomy1",
+    "contentId": "content2",
+    "contentDefinition": "definition1",
+    "facets" : [{
+      "key":"slug",
+      "value":"slug2",
+      "normalizedValue":"taxonomy1_slug_slug2",
+      "label":"slug2",
+      "valueLabel":"someLabel"
+    }]
   }],
   "revisionId": "46b891d78a456d13026afc1e",
   "deliveryRevisionId": "46b891d78a456d13026afc1e",
@@ -219,7 +231,9 @@ describe("Search contents by taxonomy", function() {
       "keyLabel":"Foo",
       "values":[]
     }
-    ]
+    ],
+    "contentId": "content2",
+    "definitionId": "definition1"
   };
 
   it("should return proper result", function(){
