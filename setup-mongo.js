@@ -61,9 +61,9 @@ var publishedContent2 = {
     "contentDefinition": "definition1",
     "facets" : [{
       "key":"slug",
-      "value":"slug2",
-      "normalizedValue":"taxonomy1_slug_slug2",
-      "label":"slug2",
+      "value":"slug3",
+      "normalizedValue":"taxonomy1_slug_slug3",
+      "label":"slug",
       "valueLabel":"someLabel"
     }]
   }]

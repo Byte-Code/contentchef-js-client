@@ -21,11 +21,10 @@ var content2 = {
     "contentDefinition": "definition1",
     "facets" : [{
       "key":"slug",
-      "value":"slug2",
-      "normalizedValue":"taxonomy1_slug_slug2",
-      "label":"slug2",
-      "valueLabel":"someLabel"
-    }]
+      "value":"slug3",
+      "normalizedValue":"taxonomy1_slug_slug3",
+      "label":"slug",
+      "valueLabel":"someLabel"}]
   }],
   "revisionId": "56b891d78a456d13026afc1d",
   "deliveryRevisionId": "56b891d78a456d13026afc1d",
@@ -224,7 +223,34 @@ describe("Search contents by taxonomy", function() {
   });
 
   var searchResult = {
-    contents: [{"contentId":"content3"},{"contentId":"content2"}],
+    contents: [{"contentId":"content3"}],
+    facets: [
+    {
+      "key":"foo",
+      "keyLabel":"Foo",
+      "values":[]
+    }
+    ],
+    "contentId": "content2",
+    "definitionId": "definition1"
+  };
+
+  it("should return proper result", function(){
+    return chai.expect(promise).to.eventually.become(searchResult);
+  });
+
+});
+
+describe("Search contents by taxonomy (key-value)", function() {
+
+  var promise;
+
+  beforeEach(function(){
+    promise = api.searchByTaxonomyByKeyValue("taxonomy1", { slug: "slug2" });
+  });
+
+  var searchResult = {
+    contents: [{"contentId":"content3"}],
     facets: [
     {
       "key":"foo",

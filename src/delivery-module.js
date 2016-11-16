@@ -77,7 +77,7 @@ module.exports = {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listUnpublishedContentsByDefinitionId/' + encodeURIComponent(definitionId);
         var authHeader = {};
         for (var key in header) authHeader[key] = header[key];
-        authHeader["api-key"] = authToken;
+            authHeader["api-key"] = authToken;
         return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, authHeader);
     },
 
@@ -157,24 +157,43 @@ module.exports = {
 
     getTaxonomyAggregation: function(spaceId, deliveryId, taxonomyId) {
         var theFullUrl = url +
-          '/' + encodeURIComponent(spaceId) +
-          '/' + encodeURIComponent(deliveryId) +
-          '/getTaxonomyAggregation' +
-          '/' + encodeURIComponent(taxonomyId) ;
+        '/' + encodeURIComponent(spaceId) +
+        '/' + encodeURIComponent(deliveryId) +
+        '/getTaxonomyAggregation' +
+        '/' + encodeURIComponent(taxonomyId) ;
         return http.getItem(theFullUrl, mapSuccessfulResponseToTaxAgg, header);
     },
 
     searchByTaxonomy: function(spaceId, deliveryId, taxonomyId, facets) {
         var theFullUrl = url +
-          '/' + encodeURIComponent(spaceId) +
-          '/' + encodeURIComponent(deliveryId) +
-          '/searchByTaxonomy' +
-          '/' + encodeURIComponent(taxonomyId);
+        '/' + encodeURIComponent(spaceId) +
+        '/' + encodeURIComponent(deliveryId) +
+        '/searchByTaxonomy' +
+        '/' + encodeURIComponent(taxonomyId);
         if (typeof facets !== 'undefined' && facets.length > 0) {
             theFullUrl = theFullUrl + '?facets=' + encodeURIComponent(facets);
         }
         return http.getItem(theFullUrl, mapSuccessfulResponseToContentViewList, header);
-    }
+    },
+
+    searchByTaxonomyByKeyValue: function(spaceId, deliveryId, taxonomyId, keyValueObj) {
+        var theFullUrl = url +
+        '/' + encodeURIComponent(spaceId) +
+        '/' + encodeURIComponent(deliveryId) +
+        '/searchByTaxonomyByKeyValue' +
+        '/' + encodeURIComponent(taxonomyId);
+        if (typeof keyValueObj !== 'undefined') {
+            var facetsString = "";
+            for (var k in keyValueObj){
+                if (keyValueObj.hasOwnProperty(k)) {
+                   facetsString += k + "=" + keyValueObj[k] + "&";
+               }
+           }
+           facetsString = facetsString.slice(0, -1);
+           theFullUrl = theFullUrl + '?' + facetsString;
+       }
+       return http.getItem(theFullUrl, mapSuccessfulResponseToContentViewList, header);
+   }
 
 
 };
@@ -220,7 +239,7 @@ var mapSuccessfulResponseToContent = function(data) {
         data.tags,
         data.content,
         data.taxonomy,
-	   data.size,
+        data.size,
         data.linkingContents);
 };
 

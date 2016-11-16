@@ -141,6 +141,10 @@
             return delivery.searchByTaxonomy(this.spaceId, this.deliveryId, taxonomyId, facets);
         },
 
+        searchByTaxonomyByKeyValue: function(taxonomyId, keyValueObj) {
+            return delivery.searchByTaxonomyByKeyValue(this.spaceId, this.deliveryId, taxonomyId, keyValueObj);
+        },
+
         getTaxonomyAggregation: function(taxonomyId) {
             return delivery.getTaxonomyAggregation(this.spaceId, this.deliveryId, taxonomyId);
         }
