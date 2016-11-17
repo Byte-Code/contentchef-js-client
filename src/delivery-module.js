@@ -186,7 +186,7 @@ module.exports = {
             var facetsString = "";
             for (var k in keyValueObj){
                 if (keyValueObj.hasOwnProperty(k)) {
-                   facetsString += k + "=" + keyValueObj[k] + "&";
+                   facetsString += encodeURIComponent(k) + "=" + encodeURIComponent(keyValueObj[k]) + "&";
                }
            }
            facetsString = facetsString.slice(0, -1);
