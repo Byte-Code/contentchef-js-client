@@ -1,4 +1,6 @@
 
+'use strict';
+
 var cc = require('./../src/api');
 var api = cc.ContentChef.Api("http://localhost:9002", "sdk_test_space", "dev", "apiTokenWhatever", "apiCacheWhatever", 10, "");
 

@@ -1,4 +1,6 @@
 
+'use strict';
+
 var http = require('./http-module');
 var url = "";
 var header = {};

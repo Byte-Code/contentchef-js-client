@@ -1,4 +1,6 @@
 
+'use strict';
+
 var cc = require('./../src/api');
 var api = cc.ContentChef.Api("http://localhost:9002", "sdk_test_space", "dev", "apiTokenWhatever", "apiCacheWhatever", 10, "");
 
@@ -143,6 +145,7 @@ var content2 = {
   describe("List contents by definition and from-to", function() {
 
     var promise;
+    var promise2
 
     var contentWithSize2 = Object.assign({},content2);
     contentWithSize2.size = 2;

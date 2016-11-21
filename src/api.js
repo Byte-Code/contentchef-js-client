@@ -1,7 +1,7 @@
 
 (function(Global, undefined) {
 
-    "use strict";
+    'use strict';
 
     /**
      * The kit's main entry point; initialize your API like this: ContentChef.Api(baseUrl, apiToken, apiCache, cacheTimeToLive)
