@@ -18,7 +18,7 @@ var contentJson = {
   "revisionId": "56b891d78a456d13026afc1d",
   "deliveryRevisionId": "56b891d78a456d13026afc1d",
   "tags": [
-    "tag1"
+  "tag1"
   ],
   "linkingContents" : [{
     "id": "taxonomy1",
@@ -30,92 +30,82 @@ var contentJson = {
       "normalizedValue":"taxonomy1_slug_slug3",
       "label":"slug",
       "valueLabel":"someLabel"}]
-  }],
-  "taxonomy": {
-    "id" : "taxonomy1" ,
-    "matchCriteria" : [{
-      "definition" : "definition1",
-      "filters" :[{
-        "key" : "foo",
-        "value" : "bar"
+    }],
+    "taxonomy": {
+      "id" : "taxonomy1" ,
+      "matchCriteria" : [{
+        "definition" : "definition1",
+        "filters" :[{
+          "key" : "foo",
+          "value" : "bar"
+        }]
+      }], "facets" : [{
+        "id" : "slug",
+        "fields" : ["slug"],
+        "labelFields" : ["slug"]
       }]
-    }], "facets" : [{
-      "id" : "slug",
-      "fields" : ["slug"],
-      "labelFields" : ["slug"]
-    }]
-  },
-};
+    },
+  };
 
-describe("Lookup content by ID and revision", function() {
+  describe("Lookup content by ID and revision", function() {
 
-  var promise;
+    var promise;
 
-  beforeEach(function(){
     promise = api.lookupContentByRevision("content2", "56b891d78a456d13026afc1d");
+
+    it("should return proper result", function(){
+      return chai.expect(promise).to.eventually.become(contentJson);
+    });
+
   });
 
-  it("should return proper result", function(){
-    return chai.expect(promise).to.eventually.become(contentJson);
-  });
+  describe("Lookup latest content by ID", function() {
 
-});
+    var promise;
 
-describe("Lookup latest content by ID", function() {
-
-  var promise;
-
-  beforeEach(function(){
     promise = api.lookupContentLatestRevision("content2");
+
+    it("should return proper result", function(){
+      return chai.expect(promise).to.eventually.become(contentJson);
+    });
+
   });
 
-  it("should return proper result", function(){
-    return chai.expect(promise).to.eventually.become(contentJson);
-  });
+  describe("Lookup content by slug and revision", function() {
 
-});
+    var promise;
 
-describe("Lookup content by slug and revision", function() {
-
-  var promise;
-
-  beforeEach(function(){
     promise = api.lookupContentBySlug("slug2", "56b891d78a456d13026afc1d");
+
+    it("should return proper result", function(){
+      return chai.expect(promise).to.eventually.become(contentJson);
+    });
+
   });
 
-  it("should return proper result", function(){
-    return chai.expect(promise).to.eventually.become(contentJson);
-  });
+  describe("Lookup latest content by slug", function() {
 
-});
+    var promise;
 
-describe("Lookup latest content by slug", function() {
-
-  var promise;
-
-  beforeEach(function(){
     promise = api.lookupContentLatestRevisionBySlug("slug2");
+
+    it("should return proper result", function(){
+      return chai.expect(promise).to.eventually.become(contentJson);
+    });
+
   });
 
-  it("should return proper result", function(){
-    return chai.expect(promise).to.eventually.become(contentJson);
-  });
+  describe("Lookup latest content by slug and definition", function() {
 
-});
+    var promise;
 
-describe("Lookup latest content by slug and definition", function() {
-
-  var promise;
-
-  beforeEach(function(){
     promise = api.lookupContentLatestRevisionBySlugAndDefinition("slug2", "definition1");
-  });
 
-  it("should return proper result", function(){
-    return chai.expect(promise).to.eventually.become(contentJson);
-  });
+    it("should return proper result", function(){
+      return chai.expect(promise).to.eventually.become(contentJson);
+    });
 
-});
+  });
 
 
 

@@ -39,9 +39,7 @@ describe("Lookup web pages sitemap by URL", function() {
 
   var promise;
 
-  beforeEach(function(){
-    promise = api.lookupWebPagesSitemapByUrl("baseUrl/", "site1");
-  });
+  promise = api.lookupWebPagesSitemapByUrl("baseUrl/", "site1");
 
   it("should return proper result", function(){
     return chai.expect(promise).to.eventually.become(siteMap);
@@ -53,9 +51,7 @@ describe("Lookup page by ID", function() {
 
   var promise;
 
-  beforeEach(function(){
-    promise = api.lookupPageById("site1", "webPage1");
-  });
+  promise = api.lookupPageById("site1", "webPage1");
 
   it("should return proper result", function(){
     return chai.expect(promise).to.eventually.become(webPage);
@@ -67,9 +63,7 @@ describe("Lookup page by URL", function() {
 
   var promise;
 
-  beforeEach(function(){
-    promise = api.lookupPageByUrl("site1", "webPage1Url");
-  });
+  promise = api.lookupPageByUrl("site1", "webPage1Url");
 
   it("should return proper result", function(){
     return chai.expect(promise).to.eventually.become(webPage);
