@@ -1,6 +1,6 @@
 {
   "name": "contentchef-js-client",
-  "version": "2.8.0",
+  "version": "2.9.0",
   "description": "ContentChef.io javascript client",
   "main": "dist/contentchef-js-client.js",
   "files": "dist",
