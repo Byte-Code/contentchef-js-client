@@ -207,7 +207,7 @@ var content2 = {
 
     var promise;
 
-    promise = api.searchByTaxonomy("taxonomy1", "taxonomy1_slug_slug2");
+    promise = api.searchByTaxonomy("taxonomy1", "taxonomy1_::_slug_::_slug2");
 
     var searchResult = {
       contents: [{"contentId":"content3"}],
