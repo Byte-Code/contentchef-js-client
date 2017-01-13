@@ -1,5 +1,6 @@
 
-// var promise = require('es6-promise');
+'use strict';
+
 var axios = require('axios');
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 

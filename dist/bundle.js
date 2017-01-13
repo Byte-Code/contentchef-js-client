@@ -54,7 +54,7 @@
 	/* WEBPACK VAR INJECTION */(function(module, global) {
 	(function(Global, undefined) {
 
-	    "use strict";
+	    'use strict';
 
 	    /**
 	     * The kit's main entry point; initialize your API like this: ContentChef.Api(baseUrl, apiToken, apiCache, cacheTimeToLive)
@@ -194,6 +194,10 @@
 	            return delivery.searchByTaxonomy(this.spaceId, this.deliveryId, taxonomyId, facets);
 	        },
 
+	        searchByTaxonomyByKeyValue: function(taxonomyId, keyValueObj) {
+	            return delivery.searchByTaxonomyByKeyValue(this.spaceId, this.deliveryId, taxonomyId, keyValueObj);
+	        },
+
 	        getTaxonomyAggregation: function(taxonomyId) {
 	            return delivery.getTaxonomyAggregation(this.spaceId, this.deliveryId, taxonomyId);
 	        }
@@ -242,6 +246,8 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	
+	'use strict';
+
 	var http = __webpack_require__(4);
 	var url = "";
 	var header = {};
@@ -320,7 +326,7 @@
 	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listUnpublishedContentsByDefinitionId/' + encodeURIComponent(definitionId);
 	        var authHeader = {};
 	        for (var key in header) authHeader[key] = header[key];
-	        authHeader["api-key"] = authToken;
+	            authHeader["api-key"] = authToken;
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, authHeader);
 	    },
 
@@ -331,13 +337,13 @@
 	    },
 
 	    lookupPageById : function(spaceId, deliveryId, pageId, site) {
-	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getWebPageById/' + encodeURIComponent(site)  + '/' + encodeURIComponent(pageId);
+	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getWebPageById/' + encodeURIComponent(pageId)  + '/' + encodeURIComponent(site);
 
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToWebPage, header);
 	    },
 
 	    lookupPageByUrl : function(spaceId, deliveryId, pageUrl, site) {
-	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getWebPageByUrl/' + encodeURIComponent(site)  + '/' + encodeURIComponent(pageUrl);
+	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getWebPageByUrl/' + encodeURIComponent(pageUrl)  + '/' + encodeURIComponent(site);
 
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToWebPage, header);
 	    },
@@ -400,29 +406,48 @@
 
 	    getTaxonomyAggregation: function(spaceId, deliveryId, taxonomyId) {
 	        var theFullUrl = url +
-	          '/' + encodeURIComponent(spaceId) +
-	          '/' + encodeURIComponent(deliveryId) +
-	          '/getTaxonomyAggregation' +
-	          '/' + encodeURIComponent(taxonomyId) ;
+	        '/' + encodeURIComponent(spaceId) +
+	        '/' + encodeURIComponent(deliveryId) +
+	        '/getTaxonomyAggregation' +
+	        '/' + encodeURIComponent(taxonomyId) ;
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToTaxAgg, header);
 	    },
 
 	    searchByTaxonomy: function(spaceId, deliveryId, taxonomyId, facets) {
 	        var theFullUrl = url +
-	          '/' + encodeURIComponent(spaceId) +
-	          '/' + encodeURIComponent(deliveryId) +
-	          '/searchByTaxonomy' +
-	          '/' + encodeURIComponent(taxonomyId);
+	        '/' + encodeURIComponent(spaceId) +
+	        '/' + encodeURIComponent(deliveryId) +
+	        '/searchByTaxonomy' +
+	        '/' + encodeURIComponent(taxonomyId);
 	        if (typeof facets !== 'undefined' && facets.length > 0) {
 	            theFullUrl = theFullUrl + '?facets=' + encodeURIComponent(facets);
 	        }
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToContentViewList, header);
-	    }
+	    },
+
+	    searchByTaxonomyByKeyValue: function(spaceId, deliveryId, taxonomyId, keyValueObj) {
+	        var theFullUrl = url +
+	        '/' + encodeURIComponent(spaceId) +
+	        '/' + encodeURIComponent(deliveryId) +
+	        '/searchByTaxonomyByKeyValue' +
+	        '/' + encodeURIComponent(taxonomyId);
+	        if (typeof keyValueObj !== 'undefined') {
+	            var facetsString = "";
+	            for (var k in keyValueObj){
+	                if (keyValueObj.hasOwnProperty(k)) {
+	                   facetsString += encodeURIComponent(k) + "=" + encodeURIComponent(keyValueObj[k]) + "&";
+	               }
+	           }
+	           facetsString = facetsString.slice(0, -1);
+	           theFullUrl = theFullUrl + '?' + facetsString;
+	       }
+	       return http.getItem(theFullUrl, mapSuccessfulResponseToContentViewList, header);
+	   }
 
 
 	};
 
-	function Content(contentId, revisionId, deliveryRevisionId, definitionInfo, tags, content, taxonomy, size, facets) {
+	function Content(contentId, revisionId, deliveryRevisionId, definitionInfo, tags, content, taxonomy, size, linkingContents) {
 	    this.contentId = contentId;
 	    this.revisionId = revisionId;
 	    this.deliveryRevisionId = deliveryRevisionId;
@@ -435,8 +460,8 @@
 	    if (typeof(size) !== 'undefined') {
 	    	this.size = size;
 	    }
-	    if (typeof(facets) !== 'undefined') {
-	        this.facets = facets;
+	    if (typeof(linkingContents) !== 'undefined') {
+	        this.linkingContents = linkingContents;
 	    }
 	}
 
@@ -463,8 +488,8 @@
 	        data.tags,
 	        data.content,
 	        data.taxonomy,
-		data.size,
-	    data.facets);
+	        data.size,
+	        data.linkingContents);
 	};
 
 	var mapSuccessfulResponseToContentList = function(data) {
@@ -480,6 +505,20 @@
 	    return data;
 	};
 
+	var transformAreas = function (contentAreas) {
+
+	    var areas = {};
+
+	    for (var i = 0; i<contentAreas.length;i++) {
+	        var contentArea = contentAreas[i];
+	        var areaName = contentArea.areaName;
+	        var contents = contentArea.contents;
+	        areas[areaName] = contents.length == 1? [contents[0]] : contentArea.contents;
+	    }
+
+	    return areas;
+	};
+
 	var mapSuccessfulResponseToWebPage = function(data) {
 	    return new WebPage(
 	        data.webPageId,
@@ -492,7 +531,7 @@
 	        data.templateId,
 	        data.templateRevision,
 	        data.variablesArea,
-	        data.contentAreas);
+	        transformAreas(data.contentAreas));
 	};
 
 	var mapSuccessfulResponseToWebPageList = function(data) {
@@ -518,7 +557,8 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	
-	// var promise = require('es6-promise');
+	'use strict';
+
 	var axios = __webpack_require__(5);
 	axios.defaults.headers.post['Content-Type'] = 'application/json';
 
@@ -1076,14 +1116,103 @@
 /***/ function(module, exports) {
 
 	// shim for using process in browser
-
 	var process = module.exports = {};
+
+	// cached from whatever global is present so that test runners that stub it
+	// don't break things.  But we need to wrap it in a try catch in case it is
+	// wrapped in strict mode code which doesn't define any globals.  It's inside a
+	// function because try/catches deoptimize in certain engines.
+
+	var cachedSetTimeout;
+	var cachedClearTimeout;
+
+	function defaultSetTimout() {
+	    throw new Error('setTimeout has not been defined');
+	}
+	function defaultClearTimeout () {
+	    throw new Error('clearTimeout has not been defined');
+	}
+	(function () {
+	    try {
+	        if (typeof setTimeout === 'function') {
+	            cachedSetTimeout = setTimeout;
+	        } else {
+	            cachedSetTimeout = defaultSetTimout;
+	        }
+	    } catch (e) {
+	        cachedSetTimeout = defaultSetTimout;
+	    }
+	    try {
+	        if (typeof clearTimeout === 'function') {
+	            cachedClearTimeout = clearTimeout;
+	        } else {
+	            cachedClearTimeout = defaultClearTimeout;
+	        }
+	    } catch (e) {
+	        cachedClearTimeout = defaultClearTimeout;
+	    }
+	} ())
+	function runTimeout(fun) {
+	    if (cachedSetTimeout === setTimeout) {
+	        //normal enviroments in sane situations
+	        return setTimeout(fun, 0);
+	    }
+	    // if setTimeout wasn't available but was latter defined
+	    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+	        cachedSetTimeout = setTimeout;
+	        return setTimeout(fun, 0);
+	    }
+	    try {
+	        // when when somebody has screwed with setTimeout but no I.E. maddness
+	        return cachedSetTimeout(fun, 0);
+	    } catch(e){
+	        try {
+	            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+	            return cachedSetTimeout.call(null, fun, 0);
+	        } catch(e){
+	            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+	            return cachedSetTimeout.call(this, fun, 0);
+	        }
+	    }
+
+
+	}
+	function runClearTimeout(marker) {
+	    if (cachedClearTimeout === clearTimeout) {
+	        //normal enviroments in sane situations
+	        return clearTimeout(marker);
+	    }
+	    // if clearTimeout wasn't available but was latter defined
+	    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+	        cachedClearTimeout = clearTimeout;
+	        return clearTimeout(marker);
+	    }
+	    try {
+	        // when when somebody has screwed with setTimeout but no I.E. maddness
+	        return cachedClearTimeout(marker);
+	    } catch (e){
+	        try {
+	            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+	            return cachedClearTimeout.call(null, marker);
+	        } catch (e){
+	            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+	            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+	            return cachedClearTimeout.call(this, marker);
+	        }
+	    }
+
+
+
+	}
 	var queue = [];
 	var draining = false;
 	var currentQueue;
 	var queueIndex = -1;
 
 	function cleanUpNextTick() {
+	    if (!draining || !currentQueue) {
+	        return;
+	    }
 	    draining = false;
 	    if (currentQueue.length) {
 	        queue = currentQueue.concat(queue);
@@ -1099,7 +1228,7 @@
 	    if (draining) {
 	        return;
 	    }
-	    var timeout = setTimeout(cleanUpNextTick);
+	    var timeout = runTimeout(cleanUpNextTick);
 	    draining = true;
 
 	    var len = queue.length;
@@ -1116,7 +1245,7 @@
 	    }
 	    currentQueue = null;
 	    draining = false;
-	    clearTimeout(timeout);
+	    runClearTimeout(timeout);
 	}
 
 	process.nextTick = function (fun) {
@@ -1128,7 +1257,7 @@
 	    }
 	    queue.push(new Item(fun, args));
 	    if (queue.length === 1 && !draining) {
-	        setTimeout(drainQueue, 0);
+	        runTimeout(drainQueue);
 	    }
 	};
 

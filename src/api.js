@@ -1,7 +1,7 @@
 
 (function(Global, undefined) {
 
-    "use strict";
+    'use strict';
 
     /**
      * The kit's main entry point; initialize your API like this: ContentChef.Api(baseUrl, apiToken, apiCache, cacheTimeToLive)
@@ -139,6 +139,10 @@
 
         searchByTaxonomy: function(taxonomyId, facets) {
             return delivery.searchByTaxonomy(this.spaceId, this.deliveryId, taxonomyId, facets);
+        },
+
+        searchByTaxonomyByKeyValue: function(taxonomyId, keyValueObj) {
+            return delivery.searchByTaxonomyByKeyValue(this.spaceId, this.deliveryId, taxonomyId, keyValueObj);
         },
 
         getTaxonomyAggregation: function(taxonomyId) {

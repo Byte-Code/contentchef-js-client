@@ -1,4 +1,6 @@
 
+'use strict';
+
 var http = require('./http-module');
 var url = "";
 var header = {};
@@ -77,7 +79,7 @@ module.exports = {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listUnpublishedContentsByDefinitionId/' + encodeURIComponent(definitionId);
         var authHeader = {};
         for (var key in header) authHeader[key] = header[key];
-        authHeader["api-key"] = authToken;
+            authHeader["api-key"] = authToken;
         return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, authHeader);
     },
 
@@ -88,13 +90,13 @@ module.exports = {
     },
 
     lookupPageById : function(spaceId, deliveryId, pageId, site) {
-        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getWebPageById/' + encodeURIComponent(site)  + '/' + encodeURIComponent(pageId);
+        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getWebPageById/' + encodeURIComponent(pageId)  + '/' + encodeURIComponent(site);
 
         return http.getItem(theFullUrl, mapSuccessfulResponseToWebPage, header);
     },
 
     lookupPageByUrl : function(spaceId, deliveryId, pageUrl, site) {
-        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getWebPageByUrl/' + encodeURIComponent(site)  + '/' + encodeURIComponent(pageUrl);
+        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getWebPageByUrl/' + encodeURIComponent(pageUrl)  + '/' + encodeURIComponent(site);
 
         return http.getItem(theFullUrl, mapSuccessfulResponseToWebPage, header);
     },
@@ -157,29 +159,48 @@ module.exports = {
 
     getTaxonomyAggregation: function(spaceId, deliveryId, taxonomyId) {
         var theFullUrl = url +
-          '/' + encodeURIComponent(spaceId) +
-          '/' + encodeURIComponent(deliveryId) +
-          '/getTaxonomyAggregation' +
-          '/' + encodeURIComponent(taxonomyId) ;
+        '/' + encodeURIComponent(spaceId) +
+        '/' + encodeURIComponent(deliveryId) +
+        '/getTaxonomyAggregation' +
+        '/' + encodeURIComponent(taxonomyId) ;
         return http.getItem(theFullUrl, mapSuccessfulResponseToTaxAgg, header);
     },
 
     searchByTaxonomy: function(spaceId, deliveryId, taxonomyId, facets) {
         var theFullUrl = url +
-          '/' + encodeURIComponent(spaceId) +
-          '/' + encodeURIComponent(deliveryId) +
-          '/searchByTaxonomy' +
-          '/' + encodeURIComponent(taxonomyId);
+        '/' + encodeURIComponent(spaceId) +
+        '/' + encodeURIComponent(deliveryId) +
+        '/searchByTaxonomy' +
+        '/' + encodeURIComponent(taxonomyId);
         if (typeof facets !== 'undefined' && facets.length > 0) {
             theFullUrl = theFullUrl + '?facets=' + encodeURIComponent(facets);
         }
         return http.getItem(theFullUrl, mapSuccessfulResponseToContentViewList, header);
-    }
+    },
+
+    searchByTaxonomyByKeyValue: function(spaceId, deliveryId, taxonomyId, keyValueObj) {
+        var theFullUrl = url +
+        '/' + encodeURIComponent(spaceId) +
+        '/' + encodeURIComponent(deliveryId) +
+        '/searchByTaxonomyByKeyValue' +
+        '/' + encodeURIComponent(taxonomyId);
+        if (typeof keyValueObj !== 'undefined') {
+            var facetsString = "";
+            for (var k in keyValueObj){
+                if (keyValueObj.hasOwnProperty(k)) {
+                   facetsString += encodeURIComponent(k) + "=" + encodeURIComponent(keyValueObj[k]) + "&";
+               }
+           }
+           facetsString = facetsString.slice(0, -1);
+           theFullUrl = theFullUrl + '?' + facetsString;
+       }
+       return http.getItem(theFullUrl, mapSuccessfulResponseToContentViewList, header);
+   }
 
 
 };
 
-function Content(contentId, revisionId, deliveryRevisionId, definitionInfo, tags, content, taxonomy, size, facets) {
+function Content(contentId, revisionId, deliveryRevisionId, definitionInfo, tags, content, taxonomy, size, linkingContents) {
     this.contentId = contentId;
     this.revisionId = revisionId;
     this.deliveryRevisionId = deliveryRevisionId;
@@ -192,8 +213,8 @@ function Content(contentId, revisionId, deliveryRevisionId, definitionInfo, tags
     if (typeof(size) !== 'undefined') {
     	this.size = size;
     }
-    if (typeof(facets) !== 'undefined') {
-        this.facets = facets;
+    if (typeof(linkingContents) !== 'undefined') {
+        this.linkingContents = linkingContents;
     }
 }
 
@@ -220,8 +241,8 @@ var mapSuccessfulResponseToContent = function(data) {
         data.tags,
         data.content,
         data.taxonomy,
-	data.size,
-    data.facets);
+        data.size,
+        data.linkingContents);
 };
 
 var mapSuccessfulResponseToContentList = function(data) {
@@ -237,6 +258,20 @@ var mapSuccessfulResponseToContentViewList = function(data) {
     return data;
 };
 
+var transformAreas = function (contentAreas) {
+
+    var areas = {};
+
+    for (var i = 0; i<contentAreas.length;i++) {
+        var contentArea = contentAreas[i];
+        var areaName = contentArea.areaName;
+        var contents = contentArea.contents;
+        areas[areaName] = contents.length == 1? [contents[0]] : contentArea.contents;
+    }
+
+    return areas;
+};
+
 var mapSuccessfulResponseToWebPage = function(data) {
     return new WebPage(
         data.webPageId,
@@ -249,7 +284,7 @@ var mapSuccessfulResponseToWebPage = function(data) {
         data.templateId,
         data.templateRevision,
         data.variablesArea,
-        data.contentAreas);
+        transformAreas(data.contentAreas));
 };
 
 var mapSuccessfulResponseToWebPageList = function(data) {

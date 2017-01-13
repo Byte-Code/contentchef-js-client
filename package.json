@@ -1,6 +1,6 @@
 {
   "name": "contentchef-js-client",
-  "version": "2.4.0",
+  "version": "2.9.0",
   "description": "ContentChef.io javascript client",
   "main": "dist/contentchef-js-client.js",
   "files": "dist",
@@ -24,14 +24,16 @@
     "grunt-mocha-test": "0.12.7",
     "grunt-webpack": "1.0.11",
     "jshint": "latest",
+    "kerberos": "0.0.22",
     "load-grunt-tasks": "^3.2.0",
     "mocha": "2.3.4",
-    "webpack": "1.12.14"
+    "webpack": "^1.12.14",
+    "webpack-dev-server": "^1.16.2",
+    "mongodb": "2.1.4"
   },
   "dependencies": {
     "axios": "0.7.0",
     "es6-promise": "3.0.2",
-    "mongodb": "2.1.4",
     "xml2js": "^0.4.17"
   },
   "directories": {
