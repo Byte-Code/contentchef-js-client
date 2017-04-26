@@ -195,7 +195,19 @@ module.exports = {
            theFullUrl = theFullUrl + '?' + facetsString;
        }
        return http.getItem(theFullUrl, mapSuccessfulResponseToContentViewList, header);
-   }
+   },
+
+    searchByTaxonomyQuery: function(spaceId, deliveryId, taxonomyId, query) {
+        var theFullUrl = url +
+            '/' + encodeURIComponent(spaceId) +
+            '/' + encodeURIComponent(deliveryId) +
+            '/searchByTaxonomyByKeyValue' +
+            '/' + encodeURIComponent(taxonomyId);
+        if (typeof query !== 'undefined' && query.length > 0) {
+            theFullUrl = theFullUrl + query;
+        }
+        return http.getItem(theFullUrl, mapSuccessfulResponseToContentViewList, header);
+    }
 
 
 };
