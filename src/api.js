@@ -146,7 +146,7 @@
         },
 
         searchByTaxonomyQuery: function(taxonomyId, query) {
-            return delivery.searchByTaxonomyByKeyValue(this.spaceId, this.deliveryId, taxonomyId, query);
+            return delivery.searchByTaxonomyQuery(this.spaceId, this.deliveryId, taxonomyId, query);
         },
 
         getTaxonomyAggregation: function(taxonomyId) {

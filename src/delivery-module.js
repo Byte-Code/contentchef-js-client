@@ -204,7 +204,7 @@ module.exports = {
             '/searchByTaxonomyByKeyValue' +
             '/' + encodeURIComponent(taxonomyId);
         if (typeof query !== 'undefined' && query.length > 0) {
-            theFullUrl = theFullUrl + query;
+            theFullUrl = theFullUrl + '?' + query;
         }
         return http.getItem(theFullUrl, mapSuccessfulResponseToContentViewList, header);
     }
