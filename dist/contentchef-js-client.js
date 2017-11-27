@@ -42,14 +42,14 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["ContentChef"] = __webpack_require__(1);
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
-/***/ },
+/***/ }),
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module, global) {
 	(function(Global, undefined) {
@@ -198,6 +198,10 @@
 	            return delivery.searchByTaxonomyByKeyValue(this.spaceId, this.deliveryId, taxonomyId, keyValueObj);
 	        },
 
+	        searchByTaxonomyQuery: function(taxonomyId, query) {
+	            return delivery.searchByTaxonomyQuery(this.spaceId, this.deliveryId, taxonomyId, query);
+	        },
+
 	        getTaxonomyAggregation: function(taxonomyId) {
 	            return delivery.getTaxonomyAggregation(this.spaceId, this.deliveryId, taxonomyId);
 	        }
@@ -225,9 +229,9 @@
 
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module), (function() { return this; }())))
 
-/***/ },
+/***/ }),
 /* 2 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = function(module) {
 		if(!module.webpackPolyfill) {
@@ -241,9 +245,9 @@
 	}
 
 
-/***/ },
+/***/ }),
 /* 3 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	
 	'use strict';
@@ -342,8 +346,12 @@
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToWebPage, header);
 	    },
 
-	    lookupPageByUrl : function(spaceId, deliveryId, pageUrl, site) {
+	    lookupPageByUrl : function(spaceId, deliveryId, pageUrl, site , viewDate) {
 	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getWebPageByUrl/' + encodeURIComponent(pageUrl)  + '/' + encodeURIComponent(site);
+
+	        if (viewDate) {
+	            theFullUrl = theFullUrl + '?viewDate=' + encodeURIComponent(viewDate);
+	        }
 
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToWebPage, header);
 	    },
@@ -442,7 +450,19 @@
 	           theFullUrl = theFullUrl + '?' + facetsString;
 	       }
 	       return http.getItem(theFullUrl, mapSuccessfulResponseToContentViewList, header);
-	   }
+	   },
+
+	    searchByTaxonomyQuery: function(spaceId, deliveryId, taxonomyId, query) {
+	        var theFullUrl = url +
+	            '/' + encodeURIComponent(spaceId) +
+	            '/' + encodeURIComponent(deliveryId) +
+	            '/searchByTaxonomyByKeyValue' +
+	            '/' + encodeURIComponent(taxonomyId);
+	        if (typeof query !== 'undefined' && query.length > 0) {
+	            theFullUrl = theFullUrl + '?' + query;
+	        }
+	        return http.getItem(theFullUrl, mapSuccessfulResponseToContentViewList, header);
+	    }
 
 
 	};
@@ -552,9 +572,9 @@
 	};
 
 
-/***/ },
+/***/ }),
 /* 4 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	
 	'use strict';
@@ -655,15 +675,15 @@
 	};
 
 
-/***/ },
+/***/ }),
 /* 5 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__(6);
 
-/***/ },
+/***/ }),
 /* 6 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -755,9 +775,9 @@
 	})();
 
 
-/***/ },
+/***/ }),
 /* 7 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -823,9 +843,9 @@
 	};
 
 
-/***/ },
+/***/ }),
 /* 8 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	'use strict';
 
@@ -1078,9 +1098,9 @@
 	};
 
 
-/***/ },
+/***/ }),
 /* 9 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
@@ -1111,9 +1131,9 @@
 
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
-/***/ },
+/***/ }),
 /* 10 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	// shim for using process in browser
 	var process = module.exports = {};
@@ -1285,6 +1305,10 @@
 	process.removeListener = noop;
 	process.removeAllListeners = noop;
 	process.emit = noop;
+	process.prependListener = noop;
+	process.prependOnceListener = noop;
+
+	process.listeners = function (name) { return [] }
 
 	process.binding = function (name) {
 	    throw new Error('process.binding is not supported');
@@ -1297,9 +1321,9 @@
 	process.umask = function() { return 0; };
 
 
-/***/ },
+/***/ }),
 /* 11 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -1419,9 +1443,9 @@
 	};
 
 
-/***/ },
+/***/ }),
 /* 12 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -1484,9 +1508,9 @@
 	};
 
 
-/***/ },
+/***/ }),
 /* 13 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -1524,9 +1548,9 @@
 	};
 
 
-/***/ },
+/***/ }),
 /* 14 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -1549,9 +1573,9 @@
 	};
 
 
-/***/ },
+/***/ }),
 /* 15 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -1598,9 +1622,9 @@
 	};
 
 
-/***/ },
+/***/ }),
 /* 16 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -1662,9 +1686,9 @@
 	};
 
 
-/***/ },
+/***/ }),
 /* 17 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -1720,9 +1744,9 @@
 	module.exports = InterceptorManager;
 
 
-/***/ },
+/***/ }),
 /* 18 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	'use strict';
 
@@ -1753,5 +1777,5 @@
 	};
 
 
-/***/ }
+/***/ })
 /******/ ]);
