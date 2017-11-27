@@ -95,8 +95,12 @@ module.exports = {
         return http.getItem(theFullUrl, mapSuccessfulResponseToWebPage, header);
     },
 
-    lookupPageByUrl : function(spaceId, deliveryId, pageUrl, site) {
+    lookupPageByUrl : function(spaceId, deliveryId, pageUrl, site , viewDate) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getWebPageByUrl/' + encodeURIComponent(pageUrl)  + '/' + encodeURIComponent(site);
+
+        if (viewDate) {
+            theFullUrl = theFullUrl + '?viewDate=' + encodeURIComponent(viewDate);
+        }
 
         return http.getItem(theFullUrl, mapSuccessfulResponseToWebPage, header);
     },
