@@ -150,8 +150,8 @@
 	            return delivery.lookupPageById(this.spaceId, this.deliveryId, pageId, site);
 	        },
 
-	        lookupPageByUrl: function(site, pageUrl) {
-	            return delivery.lookupPageByUrl(this.spaceId, this.deliveryId, pageUrl, site);
+	        lookupPageByUrl: function(site, pageUrl, viewDate) {
+	            return delivery.lookupPageByUrl(this.spaceId, this.deliveryId, pageUrl, site, viewDate);
 	        },
 
 	        storeQuery: function(params) {
