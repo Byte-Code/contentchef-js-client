@@ -5,6 +5,42 @@ var http = require('./http-module');
 var url = "";
 var header = {};
 
+function appendQueryParam (queryParamName, queryParam) {
+    var queryParams = {};
+    queryParams[queryParamName] = queryParam;
+    return handleQueryParams(queryParams)
+}
+
+function handleQueryParams(queryParams) {
+    var params = '';
+    var queryKeys = Object.keys(queryParams);
+    queryKeys
+        .filter(isValidParam(queryParams))
+        .forEach(function (queryParamName) {
+            var isFirst = params.length === 0;
+            var separator = isFirst ? '?' : '&';
+
+            params += handleQueryParam(queryParamName, queryParams[queryParamName], separator)
+        });
+    return params;
+}
+
+function handleQueryParam(queryParamName, queryParam, separator) {
+    return separator + queryParamName + '=' + encodeURIComponent(queryParam);
+}
+
+function isValidParam(queryParams){
+    return function(param){
+        var valueToTest = queryParams[param];
+        var isDefined = typeof valueToTest !== 'undefined' && !Array.isArray(valueToTest);
+        if (!isDefined) {
+            return Array.isArray(valueToTest) && valueToTest.length > 0 ;
+        }
+        return isDefined;
+    }
+}
+
+
 module.exports = {
 
     setUrl: function(newUrl) {
@@ -15,15 +51,21 @@ module.exports = {
         header = {"x-square-api-key" : apiToken};
     },
 
-    lookupContentByRevision: function(spaceId, deliveryId, contentId, contentRevision) {
-        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getContent/' + encodeURIComponent(contentId) + '/' + encodeURIComponent(contentRevision);
+    lookupContentByRevision: function(spaceId, deliveryId, contentId, contentRevision, viewDate) {
+        var theFullUrl = url + '/' + encodeURIComponent(spaceId) +
+          '/' + encodeURIComponent(deliveryId) +
+          '/getContent/' + encodeURIComponent(contentId) +
+          '/' + encodeURIComponent(contentRevision) +
+          appendQueryParam('viewDate', viewDate);
 
         return http.getItem(theFullUrl, mapSuccessfulResponseToContent, header);
     },
 
-    lookupContentLatestRevision: function(spaceId, deliveryId, contentId) {
-        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getLatestContent/' + encodeURIComponent(contentId);
-
+    lookupContentLatestRevision: function(spaceId, deliveryId, contentId, viewDate) {
+        var theFullUrl = url + '/' + encodeURIComponent(spaceId) +
+          '/' + encodeURIComponent(deliveryId) +
+          '/getLatestContent/' + encodeURIComponent(contentId) +
+          appendQueryParam('viewDate', viewDate);
         return http.getItem(theFullUrl, mapSuccessfulResponseToContent, header);
     },
 
@@ -33,15 +75,20 @@ module.exports = {
         return http.getItem(theFullUrl, mapSuccessfulResponseToContent, header);
     },
 
-    lookupContentLatestRevisionBySlug: function(spaceId, deliveryId, contentSlug) {
-        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getLatestContentBySlug/' + encodeURIComponent(contentSlug);
-
+    lookupContentLatestRevisionBySlug: function(spaceId, deliveryId, contentSlug, viewDate) {
+        var theFullUrl = url + '/' + encodeURIComponent(spaceId) +
+          '/' + encodeURIComponent(deliveryId) +
+          '/getLatestContentBySlug/' + encodeURIComponent(contentSlug)
+          + appendQueryParam('viewDate', viewDate);
         return http.getItem(theFullUrl, mapSuccessfulResponseToContent, header);
     },
 
-    lookupContentLatestRevisionBySlugAndDefinition: function(spaceId, deliveryId, contentSlug, contentDefinition) {
-        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getLatestContentBySlugAndDefinition/' + encodeURIComponent(contentSlug) + "/" + encodeURIComponent(contentDefinition);
-
+    lookupContentLatestRevisionBySlugAndDefinition: function(spaceId, deliveryId, contentSlug, contentDefinition, viewDate) {
+        var theFullUrl = url + '/' + encodeURIComponent(spaceId) +
+          '/' + encodeURIComponent(deliveryId) +
+          '/getLatestContentBySlugAndDefinition/' + encodeURIComponent(contentSlug) +
+          "/" + encodeURIComponent(contentDefinition) +
+          appendQueryParam('viewDate', viewDate);
         return http.getItem(theFullUrl, mapSuccessfulResponseToContent, header);
     },
 
@@ -57,8 +104,11 @@ module.exports = {
         return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
     },
 
-    listContentsByDefinition: function(spaceId, deliveryId, definitionId) {
-        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listContentsByDefinitionId/' + encodeURIComponent(definitionId) ;
+    listContentsByDefinition: function(spaceId, deliveryId, definitionId, viewDate) {
+        var theFullUrl = url + '/' + encodeURIComponent(spaceId) +
+          '/' + encodeURIComponent(deliveryId) +
+          '/listContentsByDefinitionId/' + encodeURIComponent(definitionId) +
+          appendQueryParam('viewDate', viewDate);
 
         return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
     },
@@ -69,9 +119,11 @@ module.exports = {
         return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
     },
 
-    listContentsByListOfContentIds: function(spaceId, deliveryId, listOfContentIds) {
-        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listContentsByListOfContentIds/' + encodeURIComponent(listOfContentIds);
-
+    listContentsByListOfContentIds: function(spaceId, deliveryId, listOfContentIds, viewDate) {
+        var theFullUrl = url + '/' + encodeURIComponent(spaceId) +
+          '/' + encodeURIComponent(deliveryId) +
+          '/listContentsByListOfContentIds/' + encodeURIComponent(listOfContentIds) +
+          appendQueryParam('viewDate', viewDate);
         return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
     },
 
@@ -96,11 +148,11 @@ module.exports = {
     },
 
     lookupPageByUrl : function(spaceId, deliveryId, pageUrl, site , viewDate) {
-        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getWebPageByUrl/' + encodeURIComponent(pageUrl)  + '/' + encodeURIComponent(site);
-
-        if (viewDate) {
-            theFullUrl = theFullUrl + '?viewDate=' + encodeURIComponent(viewDate);
-        }
+        var theFullUrl = url + '/' + encodeURIComponent(spaceId) +
+            '/' + encodeURIComponent(deliveryId) +
+            '/getWebPageByUrl/' + encodeURIComponent(pageUrl)  +
+            '/' + encodeURIComponent(site) +
+            appendQueryParam('viewDate', viewDate);
 
         return http.getItem(theFullUrl, mapSuccessfulResponseToWebPage, header);
     },
@@ -135,11 +187,13 @@ module.exports = {
         return http.postItem(theFullUrl, params, header);
     },
 
-    searchContent: function(spaceId, deliveryId, queryName, queryParam) {
-        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/searchContent/' + encodeURIComponent(queryName) ;
-        if (typeof queryParam !== 'undefined') {
-            theFullUrl = theFullUrl + '?queryParam=' + encodeURIComponent(queryParam);
-        }
+    searchContent: function(spaceId, deliveryId, queryName, queryParam, viewDate) {
+        var queryParams = {queryParam: queryParam, viewDate: viewDate};
+        var theFullUrl = url + '/' + encodeURIComponent(spaceId) +
+            '/' + encodeURIComponent(deliveryId) +
+            '/searchContent/' + encodeURIComponent(queryName) +
+            handleQueryParams(queryParams);
+
         return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
     },
 
@@ -170,15 +224,13 @@ module.exports = {
         return http.getItem(theFullUrl, mapSuccessfulResponseToTaxAgg, header);
     },
 
-    searchByTaxonomy: function(spaceId, deliveryId, taxonomyId, facets) {
+    searchByTaxonomy: function(spaceId, deliveryId, taxonomyId, facets, viewDate) {
         var theFullUrl = url +
         '/' + encodeURIComponent(spaceId) +
         '/' + encodeURIComponent(deliveryId) +
-        '/searchByTaxonomy' +
-        '/' + encodeURIComponent(taxonomyId);
-        if (typeof facets !== 'undefined' && facets.length > 0) {
-            theFullUrl = theFullUrl + '?facets=' + encodeURIComponent(facets);
-        }
+        '/searchByTaxonomy/' + encodeURIComponent(taxonomyId) +
+        handleQueryParams({facets:facets, viewDate:viewDate});
+
         return http.getItem(theFullUrl, mapSuccessfulResponseToContentViewList, header);
     },
 

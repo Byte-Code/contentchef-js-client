@@ -45,24 +45,24 @@
         },
 
 
-        lookupContentByRevision: function(contentId, contentRevision) {
-            return delivery.lookupContentByRevision(this.spaceId, this.deliveryId, contentId, contentRevision);
+        lookupContentByRevision: function(contentId, contentRevision, viewDate) {
+            return delivery.lookupContentByRevision(this.spaceId, this.deliveryId, contentId, contentRevision, viewDate);
         },
 
-        lookupContentLatestRevision: function(contentId) {
-            return delivery.lookupContentLatestRevision(this.spaceId, this.deliveryId, contentId);
+        lookupContentLatestRevision: function(contentId, viewDate) {
+            return delivery.lookupContentLatestRevision(this.spaceId, this.deliveryId, contentId, viewDate);
         },
 
         lookupContentBySlug: function(contentSlug, contentRevision) {
             return delivery.lookupContentBySlug(this.spaceId, this.deliveryId, contentSlug, contentRevision);
         },
 
-        lookupContentLatestRevisionBySlug: function(contentSlug) {
-            return delivery.lookupContentLatestRevisionBySlug(this.spaceId, this.deliveryId, contentSlug);
+        lookupContentLatestRevisionBySlug: function(contentSlug, viewDate) {
+            return delivery.lookupContentLatestRevisionBySlug(this.spaceId, this.deliveryId, contentSlug, viewDate);
         },
 
-        lookupContentLatestRevisionBySlugAndDefinition: function(contentSlug, contentDefinition) {
-            return delivery.lookupContentLatestRevisionBySlugAndDefinition(this.spaceId, this.deliveryId, contentSlug, contentDefinition);
+        lookupContentLatestRevisionBySlugAndDefinition: function(contentSlug, contentDefinition, viewDate) {
+            return delivery.lookupContentLatestRevisionBySlugAndDefinition(this.spaceId, this.deliveryId, contentSlug, contentDefinition, viewDate);
         },
 
         listContentsByTag: function(tag) {
@@ -73,8 +73,8 @@
             return delivery.listContentsByTagAndDefinition(this.spaceId, this.deliveryId, tag, definitionId);
         },
 
-        listContentsByDefinition: function(definitionId) {
-            return delivery.listContentsByDefinition(this.spaceId, this.deliveryId, definitionId);
+        listContentsByDefinition: function(definitionId, viewDate) {
+            return delivery.listContentsByDefinition(this.spaceId, this.deliveryId, definitionId, viewDate);
         },
 
         listContentsByDefinitionFromTo: function(definitionId, from, to) {
@@ -85,8 +85,8 @@
             return delivery.listUnpublishedContentsByDefinition(this.spaceId, this.deliveryId, definitionId, apiKeyForUnpublishedContent);
         },
 
-        listContentsByListOfContentIds: function(listOfContentIds) {
-            return delivery.listContentsByListOfContentIds(this.spaceId, this.deliveryId, listOfContentIds);
+        listContentsByListOfContentIds: function(listOfContentIds, viewDate) {
+            return delivery.listContentsByListOfContentIds(this.spaceId, this.deliveryId, listOfContentIds, viewDate);
         },
 
         lookupWebPagesSitemapByUrl: function(baseURL, site) {
@@ -121,8 +121,8 @@
             return delivery.publishStagedRelease(this.spaceId, this.deliveryId, params);
         },
 
-        searchContent: function(queryName, queryParam) {
-            return delivery.searchContent(this.spaceId, this.deliveryId, queryName, queryParam);
+        searchContent: function(queryName, queryParam, viewDate) {
+            return delivery.searchContent(this.spaceId, this.deliveryId, queryName, queryParam, viewDate);
         },
 
         searchContentFromTo: function(queryName, from, to, queryParam) {
@@ -137,8 +137,8 @@
             return delivery.processTaxonomies(this.spaceId, this.deliveryId);
         },
 
-        searchByTaxonomy: function(taxonomyId, facets) {
-            return delivery.searchByTaxonomy(this.spaceId, this.deliveryId, taxonomyId, facets);
+        searchByTaxonomy: function(taxonomyId, facets, viewDate) {
+            return delivery.searchByTaxonomy(this.spaceId, this.deliveryId, taxonomyId, facets, viewDate);
         },
 
         searchByTaxonomyByKeyValue: function(taxonomyId, keyValueObj) {
