@@ -5,6 +5,10 @@ var http = require('./http-module');
 var url = "";
 var header = {};
 
+function appendViewDate(viewDate) {
+    return appendQueryParam({viewDate: viewDate})
+}
+
 function appendQueryParam (queryParamName, queryParam) {
     var queryParams = {};
     queryParams[queryParamName] = queryParam;
@@ -56,7 +60,7 @@ module.exports = {
           '/' + encodeURIComponent(deliveryId) +
           '/getContent/' + encodeURIComponent(contentId) +
           '/' + encodeURIComponent(contentRevision) +
-          appendQueryParam('viewDate', viewDate);
+          appendViewDate(viewDate);
 
         return http.getItem(theFullUrl, mapSuccessfulResponseToContent, header);
     },
@@ -65,7 +69,7 @@ module.exports = {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) +
           '/' + encodeURIComponent(deliveryId) +
           '/getLatestContent/' + encodeURIComponent(contentId) +
-          appendQueryParam('viewDate', viewDate);
+          appendViewDate(viewDate);
         return http.getItem(theFullUrl, mapSuccessfulResponseToContent, header);
     },
 
@@ -78,8 +82,8 @@ module.exports = {
     lookupContentLatestRevisionBySlug: function(spaceId, deliveryId, contentSlug, viewDate) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) +
           '/' + encodeURIComponent(deliveryId) +
-          '/getLatestContentBySlug/' + encodeURIComponent(contentSlug)
-          + appendQueryParam('viewDate', viewDate);
+          '/getLatestContentBySlug/' + encodeURIComponent(contentSlug) +
+          appendViewDate(viewDate);
         return http.getItem(theFullUrl, mapSuccessfulResponseToContent, header);
     },
 
@@ -88,7 +92,7 @@ module.exports = {
           '/' + encodeURIComponent(deliveryId) +
           '/getLatestContentBySlugAndDefinition/' + encodeURIComponent(contentSlug) +
           "/" + encodeURIComponent(contentDefinition) +
-          appendQueryParam('viewDate', viewDate);
+          appendViewDate(viewDate);
         return http.getItem(theFullUrl, mapSuccessfulResponseToContent, header);
     },
 
@@ -108,7 +112,7 @@ module.exports = {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) +
           '/' + encodeURIComponent(deliveryId) +
           '/listContentsByDefinitionId/' + encodeURIComponent(definitionId) +
-          appendQueryParam('viewDate', viewDate);
+          appendViewDate(viewDate);
 
         return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
     },
@@ -123,7 +127,7 @@ module.exports = {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) +
           '/' + encodeURIComponent(deliveryId) +
           '/listContentsByListOfContentIds/' + encodeURIComponent(listOfContentIds) +
-          appendQueryParam('viewDate', viewDate);
+          appendViewDate(viewDate);
         return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
     },
 
@@ -152,7 +156,7 @@ module.exports = {
             '/' + encodeURIComponent(deliveryId) +
             '/getWebPageByUrl/' + encodeURIComponent(pageUrl)  +
             '/' + encodeURIComponent(site) +
-            appendQueryParam('viewDate', viewDate);
+            appendViewDate(viewDate);
 
         return http.getItem(theFullUrl, mapSuccessfulResponseToWebPage, header);
     },
