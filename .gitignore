@@ -1,5 +1,7 @@
 node_modules
 .idea
+.env
+yarn.lock
 coverage
 test/index.test.js
 .DS_STORE
