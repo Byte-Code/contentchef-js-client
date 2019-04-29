@@ -98,24 +98,24 @@
 	        },
 
 
-	        lookupContentByRevision: function(contentId, contentRevision) {
-	            return delivery.lookupContentByRevision(this.spaceId, this.deliveryId, contentId, contentRevision);
+	        lookupContentByRevision: function(contentId, contentRevision, viewDate) {
+	            return delivery.lookupContentByRevision(this.spaceId, this.deliveryId, contentId, contentRevision, viewDate);
 	        },
 
-	        lookupContentLatestRevision: function(contentId) {
-	            return delivery.lookupContentLatestRevision(this.spaceId, this.deliveryId, contentId);
+	        lookupContentLatestRevision: function(contentId, viewDate) {
+	            return delivery.lookupContentLatestRevision(this.spaceId, this.deliveryId, contentId, viewDate);
 	        },
 
 	        lookupContentBySlug: function(contentSlug, contentRevision) {
 	            return delivery.lookupContentBySlug(this.spaceId, this.deliveryId, contentSlug, contentRevision);
 	        },
 
-	        lookupContentLatestRevisionBySlug: function(contentSlug) {
-	            return delivery.lookupContentLatestRevisionBySlug(this.spaceId, this.deliveryId, contentSlug);
+	        lookupContentLatestRevisionBySlug: function(contentSlug, viewDate) {
+	            return delivery.lookupContentLatestRevisionBySlug(this.spaceId, this.deliveryId, contentSlug, viewDate);
 	        },
 
-	        lookupContentLatestRevisionBySlugAndDefinition: function(contentSlug, contentDefinition) {
-	            return delivery.lookupContentLatestRevisionBySlugAndDefinition(this.spaceId, this.deliveryId, contentSlug, contentDefinition);
+	        lookupContentLatestRevisionBySlugAndDefinition: function(contentSlug, contentDefinition, viewDate) {
+	            return delivery.lookupContentLatestRevisionBySlugAndDefinition(this.spaceId, this.deliveryId, contentSlug, contentDefinition, viewDate);
 	        },
 
 	        listContentsByTag: function(tag) {
@@ -126,8 +126,8 @@
 	            return delivery.listContentsByTagAndDefinition(this.spaceId, this.deliveryId, tag, definitionId);
 	        },
 
-	        listContentsByDefinition: function(definitionId) {
-	            return delivery.listContentsByDefinition(this.spaceId, this.deliveryId, definitionId);
+	        listContentsByDefinition: function(definitionId, viewDate) {
+	            return delivery.listContentsByDefinition(this.spaceId, this.deliveryId, definitionId, viewDate);
 	        },
 
 	        listContentsByDefinitionFromTo: function(definitionId, from, to) {
@@ -138,8 +138,8 @@
 	            return delivery.listUnpublishedContentsByDefinition(this.spaceId, this.deliveryId, definitionId, apiKeyForUnpublishedContent);
 	        },
 
-	        listContentsByListOfContentIds: function(listOfContentIds) {
-	            return delivery.listContentsByListOfContentIds(this.spaceId, this.deliveryId, listOfContentIds);
+	        listContentsByListOfContentIds: function(listOfContentIds, viewDate) {
+	            return delivery.listContentsByListOfContentIds(this.spaceId, this.deliveryId, listOfContentIds, viewDate);
 	        },
 
 	        lookupWebPagesSitemapByUrl: function(baseURL, site) {
@@ -174,8 +174,8 @@
 	            return delivery.publishStagedRelease(this.spaceId, this.deliveryId, params);
 	        },
 
-	        searchContent: function(queryName, queryParam) {
-	            return delivery.searchContent(this.spaceId, this.deliveryId, queryName, queryParam);
+	        searchContent: function(queryName, queryParam, viewDate) {
+	            return delivery.searchContent(this.spaceId, this.deliveryId, queryName, queryParam, viewDate);
 	        },
 
 	        searchContentFromTo: function(queryName, from, to, queryParam) {
@@ -190,8 +190,8 @@
 	            return delivery.processTaxonomies(this.spaceId, this.deliveryId);
 	        },
 
-	        searchByTaxonomy: function(taxonomyId, facets) {
-	            return delivery.searchByTaxonomy(this.spaceId, this.deliveryId, taxonomyId, facets);
+	        searchByTaxonomy: function(taxonomyId, facets, viewDate) {
+	            return delivery.searchByTaxonomy(this.spaceId, this.deliveryId, taxonomyId, facets, viewDate);
 	        },
 
 	        searchByTaxonomyByKeyValue: function(taxonomyId, keyValueObj) {
@@ -256,6 +256,46 @@
 	var url = "";
 	var header = {};
 
+	function appendViewDate(viewDate) {
+	    return appendQueryParam({viewDate: viewDate})
+	}
+
+	function appendQueryParam (queryParamName, queryParam) {
+	    var queryParams = {};
+	    queryParams[queryParamName] = queryParam;
+	    return handleQueryParams(queryParams)
+	}
+
+	function handleQueryParams(queryParams) {
+	    var params = '';
+	    var queryKeys = Object.keys(queryParams);
+	    queryKeys
+	        .filter(isValidParam(queryParams))
+	        .forEach(function (queryParamName) {
+	            var isFirst = params.length === 0;
+	            var separator = isFirst ? '?' : '&';
+
+	            params += handleQueryParam(queryParamName, queryParams[queryParamName], separator)
+	        });
+	    return params;
+	}
+
+	function handleQueryParam(queryParamName, queryParam, separator) {
+	    return separator + queryParamName + '=' + encodeURIComponent(queryParam);
+	}
+
+	function isValidParam(queryParams){
+	    return function(param){
+	        var valueToTest = queryParams[param];
+	        var isDefined = typeof valueToTest !== 'undefined' && !Array.isArray(valueToTest);
+	        if (!isDefined) {
+	            return Array.isArray(valueToTest) && valueToTest.length > 0 ;
+	        }
+	        return isDefined;
+	    }
+	}
+
+
 	module.exports = {
 
 	    setUrl: function(newUrl) {
@@ -266,15 +306,21 @@
 	        header = {"x-square-api-key" : apiToken};
 	    },
 
-	    lookupContentByRevision: function(spaceId, deliveryId, contentId, contentRevision) {
-	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getContent/' + encodeURIComponent(contentId) + '/' + encodeURIComponent(contentRevision);
+	    lookupContentByRevision: function(spaceId, deliveryId, contentId, contentRevision, viewDate) {
+	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) +
+	          '/' + encodeURIComponent(deliveryId) +
+	          '/getContent/' + encodeURIComponent(contentId) +
+	          '/' + encodeURIComponent(contentRevision) +
+	          appendViewDate(viewDate);
 
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToContent, header);
 	    },
 
-	    lookupContentLatestRevision: function(spaceId, deliveryId, contentId) {
-	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getLatestContent/' + encodeURIComponent(contentId);
-
+	    lookupContentLatestRevision: function(spaceId, deliveryId, contentId, viewDate) {
+	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) +
+	          '/' + encodeURIComponent(deliveryId) +
+	          '/getLatestContent/' + encodeURIComponent(contentId) +
+	          appendViewDate(viewDate);
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToContent, header);
 	    },
 
@@ -284,15 +330,20 @@
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToContent, header);
 	    },
 
-	    lookupContentLatestRevisionBySlug: function(spaceId, deliveryId, contentSlug) {
-	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getLatestContentBySlug/' + encodeURIComponent(contentSlug);
-
+	    lookupContentLatestRevisionBySlug: function(spaceId, deliveryId, contentSlug, viewDate) {
+	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) +
+	          '/' + encodeURIComponent(deliveryId) +
+	          '/getLatestContentBySlug/' + encodeURIComponent(contentSlug) +
+	          appendViewDate(viewDate);
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToContent, header);
 	    },
 
-	    lookupContentLatestRevisionBySlugAndDefinition: function(spaceId, deliveryId, contentSlug, contentDefinition) {
-	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getLatestContentBySlugAndDefinition/' + encodeURIComponent(contentSlug) + "/" + encodeURIComponent(contentDefinition);
-
+	    lookupContentLatestRevisionBySlugAndDefinition: function(spaceId, deliveryId, contentSlug, contentDefinition, viewDate) {
+	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) +
+	          '/' + encodeURIComponent(deliveryId) +
+	          '/getLatestContentBySlugAndDefinition/' + encodeURIComponent(contentSlug) +
+	          "/" + encodeURIComponent(contentDefinition) +
+	          appendViewDate(viewDate);
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToContent, header);
 	    },
 
@@ -308,8 +359,11 @@
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
 	    },
 
-	    listContentsByDefinition: function(spaceId, deliveryId, definitionId) {
-	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listContentsByDefinitionId/' + encodeURIComponent(definitionId) ;
+	    listContentsByDefinition: function(spaceId, deliveryId, definitionId, viewDate) {
+	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) +
+	          '/' + encodeURIComponent(deliveryId) +
+	          '/listContentsByDefinitionId/' + encodeURIComponent(definitionId) +
+	          appendViewDate(viewDate);
 
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
 	    },
@@ -320,9 +374,11 @@
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
 	    },
 
-	    listContentsByListOfContentIds: function(spaceId, deliveryId, listOfContentIds) {
-	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/listContentsByListOfContentIds/' + encodeURIComponent(listOfContentIds);
-
+	    listContentsByListOfContentIds: function(spaceId, deliveryId, listOfContentIds, viewDate) {
+	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) +
+	          '/' + encodeURIComponent(deliveryId) +
+	          '/listContentsByListOfContentIds/' + encodeURIComponent(listOfContentIds) +
+	          appendViewDate(viewDate);
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
 	    },
 
@@ -347,11 +403,11 @@
 	    },
 
 	    lookupPageByUrl : function(spaceId, deliveryId, pageUrl, site , viewDate) {
-	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/getWebPageByUrl/' + encodeURIComponent(pageUrl)  + '/' + encodeURIComponent(site);
-
-	        if (viewDate) {
-	            theFullUrl = theFullUrl + '?viewDate=' + encodeURIComponent(viewDate);
-	        }
+	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) +
+	            '/' + encodeURIComponent(deliveryId) +
+	            '/getWebPageByUrl/' + encodeURIComponent(pageUrl)  +
+	            '/' + encodeURIComponent(site) +
+	            appendViewDate(viewDate);
 
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToWebPage, header);
 	    },
@@ -386,11 +442,13 @@
 	        return http.postItem(theFullUrl, params, header);
 	    },
 
-	    searchContent: function(spaceId, deliveryId, queryName, queryParam) {
-	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/searchContent/' + encodeURIComponent(queryName) ;
-	        if (typeof queryParam !== 'undefined') {
-	            theFullUrl = theFullUrl + '?queryParam=' + encodeURIComponent(queryParam);
-	        }
+	    searchContent: function(spaceId, deliveryId, queryName, queryParam, viewDate) {
+	        var queryParams = {queryParam: queryParam, viewDate: viewDate};
+	        var theFullUrl = url + '/' + encodeURIComponent(spaceId) +
+	            '/' + encodeURIComponent(deliveryId) +
+	            '/searchContent/' + encodeURIComponent(queryName) +
+	            handleQueryParams(queryParams);
+
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
 	    },
 
@@ -421,15 +479,13 @@
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToTaxAgg, header);
 	    },
 
-	    searchByTaxonomy: function(spaceId, deliveryId, taxonomyId, facets) {
+	    searchByTaxonomy: function(spaceId, deliveryId, taxonomyId, facets, viewDate) {
 	        var theFullUrl = url +
 	        '/' + encodeURIComponent(spaceId) +
 	        '/' + encodeURIComponent(deliveryId) +
-	        '/searchByTaxonomy' +
-	        '/' + encodeURIComponent(taxonomyId);
-	        if (typeof facets !== 'undefined' && facets.length > 0) {
-	            theFullUrl = theFullUrl + '?facets=' + encodeURIComponent(facets);
-	        }
+	        '/searchByTaxonomy/' + encodeURIComponent(taxonomyId) +
+	        handleQueryParams({facets:facets, viewDate:viewDate});
+
 	        return http.getItem(theFullUrl, mapSuccessfulResponseToContentViewList, header);
 	    },
 
