@@ -1,5 +1,6 @@
 node_modules
 .idea
+.env
 coverage
 test/index.test.js
 .DS_STORE
