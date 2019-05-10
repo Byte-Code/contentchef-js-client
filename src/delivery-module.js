@@ -6,7 +6,7 @@ var url = "";
 var header = {};
 
 function appendViewDate(viewDate) {
-    return appendQueryParam({viewDate: viewDate})
+    return appendQueryParam('viewDate', viewDate)
 }
 
 function appendQueryParam (queryParamName, queryParam) {
