@@ -257,13 +257,13 @@
 	var header = {};
 
 	function appendViewDate(viewDate) {
-	    return appendQueryParam({viewDate: viewDate})
+	    return appendQueryParam('viewDate', viewDate);
 	}
 
 	function appendQueryParam (queryParamName, queryParam) {
 	    var queryParams = {};
 	    queryParams[queryParamName] = queryParam;
-	    return handleQueryParams(queryParams)
+	    return handleQueryParams(queryParams);
 	}
 
 	function handleQueryParams(queryParams) {
