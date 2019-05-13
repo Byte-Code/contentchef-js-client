@@ -6,7 +6,11 @@ var url = "";
 var header = {};
 
 function appendViewDate(viewDate) {
-    return appendQueryParam('viewDate', viewDate);
+    var queryParam = '';
+    if (viewDate) {
+        queryParam = appendQueryParam('viewDate', viewDate);
+    }
+    return queryParam;
 }
 
 function appendQueryParam (queryParamName, queryParam) {
@@ -40,7 +44,7 @@ function isValidParam(queryParams){
         if (!isDefined) {
             return Array.isArray(valueToTest) && valueToTest.length > 0 ;
         }
-        return isDefined;
+        return isDefined && valueToTest !== null;
     }
 }
 
