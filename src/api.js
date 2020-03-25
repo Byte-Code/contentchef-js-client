@@ -26,13 +26,13 @@
         initialize: function(deliveryUrl, spaceId, deliveryId, apiToken, apiCache, cacheTimeToLive, apiUrlDelivery) {
 
             var API_URL_DELIVERY = '/contentchef-delivery/v2';
-            
+
             this.spaceId = spaceId;
             this.deliveryId = deliveryId;
 
             this.apiCache = apiCache || defaultGlobalCache(); // not used for now
             this.dataCacheTTL = cacheTimeToLive || 10;  // not used for now
-            
+
             if (typeof apiUrlDelivery == 'undefined') {
                 this.apiUrlDelivery = API_URL_DELIVERY;
             }
@@ -104,7 +104,7 @@
         storeQuery: function(params) {
             return delivery.storeQuery(this.spaceId, this.deliveryId, params);
         },
-        
+
         createRelease: function(params) {
             return delivery.createRelease(this.spaceId, this.deliveryId, params);
         },
@@ -119,6 +119,10 @@
 
         publishStagedRelease: function(params) {
             return delivery.publishStagedRelease(this.spaceId, this.deliveryId, params);
+        },
+
+        search: function(queryParams, viewDate) {
+            return delivery.search(this.spaceId, this.deliveryId, queryParams, viewDate);
         },
 
         searchContent: function(queryName, queryParam, viewDate) {

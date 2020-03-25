@@ -205,6 +205,19 @@ module.exports = {
         return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
     },
 
+    search: function(spaceId, deliveryId, queryParams, viewDate) {
+        var query = queryParams || {};
+        var targetDate = query.targetDate || viewDate;
+
+        var searchParams = Object.assign({}, query, {viewDate: targetDate, targetDate:undefined});
+        var theFullUrl = url + '/' + encodeURIComponent(spaceId) +
+            '/' + encodeURIComponent(deliveryId) +
+            '/search/' +
+            handleQueryParams(searchParams);
+
+        return http.getItem(theFullUrl, mapSuccessfulResponseToContentList, header);
+    },
+
     searchContentFromTo: function(spaceId, deliveryId, queryName, from, to, queryParam) {
         var theFullUrl = url + '/' + encodeURIComponent(spaceId) + '/' + encodeURIComponent(deliveryId) + '/searchContent/' + encodeURIComponent(queryName) + '/' + from + '/' + to ;
         if (typeof queryParam !== 'undefined') {
